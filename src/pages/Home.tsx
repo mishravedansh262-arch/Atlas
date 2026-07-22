@@ -1,5 +1,7 @@
-function Home() {
-  return <h1>ATLAS Home</h1>;
+export default function Home() {
+  return (
+    <div className="flex h-screen items-center justify-center bg-black text-5xl font-bold text-white">
+      ATLAS 🚀
+    </div>
+  );
 }
-
-export default Home;
