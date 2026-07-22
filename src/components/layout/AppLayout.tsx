@@ -7,8 +7,8 @@ type AppLayoutProps = {
 
 function AppLayout({ children }: AppLayoutProps) {
   return (
-    <div className="min-h-screen bg-zinc-900 text-white">
-      <Navbar />
+<div className="min-h-screen bg-zinc-950 text-zinc-100">      
+  <Navbar />
 
       <div className="flex">
         <Sidebar />
