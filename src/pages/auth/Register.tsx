@@ -1,4 +1,5 @@
 import { useForm } from "react-hook-form";
+import { useNavigate } from "react-router-dom";
 import { zodResolver } from "@hookform/resolvers/zod";
 
 import AuthCard from "../../components/auth/AuthCard";
@@ -11,8 +12,13 @@ import {
   registerSchema,
   type RegisterFormValues,
 } from "../../lib/validation/auth";
+import { useAuth } from "../../hooks/useAuth";
+import { createMockUser } from "../../lib/mockUser";
 
 export default function Register() {
+  const navigate = useNavigate();
+  const { login } = useAuth();
+
   const {
     register,
     handleSubmit,
@@ -21,9 +27,12 @@ export default function Register() {
     resolver: zodResolver(registerSchema),
   });
 
-  async function onSubmit() {
+  async function onSubmit(values: RegisterFormValues) {
     // Simulated submission — real authentication arrives in a later milestone.
     await new Promise((resolve) => setTimeout(resolve, 1500));
+
+    login(createMockUser({ name: values.fullName, email: values.email }));
+    navigate("/dashboard", { replace: true });
   }
 
   return (

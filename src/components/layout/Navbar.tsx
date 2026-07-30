@@ -1,6 +1,17 @@
-import { Bell, Search, UserCircle } from "lucide-react";
+import { Bell, LogOut, Search, UserCircle } from "lucide-react";
+import { useNavigate } from "react-router-dom";
+
+import { useAuth } from "../../hooks/useAuth";
 
 function Navbar() {
+  const navigate = useNavigate();
+  const { user, logout } = useAuth();
+
+  function handleLogout() {
+    logout();
+    navigate("/login", { replace: true });
+  }
+
   return (
     <header className="flex h-16 items-center justify-end border-b border-zinc-800 bg-zinc-950 px-6">
       <div className="flex items-center gap-4">
@@ -19,7 +30,23 @@ function Navbar() {
         </button>
 
         <button className="rounded-full bg-zinc-900 p-1 transition hover:bg-zinc-800">
-          <UserCircle size={34} />
+          {user ? (
+            <img
+              src={user.avatar}
+              alt={user.name}
+              className="size-8 rounded-full"
+            />
+          ) : (
+            <UserCircle size={34} />
+          )}
+        </button>
+
+        <button
+          onClick={handleLogout}
+          aria-label="Log out"
+          className="rounded-xl bg-zinc-900 p-2 transition hover:bg-zinc-800"
+        >
+          <LogOut size={20} />
         </button>
       </div>
     </header>
