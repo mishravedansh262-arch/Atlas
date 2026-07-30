@@ -1,4 +1,5 @@
 import { useState } from "react";
+import type { InputHTMLAttributes, Ref } from "react";
 import { Eye, EyeOff } from "lucide-react";
 
 import FormField from "./FormField";
@@ -6,15 +7,18 @@ import FormField from "./FormField";
 type PasswordInputProps = {
   id: string;
   label: string;
-  placeholder?: string;
-  autoComplete?: string;
-};
+  error?: string;
+  ref?: Ref<HTMLInputElement>;
+} & Omit<InputHTMLAttributes<HTMLInputElement>, "type">;
 
 export default function PasswordInput({
   id,
   label,
+  error,
+  ref,
   placeholder = "••••••••",
   autoComplete = "current-password",
+  ...inputProps
 }: PasswordInputProps) {
   const [isVisible, setIsVisible] = useState(false);
 
@@ -22,6 +26,8 @@ export default function PasswordInput({
     <FormField
       id={id}
       label={label}
+      error={error}
+      ref={ref}
       type={isVisible ? "text" : "password"}
       placeholder={placeholder}
       autoComplete={autoComplete}
@@ -35,6 +41,7 @@ export default function PasswordInput({
           {isVisible ? <EyeOff size={18} /> : <Eye size={18} />}
         </button>
       }
+      {...inputProps}
     />
   );
 }
