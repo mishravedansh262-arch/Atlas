@@ -22,6 +22,8 @@ export interface RegisterPayload {
 export interface AuthState {
   user: User | null;
   isAuthenticated: boolean;
+  /** True while the app checks for an existing session on startup. */
+  isRestoring: boolean;
 }
 
 export interface AuthActions {

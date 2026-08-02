@@ -10,6 +10,7 @@ import type { LoginCredentials, RegisterPayload } from "../types/Auth";
 export function useAuth() {
   const user = useAuthStore((state) => state.user);
   const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
+  const isRestoring = useAuthStore((state) => state.isRestoring);
   const setUser = useAuthStore((state) => state.setUser);
   const clearUser = useAuthStore((state) => state.clearUser);
 
@@ -28,5 +29,16 @@ export function useAuth() {
     clearUser();
   }
 
-  return { user, isAuthenticated, login, register, logout };
+  /** Rehydrates auth state from any existing session. Run once at startup. */
+  async function restoreSession() {
+    const sessionUser = await authService.getCurrentUser();
+
+    if (sessionUser) {
+      setUser(sessionUser);
+    } else {
+      clearUser();
+    }
+  }
+
+  return { user, isAuthenticated, isRestoring, login, register, logout, restoreSession };
 }
