@@ -33,10 +33,10 @@ export default function FormField({
           ref={ref}
           aria-invalid={error ? true : undefined}
           aria-describedby={error ? errorId : undefined}
-          className={`w-full rounded-xl border bg-zinc-950 px-4 py-3 text-sm text-white outline-none transition placeholder:text-zinc-500 focus:ring-1 ${
+          className={`w-full rounded-xl border bg-zinc-950 px-4 py-3 text-sm text-white outline-none transition-all duration-200 placeholder:text-zinc-500 focus:ring-1 ${
             error
               ? "border-red-500 focus:border-red-500 focus:ring-red-500"
-              : "border-zinc-800 focus:border-blue-600 focus:ring-blue-600"
+              : "border-zinc-800 hover:border-zinc-700 focus:border-blue-600 focus:ring-blue-600"
           }`}
           {...inputProps}
         />

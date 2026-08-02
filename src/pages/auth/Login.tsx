@@ -1,6 +1,7 @@
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { toast } from "sonner";
 
 import AuthCard from "../../components/auth/AuthCard";
 import AuthFooter from "../../components/auth/AuthFooter";
@@ -29,6 +30,7 @@ export default function Login() {
     await new Promise((resolve) => setTimeout(resolve, 1500));
 
     login(createMockUser({ email: values.email }));
+    toast.success("Welcome back!");
     navigate("/dashboard", { replace: true });
   }
 
@@ -46,6 +48,7 @@ export default function Login() {
           type="email"
           placeholder="you@example.com"
           autoComplete="email"
+          autoFocus
           error={errors.email?.message}
           {...register("email")}
         />

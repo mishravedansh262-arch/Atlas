@@ -1,6 +1,7 @@
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { toast } from "sonner";
 
 import AuthCard from "../../components/auth/AuthCard";
 import AuthFooter from "../../components/auth/AuthFooter";
@@ -32,6 +33,7 @@ export default function Register() {
     await new Promise((resolve) => setTimeout(resolve, 1500));
 
     login(createMockUser({ name: values.fullName, email: values.email }));
+    toast.success("Account created. Welcome to ATLAS!");
     navigate("/dashboard", { replace: true });
   }
 
@@ -49,6 +51,7 @@ export default function Register() {
           type="text"
           placeholder="Your name"
           autoComplete="name"
+          autoFocus
           error={errors.fullName?.message}
           {...register("fullName")}
         />

@@ -1,5 +1,6 @@
 import { Bell, LogOut, Search, UserCircle } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import { toast } from "sonner";
 
 import { useAuth } from "../../hooks/useAuth";
 
@@ -9,6 +10,7 @@ function Navbar() {
 
   function handleLogout() {
     logout();
+    toast.success("You have been logged out.");
     navigate("/login", { replace: true });
   }
 

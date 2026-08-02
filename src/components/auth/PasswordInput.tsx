@@ -36,7 +36,8 @@ export default function PasswordInput({
           type="button"
           onClick={() => setIsVisible((visible) => !visible)}
           aria-label={isVisible ? "Hide password" : "Show password"}
-          className="text-zinc-500 transition hover:text-zinc-300"
+          aria-pressed={isVisible}
+          className="rounded-md p-1 text-zinc-500 transition hover:text-zinc-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-600"
         >
           {isVisible ? <EyeOff size={18} /> : <Eye size={18} />}
         </button>
