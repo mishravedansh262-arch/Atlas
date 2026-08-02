@@ -11,7 +11,6 @@ import FormField from "../../components/auth/FormField";
 import PasswordInput from "../../components/auth/PasswordInput";
 import { loginSchema, type LoginFormValues } from "../../lib/validation/auth";
 import { useAuth } from "../../hooks/useAuth";
-import { createMockUser } from "../../lib/mockUser";
 
 export default function Login() {
   const navigate = useNavigate();
@@ -26,10 +25,7 @@ export default function Login() {
   });
 
   async function onSubmit(values: LoginFormValues) {
-    // Simulated submission — real authentication arrives in a later milestone.
-    await new Promise((resolve) => setTimeout(resolve, 1500));
-
-    login(createMockUser({ email: values.email }));
+    await login(values);
     toast.success("Welcome back!");
     navigate("/dashboard", { replace: true });
   }

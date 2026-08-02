@@ -14,11 +14,10 @@ import {
   type RegisterFormValues,
 } from "../../lib/validation/auth";
 import { useAuth } from "../../hooks/useAuth";
-import { createMockUser } from "../../lib/mockUser";
 
 export default function Register() {
   const navigate = useNavigate();
-  const { login } = useAuth();
+  const { register: registerAccount } = useAuth();
 
   const {
     register,
@@ -29,10 +28,12 @@ export default function Register() {
   });
 
   async function onSubmit(values: RegisterFormValues) {
-    // Simulated submission — real authentication arrives in a later milestone.
-    await new Promise((resolve) => setTimeout(resolve, 1500));
-
-    login(createMockUser({ name: values.fullName, email: values.email }));
+    // confirmPassword is a form-only field; the service never receives it.
+    await registerAccount({
+      fullName: values.fullName,
+      email: values.email,
+      password: values.password,
+    });
     toast.success("Account created. Welcome to ATLAS!");
     navigate("/dashboard", { replace: true });
   }

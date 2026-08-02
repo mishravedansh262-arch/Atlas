@@ -8,8 +8,8 @@ function Navbar() {
   const navigate = useNavigate();
   const { user, logout } = useAuth();
 
-  function handleLogout() {
-    logout();
+  async function handleLogout() {
+    await logout();
     toast.success("You have been logged out.");
     navigate("/login", { replace: true });
   }

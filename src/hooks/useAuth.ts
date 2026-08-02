@@ -1,17 +1,32 @@
 import { useAuthStore } from "../store/authStore";
+import * as authService from "../services/auth.service";
+import type { LoginCredentials, RegisterPayload } from "../types/Auth";
 
 /**
  * Single access point for authentication state and actions.
- * Pages and components should use this hook instead of
- * importing the Zustand store directly.
+ * Orchestrates the auth service and the store so pages only
+ * coordinate UI (toasts, navigation) around these calls.
  */
 export function useAuth() {
   const user = useAuthStore((state) => state.user);
   const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
-  const isLoading = useAuthStore((state) => state.isLoading);
-  const login = useAuthStore((state) => state.login);
-  const logout = useAuthStore((state) => state.logout);
-  const setLoading = useAuthStore((state) => state.setLoading);
+  const setUser = useAuthStore((state) => state.setUser);
+  const clearUser = useAuthStore((state) => state.clearUser);
 
-  return { user, isAuthenticated, isLoading, login, logout, setLoading };
+  async function login(credentials: LoginCredentials) {
+    const authenticatedUser = await authService.login(credentials);
+    setUser(authenticatedUser);
+  }
+
+  async function register(payload: RegisterPayload) {
+    const registeredUser = await authService.register(payload);
+    setUser(registeredUser);
+  }
+
+  async function logout() {
+    await authService.logout();
+    clearUser();
+  }
+
+  return { user, isAuthenticated, login, register, logout };
 }

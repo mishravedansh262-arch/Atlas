@@ -5,16 +5,16 @@ import type { AuthState, AuthStore, User } from "../types/Auth";
 const initialState: AuthState = {
   user: null,
   isAuthenticated: false,
-  isLoading: false,
 };
 
+/**
+ * Holds authentication state only. Business logic lives in
+ * useAuth() and the auth service — actions here just mutate state.
+ */
 export const useAuthStore = create<AuthStore>((set) => ({
   ...initialState,
 
-  login: (user: User) =>
-    set({ user, isAuthenticated: true, isLoading: false }),
+  setUser: (user: User) => set({ user, isAuthenticated: true }),
 
-  logout: () => set(initialState),
-
-  setLoading: (isLoading: boolean) => set({ isLoading }),
+  clearUser: () => set(initialState),
 }));
