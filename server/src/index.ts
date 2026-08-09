@@ -1,10 +1,14 @@
 import { env } from './config/env.js'; // loads dotenv as a side effect — must be first
+import { connectDB, disconnectDB } from './config/db.js';
 import { createApp } from './app.js';
 
 /**
  * Server entry point — the only file that touches the network.
- * Responsibilities: build the app, bind the port, handle shutdown signals.
+ * Responsibilities: connect the DB, build the app, bind the port,
+ * handle shutdown signals.
  */
+await connectDB();
+
 const app = createApp();
 
 const server = app.listen(env.port, () => {
@@ -23,8 +27,10 @@ const server = app.listen(env.port, () => {
 function shutdown(signal: string): void {
   console.log(`\n${signal} received — shutting down gracefully...`);
   server.close(() => {
-    console.log('Server closed. Goodbye!');
-    process.exit(0);
+    void disconnectDB().finally(() => {
+      console.log('Server closed. Goodbye!');
+      process.exit(0);
+    });
   });
 }
 

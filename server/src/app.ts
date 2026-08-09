@@ -6,6 +6,7 @@ import cookieParser from 'cookie-parser';
 
 import { env } from './config/env.js';
 import { healthRouter } from './routes/health.route.js';
+import { authRouter } from './routes/auth.route.js';
 import { errorHandler, notFoundHandler } from './middleware/error.middleware.js';
 
 /**
@@ -37,6 +38,7 @@ export function createApp(): Application {
 
   // --- Routes ---------------------------------------------------------------
   app.use('/api/health', healthRouter);
+  app.use('/api/auth', authRouter);
 
   // --- 404 + error handling (must come last) --------------------------------
   app.use(notFoundHandler);

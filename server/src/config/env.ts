@@ -13,6 +13,9 @@ interface Env {
   port: number;
   clientOrigin: string;
   isProduction: boolean;
+  mongodbUri: string;
+  jwtSecret: string;
+  jwtExpiresIn: string;
 }
 
 function requireNumber(name: string, fallback: number): number {
@@ -26,6 +29,14 @@ function requireNumber(name: string, fallback: number): number {
   return parsed;
 }
 
+function requireString(name: string): string {
+  const raw = process.env[name];
+  if (raw === undefined || raw === '') {
+    throw new Error(`Missing required environment variable ${name} — check server/.env`);
+  }
+  return raw;
+}
+
 const nodeEnv = (process.env.NODE_ENV ?? 'development') as Env['nodeEnv'];
 
 export const env: Env = {
@@ -33,4 +44,7 @@ export const env: Env = {
   port: requireNumber('PORT', 8000),
   clientOrigin: process.env.CLIENT_ORIGIN ?? 'http://localhost:5173',
   isProduction: nodeEnv === 'production',
+  mongodbUri: requireString('MONGODB_URI'),
+  jwtSecret: requireString('JWT_SECRET'),
+  jwtExpiresIn: process.env.JWT_EXPIRES_IN ?? '7d',
 };
