@@ -1,10 +1,23 @@
 import { Navigate, Outlet } from "react-router-dom";
 
 import { useAuth } from "../hooks/useAuth";
+import Spinner from "../components/ui/Spinner";
 
-/** Renders child routes only when authenticated; otherwise sends the user to Login. */
+/**
+ * Renders child routes only when authenticated; otherwise redirects to Login.
+ * Shows a loading spinner while session restoration is in progress to prevent
+ * premature redirects on hard refresh.
+ */
 export function ProtectedRoute() {
-  const { isAuthenticated } = useAuth();
+  const { isAuthenticated, isRestoring } = useAuth();
+
+  if (isRestoring) {
+    return (
+      <div className="flex min-h-screen items-center justify-center bg-zinc-950">
+        <Spinner size={32} className="text-zinc-400" />
+      </div>
+    );
+  }
 
   if (!isAuthenticated) {
     return <Navigate to="/login" replace />;
@@ -13,9 +26,21 @@ export function ProtectedRoute() {
   return <Outlet />;
 }
 
-/** Renders public auth routes; authenticated users are sent to the Dashboard. */
+/**
+ * Renders public auth routes; authenticated users are redirected to Dashboard.
+ * Shows a loading spinner while session restoration is in progress to prevent
+ * flashing the auth page before redirecting an already-logged-in user.
+ */
 export function PublicRoute() {
-  const { isAuthenticated } = useAuth();
+  const { isAuthenticated, isRestoring } = useAuth();
+
+  if (isRestoring) {
+    return (
+      <div className="flex min-h-screen items-center justify-center bg-zinc-950">
+        <Spinner size={32} className="text-zinc-400" />
+      </div>
+    );
+  }
 
   if (isAuthenticated) {
     return <Navigate to="/dashboard" replace />;

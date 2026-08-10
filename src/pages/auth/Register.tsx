@@ -14,6 +14,7 @@ import {
   type RegisterFormValues,
 } from "../../lib/validation/auth";
 import { useAuth } from "../../hooks/useAuth";
+import { extractApiError } from "../../lib/api";
 
 export default function Register() {
   const navigate = useNavigate();
@@ -28,14 +29,19 @@ export default function Register() {
   });
 
   async function onSubmit(values: RegisterFormValues) {
-    // confirmPassword is a form-only field; the service never receives it.
-    await registerAccount({
-      fullName: values.fullName,
-      email: values.email,
-      password: values.password,
-    });
-    toast.success("Account created. Welcome to ATLAS!");
-    navigate("/dashboard", { replace: true });
+    try {
+      // confirmPassword is a form-only field; the service never receives it.
+      await registerAccount({
+        fullName: values.fullName,
+        email: values.email,
+        password: values.password,
+      });
+      toast.success("Account created. Welcome to ATLAS!");
+      navigate("/dashboard", { replace: true });
+    } catch (error) {
+      const apiError = extractApiError(error);
+      toast.error(apiError.message);
+    }
   }
 
   return (

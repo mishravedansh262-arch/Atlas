@@ -1,77 +1,64 @@
+import { api } from "../lib/api";
 import type { LoginCredentials, RegisterPayload, User } from "../types/Auth";
 
 /**
  * Authentication service — the single integration point for auth IO.
  *
- * Currently mock-backed; each function simulates a network round-trip.
- * When the real backend arrives, only this file needs to change —
- * the hook, store, and pages stay untouched.
+ * Communicates with the backend auth API. Authentication state is managed
+ * via HTTP-only cookies set by the server — no tokens are stored client-side.
  */
 
-const MOCK_REQUEST_DELAY_MS = 1500;
-
-/**
- * localStorage key for the mock session. A real backend would use an
- * httpOnly cookie instead; this key (and the read/write helpers below)
- * disappear when that backend arrives.
- */
-const SESSION_STORAGE_KEY = "atlas.session";
-
-function simulateRequest(): Promise<void> {
-  return new Promise((resolve) => setTimeout(resolve, MOCK_REQUEST_DELAY_MS));
+/** Shape returned by the backend for user data. */
+interface AuthApiResponse {
+  success: boolean;
+  data: {
+    user: {
+      id: string;
+      name: string;
+      email: string;
+    };
+  };
 }
 
-function persistSession(user: User): void {
-  localStorage.setItem(SESSION_STORAGE_KEY, JSON.stringify(user));
+/** Generates a deterministic avatar URL from the user's name. */
+function generateAvatarUrl(name: string): string {
+  return `https://api.dicebear.com/9.x/initials/svg?seed=${encodeURIComponent(name)}`;
 }
 
-function readSession(): User | null {
-  const raw = localStorage.getItem(SESSION_STORAGE_KEY);
-
-  if (!raw) {
-    return null;
-  }
-
-  try {
-    return JSON.parse(raw) as User;
-  } catch {
-    // Corrupted entry — discard it rather than crash session restore.
-    localStorage.removeItem(SESSION_STORAGE_KEY);
-    return null;
-  }
-}
-
-function createMockUser(overrides: Partial<User> = {}): User {
+/** Maps the backend user payload to the frontend User type. */
+function toUser(raw: AuthApiResponse["data"]["user"]): User {
   return {
-    id: "usr_mock_001",
-    name: "Vedansh Mishra",
-    email: "vedansh@atlas.app",
-    avatar: "https://api.dicebear.com/9.x/initials/svg?seed=Vedansh%20Mishra",
-    ...overrides,
+    id: raw.id,
+    name: raw.name,
+    email: raw.email,
+    avatar: generateAvatarUrl(raw.name),
   };
 }
 
 export async function login(credentials: LoginCredentials): Promise<User> {
-  await simulateRequest();
-
-  const user = createMockUser({ email: credentials.email });
-  persistSession(user);
-  return user;
+  const { data } = await api.post<AuthApiResponse>("/auth/login", credentials);
+  return toUser(data.data.user);
 }
 
 export async function register(payload: RegisterPayload): Promise<User> {
-  await simulateRequest();
-
-  const user = createMockUser({ name: payload.fullName, email: payload.email });
-  persistSession(user);
-  return user;
+  const { data } = await api.post<AuthApiResponse>("/auth/register", payload);
+  return toUser(data.data.user);
 }
 
 export async function logout(): Promise<void> {
-  localStorage.removeItem(SESSION_STORAGE_KEY);
+  await api.post("/auth/logout");
 }
 
-/** Restores the session user, or null when no session exists. */
+/**
+ * Restores the session by calling the protected /auth/me endpoint.
+ * Returns the current user if a valid session cookie exists, or null otherwise.
+ */
 export async function getCurrentUser(): Promise<User | null> {
-  return readSession();
+  try {
+    const { data } = await api.get<AuthApiResponse>("/auth/me");
+    return toUser(data.data.user);
+  } catch {
+    // 401 or network error — no active session
+    return null;
+  }
 }

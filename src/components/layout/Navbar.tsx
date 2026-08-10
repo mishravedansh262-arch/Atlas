@@ -3,15 +3,21 @@ import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 
 import { useAuth } from "../../hooks/useAuth";
+import { extractApiError } from "../../lib/api";
 
 function Navbar() {
   const navigate = useNavigate();
   const { user, logout } = useAuth();
 
   async function handleLogout() {
-    await logout();
-    toast.success("You have been logged out.");
-    navigate("/login", { replace: true });
+    try {
+      await logout();
+      toast.success("You have been logged out.");
+      navigate("/login", { replace: true });
+    } catch (error) {
+      const apiError = extractApiError(error);
+      toast.error(apiError.message);
+    }
   }
 
   return (

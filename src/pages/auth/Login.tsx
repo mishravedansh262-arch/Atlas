@@ -11,6 +11,7 @@ import FormField from "../../components/auth/FormField";
 import PasswordInput from "../../components/auth/PasswordInput";
 import { loginSchema, type LoginFormValues } from "../../lib/validation/auth";
 import { useAuth } from "../../hooks/useAuth";
+import { extractApiError } from "../../lib/api";
 
 export default function Login() {
   const navigate = useNavigate();
@@ -25,9 +26,14 @@ export default function Login() {
   });
 
   async function onSubmit(values: LoginFormValues) {
-    await login(values);
-    toast.success("Welcome back!");
-    navigate("/dashboard", { replace: true });
+    try {
+      await login(values);
+      toast.success("Welcome back!");
+      navigate("/dashboard", { replace: true });
+    } catch (error) {
+      const apiError = extractApiError(error);
+      toast.error(apiError.message);
+    }
   }
 
   return (
