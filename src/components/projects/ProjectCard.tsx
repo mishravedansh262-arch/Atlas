@@ -1,4 +1,4 @@
-import { Calendar } from "lucide-react";
+import { Calendar, Trash2 } from "lucide-react";
 
 import ProgressBar from "../ui/ProgressBar";
 import StatusBadge from "../ui/StatusBadge";
@@ -7,6 +7,7 @@ import type { Project, ProjectStatus } from "../../types";
 
 type Props = {
   project: Project;
+  onDelete?: (id: string) => void;
 };
 
 const statusBadge: Record<ProjectStatus, { label: string; variant: "success" | "info" | "warning" | "muted" }> = {
@@ -23,7 +24,7 @@ const typeLabel: Record<string, string> = {
   freelance: "Freelance",
 };
 
-export default function ProjectCard({ project }: Props) {
+export default function ProjectCard({ project, onDelete }: Props) {
   const badge = statusBadge[project.status];
 
   return (
@@ -41,7 +42,18 @@ export default function ProjectCard({ project }: Props) {
             {project.description}
           </p>
         </div>
-        <PriorityIndicator priority={project.priority} />
+        <div className="flex items-center gap-1.5">
+          <PriorityIndicator priority={project.priority} />
+          {onDelete && (
+            <button
+              onClick={() => onDelete(project.id)}
+              className="rounded p-1 text-text-muted opacity-0 transition-all hover:bg-error/10 hover:text-error group-hover:opacity-100"
+              aria-label="Delete project"
+            >
+              <Trash2 size={13} />
+            </button>
+          )}
+        </div>
       </div>
 
       {/* Progress */}
@@ -54,21 +66,23 @@ export default function ProjectCard({ project }: Props) {
       </div>
 
       {/* Technologies */}
-      <div className="mt-3 flex flex-wrap gap-1">
-        {project.technologies.slice(0, 4).map((tech) => (
-          <span
-            key={tech}
-            className="rounded bg-surface-overlay px-1.5 py-0.5 text-[10px] text-text-muted"
-          >
-            {tech}
-          </span>
-        ))}
-        {project.technologies.length > 4 && (
-          <span className="rounded bg-surface-overlay px-1.5 py-0.5 text-[10px] text-text-muted">
-            +{project.technologies.length - 4}
-          </span>
-        )}
-      </div>
+      {project.technologies.length > 0 && (
+        <div className="mt-3 flex flex-wrap gap-1">
+          {project.technologies.slice(0, 4).map((tech) => (
+            <span
+              key={tech}
+              className="rounded bg-surface-overlay px-1.5 py-0.5 text-[10px] text-text-muted"
+            >
+              {tech}
+            </span>
+          ))}
+          {project.technologies.length > 4 && (
+            <span className="rounded bg-surface-overlay px-1.5 py-0.5 text-[10px] text-text-muted">
+              +{project.technologies.length - 4}
+            </span>
+          )}
+        </div>
+      )}
 
       {/* Footer */}
       <div className="mt-4 flex items-center justify-between border-t border-border-secondary pt-3">

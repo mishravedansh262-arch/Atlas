@@ -3,7 +3,8 @@ import { CheckCircle2, Circle, Clock } from "lucide-react";
 
 import { cn } from "../../lib/cn";
 import PriorityIndicator from "../ui/PriorityIndicator";
-import { mockTasks } from "../../data/tasks";
+import Spinner from "../ui/Spinner";
+import { useTasks } from "../../hooks/useTasks";
 import type { TaskStatus } from "../../types";
 
 const statusIcon: Record<TaskStatus, typeof Circle> = {
@@ -19,7 +20,8 @@ const statusColor: Record<TaskStatus, string> = {
 };
 
 export default function UpcomingTasks() {
-  const tasks = mockTasks.filter((t) => t.status !== "completed").slice(0, 5);
+  const { data: tasks, isLoading } = useTasks();
+  const pending = tasks?.filter((t) => t.status !== "completed").slice(0, 5) ?? [];
 
   return (
     <div className="rounded-xl border border-border-secondary bg-surface-secondary p-5">
@@ -33,23 +35,31 @@ export default function UpcomingTasks() {
         </Link>
       </div>
 
-      <div className="space-y-1">
-        {tasks.map((task) => {
-          const Icon = statusIcon[task.status];
-          return (
-            <div
-              key={task.id}
-              className="flex items-center gap-3 rounded-lg px-2 py-2 transition-colors hover:bg-surface-tertiary"
-            >
-              <Icon size={14} className={cn("shrink-0", statusColor[task.status])} />
-              <span className="min-w-0 flex-1 truncate text-xs text-text-primary">
-                {task.title}
-              </span>
-              <PriorityIndicator priority={task.priority} />
-            </div>
-          );
-        })}
-      </div>
+      {isLoading ? (
+        <div className="flex justify-center py-6">
+          <Spinner size={16} className="text-text-muted" />
+        </div>
+      ) : pending.length === 0 ? (
+        <p className="py-4 text-center text-xs text-text-muted">No pending tasks</p>
+      ) : (
+        <div className="space-y-1">
+          {pending.map((task) => {
+            const Icon = statusIcon[task.status];
+            return (
+              <div
+                key={task.id}
+                className="flex items-center gap-3 rounded-lg px-2 py-2 transition-colors hover:bg-surface-tertiary"
+              >
+                <Icon size={14} className={cn("shrink-0", statusColor[task.status])} />
+                <span className="min-w-0 flex-1 truncate text-xs text-text-primary">
+                  {task.title}
+                </span>
+                <PriorityIndicator priority={task.priority} />
+              </div>
+            );
+          })}
+        </div>
+      )}
     </div>
   );
 }

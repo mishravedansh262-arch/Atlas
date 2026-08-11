@@ -1,4 +1,4 @@
-import { CheckCircle2, Circle, Clock, Calendar } from "lucide-react";
+import { CheckCircle2, Circle, Clock, Calendar, Trash2 } from "lucide-react";
 
 import { cn } from "../../lib/cn";
 import PriorityIndicator from "../ui/PriorityIndicator";
@@ -6,7 +6,8 @@ import type { Task, TaskStatus } from "../../types";
 
 type Props = {
   task: Task;
-  onToggle?: (id: string) => void;
+  onToggle?: (task: Task) => void;
+  onDelete?: (id: string) => void;
 };
 
 const statusIcon: Record<TaskStatus, typeof Circle> = {
@@ -28,7 +29,7 @@ const categoryLabel: Record<string, string> = {
   personal: "Personal",
 };
 
-export default function TaskItem({ task, onToggle }: Props) {
+export default function TaskItem({ task, onToggle, onDelete }: Props) {
   const Icon = statusIcon[task.status];
 
   return (
@@ -39,7 +40,7 @@ export default function TaskItem({ task, onToggle }: Props) {
       )}
     >
       <button
-        onClick={() => onToggle?.(task.id)}
+        onClick={() => onToggle?.(task)}
         className={cn("mt-0.5 shrink-0 transition-colors", statusColor[task.status])}
         aria-label={task.status === "completed" ? "Mark as incomplete" : "Mark as complete"}
       >
@@ -88,6 +89,15 @@ export default function TaskItem({ task, onToggle }: Props) {
               })}
             </span>
           </div>
+        )}
+        {onDelete && (
+          <button
+            onClick={() => onDelete(task.id)}
+            className="rounded p-1 text-text-muted opacity-0 transition-all hover:bg-error/10 hover:text-error group-hover:opacity-100"
+            aria-label="Delete task"
+          >
+            <Trash2 size={12} />
+          </button>
         )}
       </div>
     </div>

@@ -23,20 +23,20 @@ export interface ApiError {
  */
 export function extractApiError(error: unknown): ApiError {
   if (error instanceof AxiosError) {
-    const status = error.response?.status ?? 500;
+    // Network failure — server unreachable or CORS blocked the response
+    if (!error.response) {
+      return {
+        message: "Unable to reach the server. Please check your connection.",
+        statusCode: 0,
+      };
+    }
+
+    const status = error.response.status;
     const message =
-      (error.response?.data as { message?: string })?.message ||
+      (error.response.data as { message?: string })?.message ||
       getDefaultMessage(status);
 
     return { message, statusCode: status };
-  }
-
-  // Network failure or unexpected throw
-  if (error instanceof Error && error.message === "Network Error") {
-    return {
-      message: "Unable to reach the server. Please check your connection.",
-      statusCode: 0,
-    };
   }
 
   return { message: "An unexpected error occurred.", statusCode: 500 };
