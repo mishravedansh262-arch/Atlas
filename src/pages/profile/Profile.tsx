@@ -1,13 +1,23 @@
-import { Calendar, FolderKanban, CheckSquare, Target, Flame } from "lucide-react";
+import { Calendar, FolderKanban, CheckSquare, Target } from "lucide-react";
 
 import PageHeader from "../../components/ui/PageHeader";
 import SectionCard from "../../components/ui/SectionCard";
-import { mockProfile } from "../../data/profile";
 import { useAuth } from "../../hooks/useAuth";
+import { useProjects } from "../../hooks/useProjects";
+import { useTasks } from "../../hooks/useTasks";
 
 export default function Profile() {
   const { user } = useAuth();
-  const profile = { ...mockProfile, name: user?.name ?? mockProfile.name, email: user?.email ?? mockProfile.email };
+  const { data: projects } = useProjects();
+  const { data: tasks } = useTasks();
+
+  const completedProjects = projects?.filter((p) => p.status === "completed").length ?? 0;
+  const completedTasks = tasks?.filter((t) => t.status === "completed").length ?? 0;
+  const totalProjects = projects?.length ?? 0;
+
+  // Derive unique technologies from projects
+  const allTech = projects?.flatMap((p) => p.technologies) ?? [];
+  const uniqueSkills = [...new Set(allTech)].slice(0, 12);
 
   return (
     <div className="mx-auto max-w-7xl space-y-6">
@@ -17,37 +27,23 @@ export default function Profile() {
       <div className="rounded-xl border border-border-secondary bg-surface-secondary p-6">
         <div className="flex flex-col items-start gap-5 sm:flex-row sm:items-center">
           <img
-            src={user?.avatar ?? profile.avatar}
-            alt={profile.name}
+            src={user?.avatar ?? ""}
+            alt={user?.name ?? "User"}
             className="size-16 rounded-full ring-2 ring-border-secondary"
           />
           <div className="min-w-0 flex-1">
-            <h2 className="text-lg font-semibold text-text-primary">{profile.name}</h2>
-            <p className="text-sm text-text-secondary">{profile.email}</p>
-            <p className="mt-1 text-xs text-text-tertiary">
-              {profile.branch} — Year {profile.year}, Semester {profile.semester}
-            </p>
-            <p className="text-xs text-text-tertiary">{profile.university}</p>
+            <h2 className="text-lg font-semibold text-text-primary">{user?.name}</h2>
+            <p className="text-sm text-text-secondary">{user?.email}</p>
           </div>
-          <button className="shrink-0 rounded-lg border border-border-secondary bg-surface-tertiary px-3.5 py-2 text-xs font-medium text-text-secondary transition-colors hover:border-border-hover hover:text-text-primary">
-            Edit Profile
-          </button>
         </div>
-
-        {profile.bio && (
-          <p className="mt-4 border-t border-border-secondary pt-4 text-xs leading-relaxed text-text-secondary">
-            {profile.bio}
-          </p>
-        )}
       </div>
 
       {/* Stats row */}
-      <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
+      <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
         {[
-          { icon: FolderKanban, label: "Projects", value: profile.stats.projectsCompleted },
-          { icon: CheckSquare, label: "Tasks Done", value: profile.stats.tasksCompleted },
-          { icon: Target, label: "Milestones", value: profile.stats.milestonesReached },
-          { icon: Flame, label: "Day Streak", value: profile.stats.currentStreak },
+          { icon: FolderKanban, label: "Projects", value: totalProjects },
+          { icon: CheckSquare, label: "Tasks Done", value: completedTasks },
+          { icon: Target, label: "Completed Projects", value: completedProjects },
         ].map((stat) => {
           const Icon = stat.icon;
           return (
@@ -67,11 +63,11 @@ export default function Profile() {
         })}
       </div>
 
-      <div className="grid gap-4 lg:grid-cols-2">
-        {/* Skills */}
-        <SectionCard title="Technical Skills">
+      {/* Skills from projects */}
+      {uniqueSkills.length > 0 && (
+        <SectionCard title="Skills" description="Technologies from your projects">
           <div className="flex flex-wrap gap-1.5">
-            {profile.skills.map((skill) => (
+            {uniqueSkills.map((skill) => (
               <span
                 key={skill}
                 className="rounded-md border border-border-secondary bg-surface-tertiary px-2.5 py-1 text-xs text-text-secondary"
@@ -81,33 +77,13 @@ export default function Profile() {
             ))}
           </div>
         </SectionCard>
-
-        {/* Interests */}
-        <SectionCard title="Interests & Focus Areas">
-          <div className="flex flex-wrap gap-1.5">
-            {profile.interests.map((interest) => (
-              <span
-                key={interest}
-                className="rounded-md border border-brand-500/20 bg-brand-600/5 px-2.5 py-1 text-xs text-brand-400"
-              >
-                {interest}
-              </span>
-            ))}
-          </div>
-        </SectionCard>
-      </div>
+      )}
 
       {/* Journey info */}
       <SectionCard title="Journey">
         <div className="flex items-center gap-2 text-xs text-text-secondary">
           <Calendar size={13} className="text-text-muted" />
-          <span>
-            Joined ATLAS on{" "}
-            {new Date(profile.joinedAt).toLocaleDateString("en-US", {
-              month: "long",
-              year: "numeric",
-            })}
-          </span>
+          <span>Using ATLAS to track {totalProjects} projects and {completedTasks} completed tasks.</span>
         </div>
       </SectionCard>
     </div>

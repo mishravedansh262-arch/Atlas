@@ -4,20 +4,71 @@ import PageHeader from "../../components/ui/PageHeader";
 import SectionCard from "../../components/ui/SectionCard";
 import ProgressBar from "../../components/ui/ProgressBar";
 import StatCard from "../../components/dashboard/StatCard";
-import { mockAnalytics } from "../../data/analytics";
+import Spinner from "../../components/ui/Spinner";
+import EmptyState from "../../components/ui/EmptyState";
+import { useProjects } from "../../hooks/useProjects";
+import { useTasks } from "../../hooks/useTasks";
 
 export default function Analytics() {
-  const { completedTasks, totalTasks, completedProjects, totalProjects, currentStreak, longestStreak, weeklyActivity, skillProgress } = mockAnalytics;
+  const { data: projects, isLoading: projLoading } = useProjects();
+  const { data: tasks, isLoading: taskLoading } = useTasks();
 
-  const taskCompletion = Math.round((completedTasks / totalTasks) * 100);
-  const projectCompletion = Math.round((completedProjects / totalProjects) * 100);
-  const maxTasks = Math.max(...weeklyActivity.map((d) => d.tasks));
+  if (projLoading || taskLoading) {
+    return (
+      <div className="mx-auto max-w-7xl space-y-6">
+        <PageHeader title="Analytics" description="Track your productivity and progress." />
+        <div className="flex justify-center py-16">
+          <Spinner size={24} className="text-brand-400" />
+        </div>
+      </div>
+    );
+  }
+
+  const totalTasks = tasks?.length ?? 0;
+  const completedTasks = tasks?.filter((t) => t.status === "completed").length ?? 0;
+  const totalProjects = projects?.length ?? 0;
+  const completedProjects = projects?.filter((p) => p.status === "completed").length ?? 0;
+  const taskCompletion = totalTasks > 0 ? Math.round((completedTasks / totalTasks) * 100) : 0;
+  const projectCompletion = totalProjects > 0 ? Math.round((completedProjects / totalProjects) * 100) : 0;
+
+  // Derive category distribution
+  const categoryBreakdown = tasks
+    ? ["learning", "project", "career", "personal"].map((cat) => {
+        const count = tasks.filter((t) => t.category === cat).length;
+        return { name: cat.charAt(0).toUpperCase() + cat.slice(1), count, total: totalTasks };
+      })
+    : [];
+
+  // Derive project status breakdown
+  const statusBreakdown = projects
+    ? [
+        { name: "In Progress", count: projects.filter((p) => p.status === "in-progress").length },
+        { name: "Planning", count: projects.filter((p) => p.status === "planning").length },
+        { name: "Completed", count: projects.filter((p) => p.status === "completed").length },
+        { name: "On Hold", count: projects.filter((p) => p.status === "on-hold").length },
+      ].filter((s) => s.count > 0)
+    : [];
+
+  const hasData = totalTasks > 0 || totalProjects > 0;
+
+  if (!hasData) {
+    return (
+      <div className="mx-auto max-w-7xl space-y-6">
+        <PageHeader title="Analytics" description="Track your productivity and progress." />
+        <EmptyState
+          icon={TrendingUp}
+          title="No data yet"
+          description="Complete some tasks or create projects to unlock meaningful analytics."
+        />
+      </div>
+    );
+  }
 
   return (
     <div className="mx-auto max-w-7xl space-y-6">
       <PageHeader
         title="Analytics"
-        description="Track your productivity, skill development, and overall progress."
+        description="Track your productivity, completion rates, and overall progress."
       />
 
       {/* Summary Stats */}
@@ -37,59 +88,54 @@ export default function Analytics() {
           accentColor="text-success"
         />
         <StatCard
-          title="Current Streak"
-          value={`${currentStreak} days`}
-          subtitle={`Longest: ${longestStreak} days`}
+          title="Pending Tasks"
+          value={String(totalTasks - completedTasks)}
+          subtitle="Tasks remaining"
           icon={Flame}
           accentColor="text-warning"
         />
         <StatCard
-          title="Weekly Output"
-          value={`${weeklyActivity.reduce((a, d) => a + d.tasks, 0)}`}
-          subtitle="Tasks this week"
+          title="Total Output"
+          value={String(completedTasks + completedProjects)}
+          subtitle="Items completed"
           icon={Zap}
           accentColor="text-brand-300"
         />
       </div>
 
       <div className="grid gap-4 lg:grid-cols-2">
-        {/* Weekly Activity */}
-        <SectionCard title="Weekly Activity" description="Tasks completed each day">
-          <div className="flex items-end justify-between gap-2 pt-2" style={{ height: 120 }}>
-            {weeklyActivity.map((day) => {
-              const height = maxTasks > 0 ? (day.tasks / maxTasks) * 100 : 0;
-              return (
-                <div key={day.day} className="flex flex-1 flex-col items-center gap-1">
-                  <span className="text-[10px] font-medium text-text-secondary">{day.tasks}</span>
-                  <div className="flex w-full justify-center">
-                    <div
-                      className="w-6 rounded-t bg-brand-500/80 transition-all duration-300 hover:bg-brand-400"
-                      style={{ height: `${Math.max(height, 4)}%` }}
-                    />
-                  </div>
-                  <span className="text-[10px] text-text-muted">{day.day}</span>
-                </div>
-              );
-            })}
-          </div>
-        </SectionCard>
-
-        {/* Skill Progress */}
-        <SectionCard title="Skill Development" description="Proficiency across key areas">
+        {/* Task categories */}
+        <SectionCard title="Tasks by Category" description="Distribution across focus areas">
           <div className="space-y-4 pt-1">
-            {skillProgress.map((skill) => (
-              <div key={skill.name} className="space-y-1.5">
+            {categoryBreakdown.map((cat) => (
+              <div key={cat.name} className="space-y-1.5">
                 <div className="flex items-center justify-between">
-                  <span className="text-xs text-text-secondary">{skill.name}</span>
-                  <span className="text-[11px] font-medium text-text-primary">{skill.level}%</span>
+                  <span className="text-xs text-text-secondary">{cat.name}</span>
+                  <span className="text-[11px] font-medium text-text-primary">{cat.count}</span>
                 </div>
                 <ProgressBar
-                  value={skill.level}
-                  color={skill.level >= 70 ? "bg-success" : skill.level >= 50 ? "bg-brand-500" : "bg-warning"}
+                  value={cat.total > 0 ? Math.round((cat.count / cat.total) * 100) : 0}
+                  color="bg-brand-500"
                 />
               </div>
             ))}
           </div>
+        </SectionCard>
+
+        {/* Project status */}
+        <SectionCard title="Project Status" description="Current state of your projects">
+          {statusBreakdown.length > 0 ? (
+            <div className="space-y-3 pt-1">
+              {statusBreakdown.map((item) => (
+                <div key={item.name} className="flex items-center justify-between rounded-lg bg-surface-tertiary px-3 py-2.5">
+                  <span className="text-xs text-text-secondary">{item.name}</span>
+                  <span className="text-sm font-bold text-text-primary">{item.count}</span>
+                </div>
+              ))}
+            </div>
+          ) : (
+            <p className="py-4 text-center text-xs text-text-muted">No projects yet.</p>
+          )}
         </SectionCard>
       </div>
     </div>

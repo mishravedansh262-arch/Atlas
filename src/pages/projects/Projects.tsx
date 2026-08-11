@@ -7,14 +7,16 @@ import EmptyState from "../../components/ui/EmptyState";
 import Spinner from "../../components/ui/Spinner";
 import ProjectCard from "../../components/projects/ProjectCard";
 import ProjectFilters from "../../components/projects/ProjectFilters";
-import { useProjects, useCreateProject, useDeleteProject } from "../../hooks/useProjects";
+import ProjectFormDialog from "../../components/projects/ProjectFormDialog";
+import { useProjects, useDeleteProject } from "../../hooks/useProjects";
 import { extractApiError } from "../../lib/api";
-import type { ProjectStatus } from "../../types";
+import type { Project, ProjectStatus } from "../../types";
 
 export default function Projects() {
   const [activeFilter, setActiveFilter] = useState<ProjectStatus | "all">("all");
+  const [formOpen, setFormOpen] = useState(false);
+  const [editingProject, setEditingProject] = useState<Project | undefined>();
   const { data: projects, isLoading, isError } = useProjects();
-  const createMutation = useCreateProject();
   const deleteMutation = useDeleteProject();
 
   const filtered =
@@ -24,21 +26,18 @@ export default function Projects() {
         ? projects
         : projects.filter((p) => p.status === activeFilter);
 
-  async function handleCreateProject() {
-    try {
-      await createMutation.mutateAsync({
-        title: "New Project",
-        description: "Describe your project here...",
-        status: "planning",
-        priority: "medium",
-      });
-      toast.success("Project created!");
-    } catch (error) {
-      toast.error(extractApiError(error).message);
-    }
+  function handleEdit(project: Project) {
+    setEditingProject(project);
+    setFormOpen(true);
   }
 
-  async function handleDeleteProject(id: string) {
+  function handleCreate() {
+    setEditingProject(undefined);
+    setFormOpen(true);
+  }
+
+  async function handleDelete(id: string) {
+    if (!confirm("Delete this project? This action cannot be undone.")) return;
     try {
       await deleteMutation.mutateAsync(id);
       toast.success("Project deleted.");
@@ -54,9 +53,8 @@ export default function Projects() {
         description="Track and manage all your projects in one place."
         action={
           <button
-            onClick={handleCreateProject}
-            disabled={createMutation.isPending}
-            className="inline-flex items-center gap-2 rounded-lg bg-brand-600 px-3.5 py-2 text-xs font-medium text-white transition-colors hover:bg-brand-700 active:scale-[0.97] disabled:opacity-60"
+            onClick={handleCreate}
+            className="inline-flex items-center gap-2 rounded-lg bg-brand-600 px-3.5 py-2 text-xs font-medium text-white transition-colors hover:bg-brand-700 active:scale-[0.97]"
           >
             <Plus size={14} />
             New Project
@@ -88,7 +86,7 @@ export default function Projects() {
           action={
             activeFilter === "all" ? (
               <button
-                onClick={handleCreateProject}
+                onClick={handleCreate}
                 className="rounded-lg bg-brand-600 px-4 py-2 text-xs font-medium text-white hover:bg-brand-700"
               >
                 Create Project
@@ -102,11 +100,18 @@ export default function Projects() {
             <ProjectCard
               key={project.id}
               project={project}
-              onDelete={handleDeleteProject}
+              onEdit={handleEdit}
+              onDelete={handleDelete}
             />
           ))}
         </div>
       )}
+
+      <ProjectFormDialog
+        open={formOpen}
+        onClose={() => setFormOpen(false)}
+        project={editingProject}
+      />
     </div>
   );
 }

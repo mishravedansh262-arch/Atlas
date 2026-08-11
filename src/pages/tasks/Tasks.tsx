@@ -8,7 +8,8 @@ import EmptyState from "../../components/ui/EmptyState";
 import Spinner from "../../components/ui/Spinner";
 import TaskItem from "../../components/tasks/TaskItem";
 import TaskFilters, { type TaskView } from "../../components/tasks/TaskFilters";
-import { useTasks, useCreateTask, useUpdateTask, useDeleteTask } from "../../hooks/useTasks";
+import TaskFormDialog from "../../components/tasks/TaskFormDialog";
+import { useTasks, useUpdateTask, useDeleteTask } from "../../hooks/useTasks";
 import { extractApiError } from "../../lib/api";
 import type { Task } from "../../types";
 
@@ -39,8 +40,9 @@ function filterTasks(tasks: Task[], view: TaskView): Task[] {
 
 export default function Tasks() {
   const [view, setView] = useState<TaskView>("all");
+  const [formOpen, setFormOpen] = useState(false);
+  const [editingTask, setEditingTask] = useState<Task | undefined>();
   const { data: tasks, isLoading, isError } = useTasks();
-  const createMutation = useCreateTask();
   const updateMutation = useUpdateTask();
   const deleteMutation = useDeleteTask();
 
@@ -54,17 +56,14 @@ export default function Tasks() {
     completed: filterTasks(allTasks, "completed").length,
   };
 
-  async function handleCreateTask() {
-    try {
-      await createMutation.mutateAsync({
-        title: "New Task",
-        category: "personal",
-        priority: "medium",
-      });
-      toast.success("Task created!");
-    } catch (error) {
-      toast.error(extractApiError(error).message);
-    }
+  function handleCreate() {
+    setEditingTask(undefined);
+    setFormOpen(true);
+  }
+
+  function handleEdit(task: Task) {
+    setEditingTask(task);
+    setFormOpen(true);
   }
 
   async function handleToggle(task: Task) {
@@ -92,9 +91,8 @@ export default function Tasks() {
         description="Stay on top of your daily work and long-term goals."
         action={
           <button
-            onClick={handleCreateTask}
-            disabled={createMutation.isPending}
-            className="inline-flex items-center gap-2 rounded-lg bg-brand-600 px-3.5 py-2 text-xs font-medium text-white transition-colors hover:bg-brand-700 active:scale-[0.97] disabled:opacity-60"
+            onClick={handleCreate}
+            className="inline-flex items-center gap-2 rounded-lg bg-brand-600 px-3.5 py-2 text-xs font-medium text-white transition-colors hover:bg-brand-700 active:scale-[0.97]"
           >
             <Plus size={14} />
             Add Task
@@ -127,10 +125,7 @@ export default function Tasks() {
           }
           action={
             view === "all" ? (
-              <button
-                onClick={handleCreateTask}
-                className="rounded-lg bg-brand-600 px-4 py-2 text-xs font-medium text-white hover:bg-brand-700"
-              >
+              <button onClick={handleCreate} className="rounded-lg bg-brand-600 px-4 py-2 text-xs font-medium text-white hover:bg-brand-700">
                 Add Task
               </button>
             ) : undefined
@@ -144,12 +139,19 @@ export default function Tasks() {
                 key={task.id}
                 task={task}
                 onToggle={handleToggle}
+                onEdit={handleEdit}
                 onDelete={handleDelete}
               />
             ))}
           </div>
         </SectionCard>
       )}
+
+      <TaskFormDialog
+        open={formOpen}
+        onClose={() => setFormOpen(false)}
+        task={editingTask}
+      />
     </div>
   );
 }

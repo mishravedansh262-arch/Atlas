@@ -1,4 +1,4 @@
-import { CheckCircle2, Circle, Clock, Calendar, Trash2 } from "lucide-react";
+import { CheckCircle2, Circle, Clock, Calendar, Pencil, Trash2 } from "lucide-react";
 
 import { cn } from "../../lib/cn";
 import PriorityIndicator from "../ui/PriorityIndicator";
@@ -7,6 +7,7 @@ import type { Task, TaskStatus } from "../../types";
 type Props = {
   task: Task;
   onToggle?: (task: Task) => void;
+  onEdit?: (task: Task) => void;
   onDelete?: (id: string) => void;
 };
 
@@ -29,7 +30,7 @@ const categoryLabel: Record<string, string> = {
   personal: "Personal",
 };
 
-export default function TaskItem({ task, onToggle, onDelete }: Props) {
+export default function TaskItem({ task, onToggle, onEdit, onDelete }: Props) {
   const Icon = statusIcon[task.status];
 
   return (
@@ -48,47 +49,36 @@ export default function TaskItem({ task, onToggle, onDelete }: Props) {
       </button>
 
       <div className="min-w-0 flex-1">
-        <p
-          className={cn(
-            "text-xs font-medium",
-            task.status === "completed"
-              ? "text-text-tertiary line-through"
-              : "text-text-primary",
-          )}
-        >
+        <p className={cn("text-xs font-medium", task.status === "completed" ? "text-text-tertiary line-through" : "text-text-primary")}>
           {task.title}
         </p>
-
         {task.description && (
-          <p className="mt-0.5 line-clamp-1 text-[11px] text-text-tertiary">
-            {task.description}
-          </p>
+          <p className="mt-0.5 line-clamp-1 text-[11px] text-text-tertiary">{task.description}</p>
         )}
-
         <div className="mt-1.5 flex flex-wrap items-center gap-2">
           {task.projectTitle && (
-            <span className="rounded bg-surface-overlay px-1.5 py-0.5 text-[10px] text-text-muted">
-              {task.projectTitle}
-            </span>
+            <span className="rounded bg-surface-overlay px-1.5 py-0.5 text-[10px] text-text-muted">{task.projectTitle}</span>
           )}
-          <span className="text-[10px] text-text-muted">
-            {categoryLabel[task.category]}
-          </span>
+          <span className="text-[10px] text-text-muted">{categoryLabel[task.category]}</span>
         </div>
       </div>
 
-      <div className="flex shrink-0 items-center gap-2">
+      <div className="flex shrink-0 items-center gap-1.5">
         <PriorityIndicator priority={task.priority} />
         {task.dueDate && (
           <div className="flex items-center gap-1 text-[11px] text-text-muted">
             <Calendar size={10} />
-            <span>
-              {new Date(task.dueDate).toLocaleDateString("en-US", {
-                month: "short",
-                day: "numeric",
-              })}
-            </span>
+            <span>{new Date(task.dueDate).toLocaleDateString("en-US", { month: "short", day: "numeric" })}</span>
           </div>
+        )}
+        {onEdit && (
+          <button
+            onClick={() => onEdit(task)}
+            className="rounded p-1 text-text-muted opacity-0 transition-all hover:bg-surface-overlay hover:text-text-secondary group-hover:opacity-100"
+            aria-label="Edit task"
+          >
+            <Pencil size={11} />
+          </button>
         )}
         {onDelete && (
           <button
@@ -96,7 +86,7 @@ export default function TaskItem({ task, onToggle, onDelete }: Props) {
             className="rounded p-1 text-text-muted opacity-0 transition-all hover:bg-error/10 hover:text-error group-hover:opacity-100"
             aria-label="Delete task"
           >
-            <Trash2 size={12} />
+            <Trash2 size={11} />
           </button>
         )}
       </div>

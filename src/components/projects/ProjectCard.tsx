@@ -1,4 +1,4 @@
-import { Calendar, Trash2 } from "lucide-react";
+import { Calendar, Pencil, Trash2 } from "lucide-react";
 
 import ProgressBar from "../ui/ProgressBar";
 import StatusBadge from "../ui/StatusBadge";
@@ -7,6 +7,7 @@ import type { Project, ProjectStatus } from "../../types";
 
 type Props = {
   project: Project;
+  onEdit?: (project: Project) => void;
   onDelete?: (id: string) => void;
 };
 
@@ -24,7 +25,7 @@ const typeLabel: Record<string, string> = {
   freelance: "Freelance",
 };
 
-export default function ProjectCard({ project, onDelete }: Props) {
+export default function ProjectCard({ project, onEdit, onDelete }: Props) {
   const badge = statusBadge[project.status];
 
   return (
@@ -42,15 +43,24 @@ export default function ProjectCard({ project, onDelete }: Props) {
             {project.description}
           </p>
         </div>
-        <div className="flex items-center gap-1.5">
+        <div className="flex items-center gap-1">
           <PriorityIndicator priority={project.priority} />
+          {onEdit && (
+            <button
+              onClick={() => onEdit(project)}
+              className="rounded p-1 text-text-muted opacity-0 transition-all hover:bg-surface-overlay hover:text-text-secondary group-hover:opacity-100"
+              aria-label="Edit project"
+            >
+              <Pencil size={12} />
+            </button>
+          )}
           {onDelete && (
             <button
               onClick={() => onDelete(project.id)}
               className="rounded p-1 text-text-muted opacity-0 transition-all hover:bg-error/10 hover:text-error group-hover:opacity-100"
               aria-label="Delete project"
             >
-              <Trash2 size={13} />
+              <Trash2 size={12} />
             </button>
           )}
         </div>
@@ -69,10 +79,7 @@ export default function ProjectCard({ project, onDelete }: Props) {
       {project.technologies.length > 0 && (
         <div className="mt-3 flex flex-wrap gap-1">
           {project.technologies.slice(0, 4).map((tech) => (
-            <span
-              key={tech}
-              className="rounded bg-surface-overlay px-1.5 py-0.5 text-[10px] text-text-muted"
-            >
+            <span key={tech} className="rounded bg-surface-overlay px-1.5 py-0.5 text-[10px] text-text-muted">
               {tech}
             </span>
           ))}
@@ -86,9 +93,7 @@ export default function ProjectCard({ project, onDelete }: Props) {
 
       {/* Footer */}
       <div className="mt-4 flex items-center justify-between border-t border-border-secondary pt-3">
-        <span className="text-[11px] text-text-muted">
-          {typeLabel[project.type] ?? project.type}
-        </span>
+        <span className="text-[11px] text-text-muted">{typeLabel[project.type] ?? project.type}</span>
         {project.deadline && (
           <div className="flex items-center gap-1 text-[11px] text-text-muted">
             <Calendar size={11} />
