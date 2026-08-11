@@ -1,5 +1,5 @@
 import { Outlet } from "react-router-dom";
-import { BarChart3, CheckSquare, FolderKanban } from "lucide-react";
+import { BarChart3, CheckSquare, FolderKanban, Sparkles } from "lucide-react";
 
 const features = [
   {
@@ -8,50 +8,65 @@ const features = [
     icon: FolderKanban,
   },
   {
-    name: "Task Tracking",
+    name: "Smart Task Tracking",
     description: "Stay on top of every task with a clear daily overview.",
     icon: CheckSquare,
   },
   {
-    name: "Productivity Analytics",
-    description: "Understand your progress with meaningful insights.",
+    name: "Productivity Insights",
+    description: "Understand your progress with meaningful analytics.",
     icon: BarChart3,
+  },
+  {
+    name: "AI-Powered Guidance",
+    description: "Get personalized recommendations for your B.Tech journey.",
+    icon: Sparkles,
   },
 ];
 
 export default function AuthLayout() {
   return (
-    <div className="flex min-h-screen bg-zinc-950 text-zinc-100">
-      <aside className="hidden w-1/2 flex-col justify-between border-r border-zinc-800 p-12 lg:flex">
-        <div>
-          <h1 className="text-3xl font-bold tracking-wide text-white">
-            🚀 ATLAS
-          </h1>
-          <p className="mt-1 text-sm text-zinc-400">AI Productivity OS</p>
+    <div className="flex min-h-screen bg-surface-base text-text-primary">
+      {/* Left branding panel */}
+      <aside className="hidden w-1/2 flex-col justify-between border-r border-border-secondary bg-surface-primary p-10 lg:flex xl:p-12">
+        <div className="flex items-center gap-2.5">
+          <div className="flex size-9 items-center justify-center rounded-lg bg-brand-600 text-sm font-bold text-white">
+            A
+          </div>
+          <div>
+            <h1 className="text-base font-semibold tracking-tight text-text-primary">
+              ATLAS
+            </h1>
+            <p className="text-xs text-text-tertiary">Productivity OS</p>
+          </div>
         </div>
 
-        <div className="max-w-md">
-          <h2 className="text-2xl font-semibold text-white">
-            Your work, organized in one place.
+        <div className="max-w-sm">
+          <h2 className="text-2xl font-semibold leading-tight tracking-tight text-text-primary">
+            Your B.Tech journey,
+            <br />
+            <span className="text-gradient">organized and on track.</span>
           </h2>
-          <p className="mt-3 text-zinc-400">
+          <p className="mt-3 text-sm leading-relaxed text-text-secondary">
             ATLAS brings your projects, tasks, and productivity insights
             together so you can focus on what matters.
           </p>
 
-          <ul className="mt-10 space-y-6">
+          <ul className="mt-8 space-y-5">
             {features.map((feature) => {
               const Icon = feature.icon;
 
               return (
-                <li key={feature.name} className="flex items-start gap-4">
-                  <div className="rounded-xl bg-zinc-900 p-2 text-blue-500">
-                    <Icon size={20} aria-hidden="true" />
+                <li key={feature.name} className="flex items-start gap-3">
+                  <div className="rounded-lg border border-border-secondary bg-surface-secondary p-2 text-brand-400">
+                    <Icon size={16} aria-hidden="true" />
                   </div>
 
                   <div>
-                    <p className="font-medium text-white">{feature.name}</p>
-                    <p className="mt-1 text-sm text-zinc-400">
+                    <p className="text-sm font-medium text-text-primary">
+                      {feature.name}
+                    </p>
+                    <p className="mt-0.5 text-xs text-text-tertiary">
                       {feature.description}
                     </p>
                   </div>
@@ -61,9 +76,10 @@ export default function AuthLayout() {
           </ul>
         </div>
 
-        <p className="text-xs text-zinc-500">ATLAS v0.1.0</p>
+        <p className="text-xs text-text-muted">ATLAS v0.1.0</p>
       </aside>
 
+      {/* Right form area */}
       <main className="flex flex-1 items-center justify-center p-4 sm:p-6">
         <Outlet />
       </main>

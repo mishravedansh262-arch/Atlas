@@ -23,8 +23,11 @@ export default function AuthProvider({ children }: AuthProviderProps) {
 
   if (isRestoring) {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-zinc-950">
-        <Spinner size={32} className="text-zinc-400" />
+      <div className="flex min-h-screen items-center justify-center bg-surface-base">
+        <div className="flex flex-col items-center gap-3">
+          <Spinner size={24} className="text-brand-400" />
+          <p className="text-xs text-text-muted">Loading ATLAS...</p>
+        </div>
       </div>
     );
   }

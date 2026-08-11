@@ -1,5 +1,6 @@
 import {
   LayoutDashboard,
+  Map,
   FolderKanban,
   CheckSquare,
   BarChart3,
@@ -12,6 +13,11 @@ export const navigation = [
     name: "Dashboard",
     href: "/dashboard",
     icon: LayoutDashboard,
+  },
+  {
+    name: "Roadmap",
+    href: "/roadmap",
+    icon: Map,
   },
   {
     name: "Projects",

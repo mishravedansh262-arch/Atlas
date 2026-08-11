@@ -8,6 +8,12 @@ import Home from "../pages/Home";
 import Login from "../pages/auth/Login";
 import Register from "../pages/auth/Register";
 import Dashboard from "../pages/dashboard/Dashboard";
+import Roadmap from "../pages/roadmap/Roadmap";
+import Projects from "../pages/projects/Projects";
+import Tasks from "../pages/tasks/Tasks";
+import Analytics from "../pages/analytics/Analytics";
+import Profile from "../pages/profile/Profile";
+import Settings from "../pages/settings/Settings";
 import NotFound from "../pages/NotFound";
 import { ProtectedRoute, PublicRoute } from "./guards";
 
@@ -44,12 +50,35 @@ export const router = createBrowserRouter([
     element: <ProtectedRoute />,
     children: [
       {
-        path: "/dashboard",
         element: <DashboardLayout />,
         children: [
           {
-            index: true,
+            path: "/dashboard",
             element: <Dashboard />,
+          },
+          {
+            path: "/roadmap",
+            element: <Roadmap />,
+          },
+          {
+            path: "/projects",
+            element: <Projects />,
+          },
+          {
+            path: "/tasks",
+            element: <Tasks />,
+          },
+          {
+            path: "/analytics",
+            element: <Analytics />,
+          },
+          {
+            path: "/profile",
+            element: <Profile />,
+          },
+          {
+            path: "/settings",
+            element: <Settings />,
           },
         ],
       },

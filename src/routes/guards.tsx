@@ -13,8 +13,8 @@ export function ProtectedRoute() {
 
   if (isRestoring) {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-zinc-950">
-        <Spinner size={32} className="text-zinc-400" />
+      <div className="flex min-h-screen items-center justify-center bg-surface-base">
+        <Spinner size={24} className="text-brand-400" />
       </div>
     );
   }
@@ -36,8 +36,8 @@ export function PublicRoute() {
 
   if (isRestoring) {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-zinc-950">
-        <Spinner size={32} className="text-zinc-400" />
+      <div className="flex min-h-screen items-center justify-center bg-surface-base">
+        <Spinner size={24} className="text-brand-400" />
       </div>
     );
   }

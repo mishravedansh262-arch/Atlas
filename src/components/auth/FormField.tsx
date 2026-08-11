@@ -1,5 +1,7 @@
 import type { InputHTMLAttributes, ReactNode, Ref } from "react";
 
+import { cn } from "../../lib/cn";
+
 type FormFieldProps = {
   id: string;
   label: string;
@@ -22,7 +24,7 @@ export default function FormField({
     <div>
       <label
         htmlFor={id}
-        className="mb-2 block text-sm font-medium text-zinc-300"
+        className="mb-2 block text-xs font-medium text-text-secondary"
       >
         {label}
       </label>
@@ -33,11 +35,12 @@ export default function FormField({
           ref={ref}
           aria-invalid={error ? true : undefined}
           aria-describedby={error ? errorId : undefined}
-          className={`w-full rounded-xl border bg-zinc-950 px-4 py-3 text-sm text-white outline-none transition-all duration-200 placeholder:text-zinc-500 focus:ring-1 ${
+          className={cn(
+            "w-full rounded-lg border bg-surface-tertiary px-3.5 py-2.5 text-sm text-text-primary outline-none transition-all duration-[var(--transition-fast)] placeholder:text-text-muted",
             error
-              ? "border-red-500 focus:border-red-500 focus:ring-red-500"
-              : "border-zinc-800 hover:border-zinc-700 focus:border-blue-600 focus:ring-blue-600"
-          }`}
+              ? "border-error focus:border-error focus:ring-1 focus:ring-error"
+              : "border-border-secondary hover:border-border-hover focus:border-brand-500 focus:ring-1 focus:ring-brand-500",
+          )}
           {...inputProps}
         />
 
@@ -49,7 +52,7 @@ export default function FormField({
       </div>
 
       {error && (
-        <p id={errorId} role="alert" className="mt-2 text-sm text-red-400">
+        <p id={errorId} role="alert" className="mt-1.5 text-xs text-error">
           {error}
         </p>
       )}

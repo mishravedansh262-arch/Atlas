@@ -1,5 +1,6 @@
 import { Loader2 } from "lucide-react";
-import clsx from "clsx";
+
+import { cn } from "../../lib/cn";
 
 type SpinnerProps = {
   size?: number;
@@ -11,7 +12,7 @@ export default function Spinner({ size = 16, className }: SpinnerProps) {
     <Loader2
       size={size}
       aria-hidden="true"
-      className={clsx("animate-spin", className)}
+      className={cn("animate-spin text-current", className)}
     />
   );
 }

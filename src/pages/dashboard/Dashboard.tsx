@@ -1,19 +1,27 @@
 import DashboardHeader from "../../components/dashboard/DashboardHeader";
 import QuickActions from "../../components/dashboard/QuickActions";
+import ProgressOverview from "../../components/dashboard/ProgressOverview";
 import RecentActivity from "../../components/dashboard/RecentActivity";
+import UpcomingTasks from "../../components/dashboard/UpcomingTasks";
 import StatsGrid from "../../components/dashboard/StatsGrid";
 
 function Dashboard() {
   return (
-    <div className="space-y-8">
+    <div className="mx-auto max-w-7xl space-y-6">
       <DashboardHeader />
 
       <StatsGrid />
 
-      <div className="grid gap-6 lg:grid-cols-2">
-        <RecentActivity />
+      <div className="grid gap-4 lg:grid-cols-3">
+        <div className="space-y-4 lg:col-span-2">
+          <UpcomingTasks />
+          <RecentActivity />
+        </div>
 
-        <QuickActions />
+        <div className="space-y-4">
+          <ProgressOverview />
+          <QuickActions />
+        </div>
       </div>
     </div>
   );
