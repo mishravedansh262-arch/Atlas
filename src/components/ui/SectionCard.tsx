@@ -11,6 +11,11 @@ type SectionCardProps = {
   noPadding?: boolean;
 };
 
+/**
+ * Standard content card.
+ * Spec: tonal surface + 1px ghost border, 6px radius, 16px internal padding,
+ * mono uppercase header for a "system-info" feel.
+ */
 export default function SectionCard({
   title,
   description,
@@ -22,19 +27,25 @@ export default function SectionCard({
   return (
     <div
       className={cn(
-        "rounded-xl border border-border-secondary bg-surface-secondary",
-        !noPadding && "p-5",
+        "rounded-xl border border-border-primary bg-surface-secondary",
+        !noPadding && "p-4",
         className,
       )}
     >
       {(title || action) && (
-        <div className={cn("flex items-center justify-between", noPadding && "px-5 pt-5", title && "mb-4")}>
-          <div>
+        <div
+          className={cn(
+            "flex items-start justify-between gap-3",
+            noPadding && "px-4 pt-4",
+            (title || description) && "mb-4",
+          )}
+        >
+          <div className="min-w-0">
             {title && (
-              <h3 className="text-sm font-semibold text-text-primary">{title}</h3>
+              <h3 className="label-mono text-text-secondary">{title}</h3>
             )}
             {description && (
-              <p className="mt-0.5 text-xs text-text-tertiary">{description}</p>
+              <p className="mt-1 text-xs text-text-tertiary">{description}</p>
             )}
           </div>
           {action && <div className="shrink-0">{action}</div>}

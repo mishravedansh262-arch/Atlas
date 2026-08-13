@@ -44,7 +44,7 @@ export default function SettingsAppearance() {
               className={cn(
                 "rounded-lg border px-4 py-2.5 text-xs font-medium transition-colors",
                 theme === t.id
-                  ? "border-brand-500 bg-brand-600/10 text-brand-400"
+                  ? "border-brand-500 bg-brand-500/10 text-brand-400"
                   : "border-border-secondary bg-surface-tertiary text-text-secondary hover:border-border-hover hover:text-text-primary",
               )}
             >

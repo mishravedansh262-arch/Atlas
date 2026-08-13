@@ -35,7 +35,7 @@ export default function SettingsSecurity() {
               className="w-full rounded-lg border border-border-secondary bg-surface-tertiary px-3.5 py-2.5 text-sm text-text-primary outline-none transition-colors placeholder:text-text-muted focus:border-brand-500 focus:ring-1 focus:ring-brand-500"
             />
           </div>
-          <button className="rounded-lg bg-brand-600 px-4 py-2 text-xs font-medium text-white transition-colors hover:bg-brand-700">
+          <button className="rounded-lg bg-brand-500 px-4 py-2 text-xs font-medium text-white transition-colors hover:bg-brand-600">
             Update Password
           </button>
         </div>

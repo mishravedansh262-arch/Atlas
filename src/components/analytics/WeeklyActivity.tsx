@@ -40,19 +40,19 @@ export default function WeeklyActivity({ tasks, milestones }: Props) {
           const isToday = day.dateStr === new Date().toISOString().split("T")[0];
           return (
             <div key={day.dateStr} className="flex flex-1 flex-col items-center gap-1.5">
-              <span className="text-[10px] font-medium text-text-secondary">{day.count || ""}</span>
+              <span className="meta-mono text-[10px] text-text-secondary">{day.count || ""}</span>
               <div className="flex w-full justify-center">
                 <div
                   className={cn(
                     "w-7 rounded-t transition-all duration-300",
-                    day.count > 0 ? "bg-brand-500/80 hover:bg-brand-400" : "bg-surface-overlay",
+                    day.count > 0 ? "bg-brand-500 hover:bg-brand-400" : "bg-surface-track",
                     isToday && "ring-1 ring-brand-500/50",
                   )}
                   style={{ height: `${Math.max(height, 6)}%` }}
                   title={`${day.count} completed on ${day.dateStr}`}
                 />
               </div>
-              <span className={cn("text-[10px]", isToday ? "font-medium text-brand-400" : "text-text-muted")}>{day.label}</span>
+              <span className={cn("meta-mono text-[10px]", isToday ? "text-brand-400" : "text-text-muted")}>{day.label}</span>
             </div>
           );
         })}

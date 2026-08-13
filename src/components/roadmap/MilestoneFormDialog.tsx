@@ -57,8 +57,8 @@ export default function MilestoneFormDialog({ open, onClose, milestone }: Props)
     }
   }
 
-  const inputClass = "w-full rounded-lg border border-border-secondary bg-surface-tertiary px-3 py-2 text-sm text-text-primary outline-none transition-colors placeholder:text-text-muted focus:border-brand-500 focus:ring-1 focus:ring-brand-500";
-  const labelClass = "mb-1.5 block text-xs font-medium text-text-secondary";
+  const inputClass = "w-full rounded-lg border border-border-primary bg-surface-tertiary px-3 py-2 text-sm text-text-primary outline-none transition-all placeholder:text-text-muted hover:border-border-hover focus:border-brand-500 focus:shadow-[0_0_0_2px_rgb(59_130_246/0.2)]";
+  const labelClass = "label-mono mb-1.5 block text-text-secondary";
 
   return (
     <Dialog open={open} onClose={onClose} title={isEditing ? "Edit Milestone" : "New Milestone"} description={isEditing ? "Update milestone details." : "Add a milestone to your roadmap."}>
@@ -119,7 +119,7 @@ export default function MilestoneFormDialog({ open, onClose, milestone }: Props)
         </div>
         <div className="flex justify-end gap-2 pt-2">
           <button type="button" onClick={onClose} className="rounded-lg px-4 py-2 text-xs font-medium text-text-secondary hover:text-text-primary">Cancel</button>
-          <button type="submit" disabled={isPending || !title.trim()} className="inline-flex items-center gap-2 rounded-lg bg-brand-600 px-4 py-2 text-xs font-medium text-white transition-colors hover:bg-brand-700 disabled:opacity-60">
+          <button type="submit" disabled={isPending || !title.trim()} className="inline-flex items-center gap-2 rounded-lg bg-brand-500 px-4 py-2 text-xs font-medium text-white transition-colors hover:bg-brand-600 disabled:opacity-60">
             {isPending && <Spinner />}
             {isEditing ? "Save Changes" : "Create Milestone"}
           </button>

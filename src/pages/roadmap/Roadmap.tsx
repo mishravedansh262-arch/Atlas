@@ -56,28 +56,26 @@ export default function Roadmap() {
   return (
     <div className="mx-auto max-w-7xl space-y-6">
       <PageHeader title="Roadmap" description="Your journey milestones — plan, track, and achieve." action={
-        <button onClick={handleCreate} className="inline-flex items-center gap-2 rounded-lg bg-brand-600 px-3.5 py-2 text-xs font-medium text-white transition-colors hover:bg-brand-700 active:scale-[0.97]">
-          <Plus size={14} /> Add Milestone
+        <button onClick={handleCreate} className="label-mono inline-flex items-center gap-2 rounded-lg bg-brand-500 px-3.5 py-2 text-white transition-colors hover:bg-brand-600 active:scale-[0.98]">
+          <Plus size={13} strokeWidth={2} /> Add Milestone
         </button>
       } />
 
       {/* Summary */}
       {all.length > 0 && (
         <div className="grid gap-3 sm:grid-cols-3">
-          <div className="rounded-lg border border-border-secondary bg-surface-secondary p-4">
-            <p className="text-[11px] font-medium uppercase tracking-wider text-text-muted">Total</p>
-            <p className="mt-1 text-xl font-bold text-text-primary">{all.length}</p>
+          <div className="rounded-xl border border-border-primary bg-surface-secondary p-4">
+            <p className="label-mono text-text-muted">Total</p>
+            <p className="mt-2 text-2xl font-bold tracking-tight text-text-primary">{all.length}</p>
           </div>
-          <div className="rounded-lg border border-border-secondary bg-surface-secondary p-4">
-            <p className="text-[11px] font-medium uppercase tracking-wider text-text-muted">In Progress</p>
-            <p className="mt-1 text-xl font-bold text-brand-400">{inProgress.length}</p>
+          <div className="rounded-xl border border-border-primary bg-surface-secondary p-4">
+            <p className="label-mono text-text-muted">In Progress</p>
+            <p className="mt-2 text-2xl font-bold tracking-tight text-brand-400">{inProgress.length}</p>
           </div>
-          <div className="rounded-lg border border-border-secondary bg-surface-secondary p-4">
-            <p className="text-[11px] font-medium uppercase tracking-wider text-text-muted">Completion</p>
-            <div className="mt-1 flex items-center gap-2">
-              <p className="text-xl font-bold text-success">{completionRate}%</p>
-              <ProgressBar value={completionRate} color="bg-success" className="flex-1" />
-            </div>
+          <div className="rounded-xl border border-border-primary bg-surface-secondary p-4">
+            <p className="label-mono text-text-muted">Completion</p>
+            <p className="mt-2 text-2xl font-bold tracking-tight text-success">{completionRate}%</p>
+            <ProgressBar value={completionRate} color="bg-success" className="mt-2" />
           </div>
         </div>
       )}
@@ -89,7 +87,7 @@ export default function Roadmap() {
         <EmptyState icon={Map} title="Could not load milestones" description="Server may be unavailable. Try again later." />
       ) : all.length === 0 ? (
         <EmptyState icon={Map} title="No milestones yet" description="Add your first milestone to start tracking your journey." action={
-          <button onClick={handleCreate} className="rounded-lg bg-brand-600 px-4 py-2 text-xs font-medium text-white hover:bg-brand-700">Create Milestone</button>
+          <button onClick={handleCreate} className="rounded-lg bg-brand-500 px-4 py-2 text-xs font-medium text-white hover:bg-brand-600">Create Milestone</button>
         } />
       ) : (
         <div className="space-y-2">
@@ -98,9 +96,10 @@ export default function Roadmap() {
             const Icon = cfg.icon;
             const overdue = isOverdue(ms);
             return (
-              <div key={ms.id} className={cn("group flex items-start gap-3 rounded-xl border bg-surface-secondary p-4 transition-colors hover:bg-surface-tertiary", overdue ? "border-error/30" : "border-border-secondary")}>
-                <button onClick={() => handleStatusToggle(ms)} className={cn("mt-0.5 shrink-0 transition-colors", cfg.color)} aria-label="Toggle status">
-                  <Icon size={18} />
+              <div key={ms.id} className={cn("group relative flex items-start gap-3 overflow-hidden rounded-xl border bg-surface-secondary p-4 transition-colors", overdue ? "border-error/30 hover:border-error/50" : "border-border-primary hover:border-border-hover")}>
+                {overdue && <span className="absolute inset-y-0 left-0 w-1 bg-error" aria-hidden="true" />}
+                <button onClick={() => handleStatusToggle(ms)} className={cn("mt-0.5 shrink-0 transition-colors", cfg.color, overdue && "ml-1")} aria-label={`Toggle status for ${ms.title}`}>
+                  <Icon size={18} strokeWidth={1.5} />
                 </button>
                 <div className="min-w-0 flex-1">
                   <div className="flex flex-wrap items-center gap-2">
@@ -114,8 +113,8 @@ export default function Roadmap() {
                     <PriorityIndicator priority={ms.priority} showLabel />
                     <ProgressBar value={ms.progress} showLabel className="w-24" />
                     {ms.targetDate && (
-                      <span className={cn("flex items-center gap-1 text-[11px]", overdue ? "text-error" : "text-text-muted")}>
-                        <Calendar size={10} /> {new Date(ms.targetDate).toLocaleDateString("en-US", { month: "short", day: "numeric" })}
+                      <span className={cn("meta-mono flex items-center gap-1 text-[10px]", overdue ? "text-error" : "text-text-muted")}>
+                        <Calendar size={10} strokeWidth={1.5} /> {new Date(ms.targetDate).toLocaleDateString("en-US", { month: "short", day: "numeric" })}
                       </span>
                     )}
                   </div>

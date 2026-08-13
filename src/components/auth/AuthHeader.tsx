@@ -6,7 +6,7 @@ type AuthHeaderProps = {
 export default function AuthHeader({ title, subtitle }: AuthHeaderProps) {
   return (
     <div className="mb-8 text-center">
-      <div className="mx-auto mb-5 flex size-10 items-center justify-center rounded-xl bg-brand-600 text-sm font-bold text-white lg:hidden">
+      <div className="mx-auto mb-5 flex size-10 items-center justify-center rounded-xl bg-brand-500 text-sm font-bold text-white lg:hidden">
         A
       </div>
 

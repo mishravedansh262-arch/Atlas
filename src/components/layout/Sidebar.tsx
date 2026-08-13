@@ -1,72 +1,71 @@
 import { NavLink } from "react-router-dom";
-import { X } from "lucide-react";
-import { motion, AnimatePresence } from "framer-motion";
 
 import { cn } from "../../lib/cn";
 import { navigation } from "../../lib/navigation";
 import { useAuth } from "../../hooks/useAuth";
 
-type SidebarProps = {
-  isOpen: boolean;
-  onClose: () => void;
-};
-
-function SidebarContent({ onClose }: { onClose?: () => void }) {
+/**
+ * Desktop navigation rail.
+ *
+ * Per the design spec: 72px slim rail that expands to 240px on hover.
+ * Active route is marked by a 2px vertical accent line on the far left
+ * plus a tinted surface — no pill, no shadow.
+ */
+export default function Sidebar() {
   const { user } = useAuth();
 
   return (
-    <div className="flex h-full flex-col">
+    <aside
+      className={cn(
+        "group hidden shrink-0 overflow-hidden border-r border-border-primary bg-surface-primary",
+        "w-[72px] transition-[width] duration-300 ease-in-out hover:w-[240px] lg:flex lg:flex-col",
+      )}
+    >
       {/* Brand */}
-      <div className="flex h-14 items-center justify-between px-4">
-        <div className="flex items-center gap-2.5">
-          <div className="flex size-7 items-center justify-center rounded-md bg-brand-600 text-xs font-bold text-white">
-            A
-          </div>
-          <span className="text-[13px] font-semibold tracking-tight text-text-primary">
+      <div className="flex h-14 w-[240px] shrink-0 items-center border-b border-border-primary px-[22px]">
+        <div className="flex size-7 shrink-0 items-center justify-center rounded-lg bg-brand-500 text-[11px] font-bold text-white">
+          A
+        </div>
+        <div className="ml-4 flex flex-col whitespace-nowrap opacity-0 transition-opacity duration-200 group-hover:opacity-100">
+          <span className="text-sm font-bold tracking-tight text-text-primary">
             ATLAS
           </span>
+          <span className="meta-mono text-[10px] text-text-muted">
+            Command Center
+          </span>
         </div>
-
-        {onClose && (
-          <button
-            onClick={onClose}
-            className="rounded-md p-1.5 text-text-tertiary transition-colors hover:bg-surface-elevated hover:text-text-secondary lg:hidden"
-            aria-label="Close menu"
-          >
-            <X size={16} />
-          </button>
-        )}
       </div>
 
-      {/* Navigation */}
-      <nav className="flex-1 space-y-0.5 px-2 py-3">
+      {/* Destinations */}
+      <nav className="flex w-[240px] flex-1 flex-col gap-0.5 overflow-y-auto overflow-x-hidden py-3">
         {navigation.map((item) => {
           const Icon = item.icon;
           return (
             <NavLink
               key={item.name}
               to={item.href}
-              onClick={onClose}
               className={({ isActive }) =>
                 cn(
-                  "group flex items-center gap-2.5 rounded-lg px-3 py-2 text-[13px] font-medium transition-all duration-[var(--transition-fast)]",
+                  "flex h-10 shrink-0 items-center border-l-2 pl-[22px] pr-4 transition-colors duration-[var(--transition-fast)]",
                   isActive
-                    ? "bg-surface-elevated text-text-primary"
-                    : "text-text-tertiary hover:bg-surface-tertiary hover:text-text-secondary",
+                    ? "border-brand-500 bg-brand-500/10 text-brand-400"
+                    : "border-transparent text-text-tertiary hover:bg-surface-tertiary hover:text-text-secondary",
                 )
               }
             >
               {({ isActive }) => (
                 <>
                   <Icon
-                    size={16}
-                    strokeWidth={isActive ? 2 : 1.5}
+                    size={20}
+                    strokeWidth={1.5}
                     className={cn(
-                      "shrink-0 transition-colors",
-                      isActive ? "text-brand-400" : "text-text-muted group-hover:text-text-tertiary",
+                      "-ml-0.5 shrink-0",
+                      isActive ? "text-brand-400" : "text-current",
                     )}
                   />
-                  <span>{item.name}</span>
+                  <span className="label-mono ml-4 whitespace-nowrap opacity-0 transition-opacity duration-200 group-hover:opacity-100">
+                    {item.name}
+                  </span>
                 </>
               )}
             </NavLink>
@@ -74,58 +73,28 @@ function SidebarContent({ onClose }: { onClose?: () => void }) {
         })}
       </nav>
 
-      {/* User identity */}
-      <div className="border-t border-border-secondary p-3">
-        <div className="flex items-center gap-2.5 rounded-lg px-2 py-2">
+      {/* Identity */}
+      <div className="w-[240px] shrink-0 border-t border-border-primary px-[22px] py-3">
+        <div className="flex items-center">
           {user ? (
-            <img src={user.avatar} alt={user.name} className="size-7 rounded-full" />
+            <img
+              src={user.avatar}
+              alt=""
+              className="size-7 shrink-0 rounded-lg border border-border-primary"
+            />
           ) : (
-            <div className="size-7 rounded-full bg-surface-overlay" />
+            <div className="size-7 shrink-0 rounded-lg bg-surface-overlay" />
           )}
-          <div className="min-w-0 flex-1">
-            <p className="truncate text-xs font-medium text-text-primary">{user?.name}</p>
-            <p className="truncate text-[11px] text-text-muted">{user?.email}</p>
+          <div className="ml-4 min-w-0 whitespace-nowrap opacity-0 transition-opacity duration-200 group-hover:opacity-100">
+            <p className="truncate text-xs font-medium text-text-primary">
+              {user?.name}
+            </p>
+            <p className="meta-mono truncate text-[10px] text-text-muted">
+              {user?.email}
+            </p>
           </div>
         </div>
       </div>
-    </div>
+    </aside>
   );
 }
-
-function Sidebar({ isOpen, onClose }: SidebarProps) {
-  return (
-    <>
-      {/* Desktop */}
-      <aside className="hidden w-56 shrink-0 border-r border-border-secondary bg-surface-primary lg:block">
-        <SidebarContent />
-      </aside>
-
-      {/* Mobile overlay */}
-      <AnimatePresence>
-        {isOpen && (
-          <>
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 0.15 }}
-              className="fixed inset-0 z-40 bg-black/70 lg:hidden"
-              onClick={onClose}
-            />
-            <motion.aside
-              initial={{ x: "-100%" }}
-              animate={{ x: 0 }}
-              exit={{ x: "-100%" }}
-              transition={{ type: "spring", damping: 28, stiffness: 320 }}
-              className="fixed inset-y-0 left-0 z-50 w-60 border-r border-border-secondary bg-surface-primary lg:hidden"
-            >
-              <SidebarContent onClose={onClose} />
-            </motion.aside>
-          </>
-        )}
-      </AnimatePresence>
-    </>
-  );
-}
-
-export default Sidebar;

@@ -8,6 +8,10 @@ type ProgressBarProps = {
   className?: string;
 };
 
+/**
+ * Linear progress indicator.
+ * Spec: 4px height, dedicated dark track, accent indicator, mono label.
+ */
 export default function ProgressBar({
   value,
   size = "sm",
@@ -15,15 +19,14 @@ export default function ProgressBar({
   showLabel = false,
   className,
 }: ProgressBarProps) {
-  const clamped = Math.min(100, Math.max(0, value));
+  const clamped = Math.min(100, Math.max(0, Math.round(value)));
 
   return (
     <div className={cn("flex items-center gap-2", className)}>
       <div
         className={cn(
-          "flex-1 overflow-hidden rounded-full bg-surface-overlay",
-          size === "sm" && "h-1.5",
-          size === "md" && "h-2",
+          "flex-1 overflow-hidden rounded-full bg-surface-track",
+          size === "sm" ? "h-1" : "h-1.5",
         )}
         role="progressbar"
         aria-valuenow={clamped}
@@ -36,7 +39,7 @@ export default function ProgressBar({
         />
       </div>
       {showLabel && (
-        <span className="shrink-0 text-xs font-medium text-text-secondary">
+        <span className="meta-mono shrink-0 text-[10px] text-text-secondary">
           {clamped}%
         </span>
       )}

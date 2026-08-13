@@ -1,13 +1,26 @@
 @import "tailwindcss";
 
 /*
- * ATLAS Design System
- * -------------------
- * Personal Command Center — Developer + Student + Productivity OS
+ * ATLAS Design System — "Command Center"
+ * --------------------------------------
+ * Derived from the Stitch ATLAS Command Center design spec.
+ *
+ * Core principles from the spec:
+ *  - Tonal layering, not shadows. Depth = lighter surface + 1px "ghost border".
+ *  - Tight, structural radii (2px badges / 4px controls / 6px cards).
+ *  - Geist for content, JetBrains Mono for metadata & labels.
+ *  - Electric blue accent reserved for interaction, focus and active nav.
+ *  - Semantic colour only for state, never decoration.
+ *
+ * NOTE ON PALETTE: the spec ships two conflicting palettes — an auto-generated
+ * Material export (primary #adc6ff, bg #131313) and the authored prose
+ * (primary #3B82F6, bg #0A0A0A, ghost border #2A2A2A). We follow the prose:
+ * it is stated explicitly, the spec's own HTML hardcodes #3B82F6 for buttons
+ * and progress indicators, and it preserves the existing ATLAS brand blue.
  */
 
 @theme {
-  /* ── Brand ── */
+  /* ── Brand: Electric Blue ── */
   --color-brand-50: #eff6ff;
   --color-brand-100: #dbeafe;
   --color-brand-200: #bfdbfe;
@@ -17,25 +30,26 @@
   --color-brand-600: #2563eb;
   --color-brand-700: #1d4ed8;
 
-  /* ── Surfaces (carefully layered depth) ── */
-  --color-surface-base: #08080a;
-  --color-surface-primary: #0a0a0d;
-  --color-surface-secondary: #111114;
-  --color-surface-tertiary: #161619;
-  --color-surface-elevated: #1a1a1e;
-  --color-surface-overlay: #222226;
+  /* ── Surfaces: tonal layering ── */
+  --color-surface-base: #0a0a0a;        /* global app background */
+  --color-surface-primary: #0e0e0e;     /* rail / top bar */
+  --color-surface-secondary: #121212;   /* primary card */
+  --color-surface-tertiary: #171717;    /* nested / hover */
+  --color-surface-elevated: #1c1c1c;    /* modals, popovers */
+  --color-surface-overlay: #232323;     /* highest contrast chip */
+  --color-surface-track: #1a1a1a;       /* progress track */
 
-  /* ── Borders ── */
-  --color-border-primary: #232328;
-  --color-border-secondary: #1a1a1f;
-  --color-border-hover: #333338;
+  /* ── Borders: ghost border technique ── */
+  --color-border-primary: #2a2a2a;      /* the canonical ghost border */
+  --color-border-secondary: #212121;    /* quieter divider */
+  --color-border-hover: #3a3a3a;
   --color-border-active: #3b82f6;
 
   /* ── Text ── */
-  --color-text-primary: #f4f4f5;
-  --color-text-secondary: #a1a1aa;
-  --color-text-tertiary: #71717a;
-  --color-text-muted: #4a4a52;
+  --color-text-primary: #ededed;
+  --color-text-secondary: #a1a1a1;
+  --color-text-tertiary: #737373;
+  --color-text-muted: #525252;
 
   /* ── Semantic ── */
   --color-success: #10b981;
@@ -43,27 +57,29 @@
   --color-error: #ef4444;
   --color-info: #3b82f6;
 
-  /* ── Shadows ── */
-  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.4);
-  --shadow-md: 0 4px 12px -2px rgb(0 0 0 / 0.5);
-  --shadow-lg: 0 12px 24px -4px rgb(0 0 0 / 0.6);
-  --shadow-glow: 0 0 24px -4px rgb(59 130 246 / 0.12);
-
-  /* ── Radius ── */
-  --radius-sm: 0.375rem;
-  --radius-md: 0.5rem;
-  --radius-lg: 0.75rem;
-  --radius-xl: 1rem;
-  --radius-2xl: 1.25rem;
+  /* ── Radius: structural, not consumer-soft ──
+     Remapped so existing utility usage lands on spec values:
+       rounded-sm/md -> 2px (badges, tags)
+       rounded-lg    -> 4px (buttons, inputs, nav items)
+       rounded-xl    -> 6px (cards, containers)
+       rounded-2xl   -> 8px (auth card) */
+  --radius-sm: 0.125rem;
+  --radius-md: 0.125rem;
+  --radius-lg: 0.25rem;
+  --radius-xl: 0.375rem;
+  --radius-2xl: 0.5rem;
 
   /* ── Transitions ── */
   --transition-fast: 120ms cubic-bezier(0.25, 0.1, 0.25, 1);
   --transition-base: 180ms cubic-bezier(0.25, 0.1, 0.25, 1);
-  --transition-slow: 280ms cubic-bezier(0.25, 0.1, 0.25, 1);
+  --transition-slow: 300ms cubic-bezier(0.4, 0, 0.2, 1);
 
   /* ── Typography ── */
-  --font-sans: "Inter", system-ui, -apple-system, sans-serif;
-  --font-mono: "JetBrains Mono", ui-monospace, monospace;
+  --font-sans: "Geist", "Inter", system-ui, -apple-system, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
+
+  /* Only floating dialogs get a shadow, per the spec. */
+  --shadow-dialog: 0 16px 40px -8px rgb(0 0 0 / 0.7);
 }
 
 /* ── Global Resets ── */
@@ -90,13 +106,16 @@ body {
   font-family: var(--font-sans);
   background-color: var(--color-surface-base);
   color: var(--color-text-primary);
-  font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+}
+
+::selection {
+  background: rgb(59 130 246 / 0.25);
 }
 
 /* ── Scrollbar ── */
 ::-webkit-scrollbar {
-  width: 5px;
-  height: 5px;
+  width: 6px;
+  height: 6px;
 }
 
 ::-webkit-scrollbar-track {
@@ -105,7 +124,7 @@ body {
 
 ::-webkit-scrollbar-thumb {
   background: var(--color-border-primary);
-  border-radius: 4px;
+  border-radius: 3px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
@@ -113,6 +132,29 @@ body {
 }
 
 /* ── Utilities ── */
+
+/*
+ * Mono metadata label. Per the spec: all-caps, letter-spaced, 12px mono.
+ * Used for card headers, stat labels, timestamps, IDs and tags.
+ */
+.label-mono {
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  line-height: 1rem;
+  font-weight: 500;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+/* Same treatment, sentence case — for inline metadata that reads as content. */
+.meta-mono {
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  line-height: 1rem;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+}
+
 .focus-ring {
   outline: none;
 }
@@ -122,25 +164,32 @@ body {
 }
 
 .text-gradient {
-  background: linear-gradient(135deg, var(--color-brand-400), var(--color-brand-600));
+  background: linear-gradient(135deg, var(--color-brand-300), var(--color-brand-600));
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
 }
 
-.glass {
-  background: rgb(10 10 13 / 0.85);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
+/* Input focus: 1px blue border + subtle outer glow (spec: 2px spread, 20%). */
+.input-focus:focus {
+  border-color: var(--color-brand-500);
+  box-shadow: 0 0 0 2px rgb(59 130 246 / 0.2);
+  outline: none;
 }
 
-/* ── Page transition wrapper ── */
+/* ── Page transition ── */
 @media (prefers-reduced-motion: no-preference) {
   .page-enter {
     animation: pageIn 200ms ease-out;
   }
   @keyframes pageIn {
-    from { opacity: 0; transform: translateY(4px); }
-    to { opacity: 1; transform: translateY(0); }
+    from {
+      opacity: 0;
+      transform: translateY(4px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
   }
 }

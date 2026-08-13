@@ -55,7 +55,7 @@ function Toggle({ label, description, checked, onChange }: ToggleProps) {
           checked={checked}
           onChange={(e) => onChange(e.target.checked)}
         />
-        <div className="h-5 w-9 rounded-full bg-surface-overlay transition-colors after:absolute after:left-[2px] after:top-[2px] after:size-4 after:rounded-full after:bg-text-muted after:transition-all peer-checked:bg-brand-600 peer-checked:after:translate-x-full peer-checked:after:bg-white peer-focus-visible:ring-2 peer-focus-visible:ring-brand-500" />
+        <div className="h-5 w-9 rounded-full bg-surface-overlay transition-colors after:absolute after:left-[2px] after:top-[2px] after:size-4 after:rounded-full after:bg-text-muted after:transition-all peer-checked:bg-brand-500 peer-checked:after:translate-x-full peer-checked:after:bg-white peer-focus-visible:ring-2 peer-focus-visible:ring-brand-500" />
       </label>
     </div>
   );

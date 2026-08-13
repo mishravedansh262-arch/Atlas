@@ -1,4 +1,4 @@
-import { useEffect, useRef, type ReactNode } from "react";
+import { useEffect, type ReactNode } from "react";
 import { X } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
@@ -10,9 +10,18 @@ type DialogProps = {
   children: ReactNode;
 };
 
-export default function Dialog({ open, onClose, title, description, children }: DialogProps) {
-  const contentRef = useRef<HTMLDivElement>(null);
-
+/**
+ * Modal dialog.
+ * Spec: sits on the elevated surface tier; floating dialogs are the one
+ * permitted exception to the no-shadow rule.
+ */
+export default function Dialog({
+  open,
+  onClose,
+  title,
+  description,
+  children,
+}: DialogProps) {
   useEffect(() => {
     if (!open) return;
     function handleKeyDown(e: KeyboardEvent) {
@@ -35,35 +44,39 @@ export default function Dialog({ open, onClose, title, description, children }: 
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.12 }}
-            className="absolute inset-0 bg-black/70"
+            className="absolute inset-0 bg-black/75"
             onClick={onClose}
           />
           <motion.div
-            ref={contentRef}
-            initial={{ opacity: 0, scale: 0.96, y: 8 }}
+            initial={{ opacity: 0, scale: 0.97, y: 6 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
-            exit={{ opacity: 0, scale: 0.96, y: 8 }}
+            exit={{ opacity: 0, scale: 0.97, y: 6 }}
             transition={{ duration: 0.15, ease: "easeOut" }}
-            className="relative w-full max-w-md rounded-xl border border-border-secondary bg-surface-primary p-5 shadow-lg"
+            className="relative max-h-[90vh] w-full max-w-md overflow-y-auto rounded-xl border border-border-primary bg-surface-elevated p-5 shadow-[var(--shadow-dialog)]"
             role="dialog"
             aria-modal="true"
             aria-labelledby="dialog-title"
           >
-            <div className="mb-4 flex items-start justify-between">
-              <div>
-                <h2 id="dialog-title" className="text-sm font-semibold text-text-primary">
+            <div className="mb-5 flex items-start justify-between gap-4">
+              <div className="min-w-0">
+                <h2
+                  id="dialog-title"
+                  className="label-mono text-text-secondary"
+                >
                   {title}
                 </h2>
                 {description && (
-                  <p className="mt-0.5 text-xs text-text-tertiary">{description}</p>
+                  <p className="mt-1.5 text-xs text-text-tertiary">
+                    {description}
+                  </p>
                 )}
               </div>
               <button
                 onClick={onClose}
-                className="rounded-md p-1 text-text-muted transition-colors hover:bg-surface-elevated hover:text-text-secondary"
+                className="shrink-0 rounded-lg p-1 text-text-muted transition-colors hover:bg-surface-overlay hover:text-text-secondary"
                 aria-label="Close dialog"
               >
-                <X size={15} />
+                <X size={15} strokeWidth={1.5} />
               </button>
             </div>
             {children}

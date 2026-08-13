@@ -3,7 +3,6 @@ import { CheckSquare, Plus } from "lucide-react";
 import { toast } from "sonner";
 
 import PageHeader from "../../components/ui/PageHeader";
-import SectionCard from "../../components/ui/SectionCard";
 import EmptyState from "../../components/ui/EmptyState";
 import Spinner from "../../components/ui/Spinner";
 import TaskItem from "../../components/tasks/TaskItem";
@@ -92,7 +91,7 @@ export default function Tasks() {
         action={
           <button
             onClick={handleCreate}
-            className="inline-flex items-center gap-2 rounded-lg bg-brand-600 px-3.5 py-2 text-xs font-medium text-white transition-colors hover:bg-brand-700 active:scale-[0.97]"
+            className="inline-flex items-center gap-2 rounded-lg bg-brand-500 px-3.5 py-2 text-xs font-medium text-white transition-colors hover:bg-brand-600 active:scale-[0.97]"
           >
             <Plus size={14} />
             Add Task
@@ -125,26 +124,24 @@ export default function Tasks() {
           }
           action={
             view === "all" ? (
-              <button onClick={handleCreate} className="rounded-lg bg-brand-600 px-4 py-2 text-xs font-medium text-white hover:bg-brand-700">
+              <button onClick={handleCreate} className="rounded-lg bg-brand-500 px-4 py-2 text-xs font-medium text-white hover:bg-brand-600">
                 Add Task
               </button>
             ) : undefined
           }
         />
       ) : (
-        <SectionCard noPadding>
-          <div className="divide-y divide-border-secondary px-2 py-2">
-            {filtered.map((task) => (
-              <TaskItem
-                key={task.id}
-                task={task}
-                onToggle={handleToggle}
-                onEdit={handleEdit}
-                onDelete={handleDelete}
-              />
-            ))}
-          </div>
-        </SectionCard>
+        <div className="flex flex-col gap-2">
+          {filtered.map((task) => (
+            <TaskItem
+              key={task.id}
+              task={task}
+              onToggle={handleToggle}
+              onEdit={handleEdit}
+              onDelete={handleDelete}
+            />
+          ))}
+        </div>
       )}
 
       <TaskFormDialog

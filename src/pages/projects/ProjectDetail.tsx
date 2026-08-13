@@ -99,7 +99,7 @@ export default function ProjectDetail() {
           title="Project not found"
           description="This project doesn't exist or you don't have access to it."
           action={
-            <Link to="/projects" className="inline-flex items-center gap-2 rounded-lg bg-brand-600 px-4 py-2 text-xs font-medium text-white hover:bg-brand-700">
+            <Link to="/projects" className="inline-flex items-center gap-2 rounded-lg bg-brand-500 px-4 py-2 text-xs font-medium text-white hover:bg-brand-600">
               <ArrowLeft size={14} /> Back to Projects
             </Link>
           }
@@ -158,7 +158,7 @@ export default function ProjectDetail() {
       {project.technologies.length > 0 && (
         <div className="flex flex-wrap gap-1.5">
           {project.technologies.map((tech) => (
-            <span key={tech} className="rounded-md border border-border-secondary bg-surface-tertiary px-2.5 py-1 text-xs text-text-secondary">{tech}</span>
+            <span key={tech} className="meta-mono rounded-sm border border-border-primary bg-surface-tertiary px-2 py-1 text-[10px] text-text-tertiary">{tech}</span>
           ))}
         </div>
       )}
@@ -168,18 +168,17 @@ export default function ProjectDetail() {
         title="Tasks"
         description={relatedTasks.length > 0 ? `${completedRelated}/${relatedTasks.length} completed` : undefined}
         action={
-          <button onClick={handleAddTask} className="inline-flex items-center gap-1.5 rounded-lg bg-brand-600 px-3 py-1.5 text-[11px] font-medium text-white transition-colors hover:bg-brand-700">
+          <button onClick={handleAddTask} className="inline-flex items-center gap-1.5 rounded-lg bg-brand-500 px-3 py-1.5 text-[11px] font-medium text-white transition-colors hover:bg-brand-600">
             <Plus size={12} /> Add Task
           </button>
         }
-        noPadding={relatedTasks.length > 0}
       >
         {relatedTasks.length === 0 ? (
           <p className="py-6 text-center text-xs text-text-muted">
             No tasks yet. Add a task to track work for this project.
           </p>
         ) : (
-          <div className="divide-y divide-border-secondary px-2 py-2">
+          <div className="flex flex-col gap-2">
             {relatedTasks.map((task) => (
               <TaskItem key={task.id} task={task} onToggle={handleTaskToggle} onEdit={handleTaskEdit} onDelete={handleTaskDelete} />
             ))}

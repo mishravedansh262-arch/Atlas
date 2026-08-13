@@ -4,11 +4,12 @@ import { toast } from "sonner";
 
 import PageHeader from "../../components/ui/PageHeader";
 import EmptyState from "../../components/ui/EmptyState";
-import Spinner from "../../components/ui/Spinner";
+import { CardSkeleton } from "../../components/ui/Skeleton";
 import ProjectCard from "../../components/projects/ProjectCard";
 import ProjectFilters from "../../components/projects/ProjectFilters";
 import ProjectFormDialog from "../../components/projects/ProjectFormDialog";
 import { useProjects, useDeleteProject } from "../../hooks/useProjects";
+import { useTasks } from "../../hooks/useTasks";
 import { extractApiError } from "../../lib/api";
 import type { Project, ProjectStatus } from "../../types";
 
@@ -17,14 +18,14 @@ export default function Projects() {
   const [formOpen, setFormOpen] = useState(false);
   const [editingProject, setEditingProject] = useState<Project | undefined>();
   const { data: projects, isLoading, isError } = useProjects();
+  const { data: tasks } = useTasks();
   const deleteMutation = useDeleteProject();
 
-  const filtered =
-    !projects
-      ? []
-      : activeFilter === "all"
-        ? projects
-        : projects.filter((p) => p.status === activeFilter);
+  const filtered = !projects
+    ? []
+    : activeFilter === "all"
+      ? projects
+      : projects.filter((p) => p.status === activeFilter);
 
   function handleEdit(project: Project) {
     setEditingProject(project);
@@ -54,40 +55,49 @@ export default function Projects() {
         action={
           <button
             onClick={handleCreate}
-            className="inline-flex items-center gap-2 rounded-lg bg-brand-600 px-3.5 py-2 text-xs font-medium text-white transition-colors hover:bg-brand-700 active:scale-[0.97]"
+            className="label-mono inline-flex items-center gap-2 rounded-lg bg-brand-500 px-3.5 py-2 text-white transition-colors hover:bg-brand-500 active:scale-[0.98]"
           >
-            <Plus size={14} />
+            <Plus size={13} strokeWidth={2} />
             New Project
           </button>
         }
       />
 
-      <ProjectFilters activeStatus={activeFilter} onStatusChange={setActiveFilter} />
+      <ProjectFilters
+        activeStatus={activeFilter}
+        onStatusChange={setActiveFilter}
+      />
 
       {isLoading ? (
-        <div className="flex justify-center py-16">
-          <Spinner size={24} className="text-brand-400" />
+        <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
+          {Array.from({ length: 6 }).map((_, i) => (
+            <CardSkeleton key={i} />
+          ))}
         </div>
       ) : isError ? (
         <EmptyState
           icon={FolderKanban}
           title="Could not load projects"
-          description="The server may be unavailable. Please try again later."
+          description="We couldn't reach the server. Check your connection and try again."
         />
       ) : filtered.length === 0 ? (
         <EmptyState
           icon={FolderKanban}
-          title="No projects found"
+          title={
+            activeFilter === "all"
+              ? "Your workspace is empty"
+              : "Nothing matches this filter"
+          }
           description={
             activeFilter === "all"
-              ? "Create your first project to get started."
-              : "No projects match the current filter."
+              ? "Create your first project and start building."
+              : "Try a different status filter to see more projects."
           }
           action={
             activeFilter === "all" ? (
               <button
                 onClick={handleCreate}
-                className="rounded-lg bg-brand-600 px-4 py-2 text-xs font-medium text-white hover:bg-brand-700"
+                className="label-mono rounded-lg bg-brand-500 px-4 py-2 text-white transition-colors hover:bg-brand-500"
               >
                 Create Project
               </button>
@@ -96,14 +106,21 @@ export default function Projects() {
         />
       ) : (
         <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
-          {filtered.map((project) => (
-            <ProjectCard
-              key={project.id}
-              project={project}
-              onEdit={handleEdit}
-              onDelete={handleDelete}
-            />
-          ))}
+          {filtered.map((project) => {
+            const projectTasks = tasks?.filter((t) => t.projectId === project.id);
+            return (
+              <ProjectCard
+                key={project.id}
+                project={project}
+                taskCount={projectTasks?.length}
+                completedTaskCount={
+                  projectTasks?.filter((t) => t.status === "completed").length
+                }
+                onEdit={handleEdit}
+                onDelete={handleDelete}
+              />
+            );
+          })}
         </div>
       )}
 

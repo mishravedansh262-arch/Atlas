@@ -68,8 +68,8 @@ export default function Profile() {
   const completedTasks = tasks?.filter((t) => t.status === "completed").length ?? 0;
   const totalProjects = projects?.length ?? 0;
 
-  const inputClass = "w-full rounded-lg border border-border-secondary bg-surface-tertiary px-3 py-2 text-sm text-text-primary outline-none transition-colors placeholder:text-text-muted focus:border-brand-500 focus:ring-1 focus:ring-brand-500";
-  const labelClass = "mb-1.5 block text-xs font-medium text-text-secondary";
+  const inputClass = "w-full rounded-lg border border-border-primary bg-surface-tertiary px-3 py-2 text-sm text-text-primary outline-none transition-all placeholder:text-text-muted hover:border-border-hover focus:border-brand-500 focus:shadow-[0_0_0_2px_rgb(59_130_246/0.2)]";
+  const labelClass = "label-mono mb-1.5 block text-text-secondary";
 
   if (isLoading) {
     return (
@@ -164,7 +164,7 @@ export default function Profile() {
               <button
                 onClick={handleSave}
                 disabled={updateMutation.isPending}
-                className="inline-flex items-center gap-2 rounded-lg bg-brand-600 px-4 py-2 text-xs font-medium text-white transition-colors hover:bg-brand-700 disabled:opacity-60"
+                className="inline-flex items-center gap-2 rounded-lg bg-brand-500 px-4 py-2 text-xs font-medium text-white transition-colors hover:bg-brand-600 disabled:opacity-60"
               >
                 {updateMutation.isPending && <Spinner />}
                 Save Changes
@@ -207,7 +207,7 @@ export default function Profile() {
             <SectionCard title="Technical Skills">
               <div className="flex flex-wrap gap-1.5">
                 {profile!.skills.map((skill) => (
-                  <span key={skill} className="rounded-md border border-border-secondary bg-surface-tertiary px-2.5 py-1 text-xs text-text-secondary">{skill}</span>
+                  <span key={skill} className="meta-mono rounded-sm border border-border-primary bg-surface-tertiary px-2 py-1 text-[10px] text-text-tertiary">{skill}</span>
                 ))}
               </div>
             </SectionCard>
@@ -216,7 +216,7 @@ export default function Profile() {
             <SectionCard title="Interests">
               <div className="flex flex-wrap gap-1.5">
                 {profile!.interests.map((interest) => (
-                  <span key={interest} className="rounded-md border border-brand-500/20 bg-brand-600/5 px-2.5 py-1 text-xs text-brand-400">{interest}</span>
+                  <span key={interest} className="meta-mono rounded-sm border border-brand-500/20 bg-brand-500/10 px-2 py-1 text-[10px] text-brand-400">{interest}</span>
                 ))}
               </div>
             </SectionCard>

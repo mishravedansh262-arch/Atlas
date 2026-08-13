@@ -10,6 +10,11 @@ type FormFieldProps = {
   ref?: Ref<HTMLInputElement>;
 } & InputHTMLAttributes<HTMLInputElement>;
 
+/**
+ * Labelled text input.
+ * Spec: mono label, tonal input surface, ghost border, blue focus border
+ * with a subtle outer glow.
+ */
 export default function FormField({
   id,
   label,
@@ -24,7 +29,10 @@ export default function FormField({
     <div>
       <label
         htmlFor={id}
-        className="mb-2 block text-xs font-medium text-text-secondary"
+        className={cn(
+          "label-mono mb-2 block",
+          error ? "text-error" : "text-text-secondary",
+        )}
       >
         {label}
       </label>
@@ -38,8 +46,8 @@ export default function FormField({
           className={cn(
             "w-full rounded-lg border bg-surface-tertiary px-3.5 py-2.5 text-sm text-text-primary outline-none transition-all duration-[var(--transition-fast)] placeholder:text-text-muted",
             error
-              ? "border-error focus:border-error focus:ring-1 focus:ring-error"
-              : "border-border-secondary hover:border-border-hover focus:border-brand-500 focus:ring-1 focus:ring-brand-500",
+              ? "border-error focus:border-error focus:shadow-[0_0_0_2px_rgb(239_68_68/0.2)]"
+              : "border-border-primary hover:border-border-hover focus:border-brand-500 focus:shadow-[0_0_0_2px_rgb(59_130_246/0.2)]",
           )}
           {...inputProps}
         />
@@ -52,7 +60,7 @@ export default function FormField({
       </div>
 
       {error && (
-        <p id={errorId} role="alert" className="mt-1.5 text-xs text-error">
+        <p id={errorId} role="alert" className="meta-mono mt-1.5 text-[10px] text-error">
           {error}
         </p>
       )}

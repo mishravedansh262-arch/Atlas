@@ -40,7 +40,7 @@ export default function Settings() {
                   className={cn(
                     "flex items-center gap-2 whitespace-nowrap rounded-lg px-3 py-2 text-xs font-medium transition-colors",
                     active === section.id
-                      ? "bg-brand-600/10 text-brand-400"
+                      ? "bg-brand-500/10 text-brand-400"
                       : "text-text-secondary hover:bg-surface-elevated hover:text-text-primary",
                   )}
                 >
