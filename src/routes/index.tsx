@@ -1,22 +1,38 @@
+/* eslint-disable react-refresh/only-export-components */
+import { lazy, Suspense } from "react";
 import { createBrowserRouter } from "react-router-dom";
 
 import RootLayout from "../layouts/RootLayout";
 import AuthLayout from "../layouts/AuthLayout";
 import DashboardLayout from "../layouts/DashboardLayout";
-
-import Home from "../pages/Home";
-import Login from "../pages/auth/Login";
-import Register from "../pages/auth/Register";
-import Dashboard from "../pages/dashboard/Dashboard";
-import Roadmap from "../pages/roadmap/Roadmap";
-import Projects from "../pages/projects/Projects";
-import ProjectDetail from "../pages/projects/ProjectDetail";
-import Tasks from "../pages/tasks/Tasks";
-import Analytics from "../pages/analytics/Analytics";
-import Profile from "../pages/profile/Profile";
-import Settings from "../pages/settings/Settings";
-import NotFound from "../pages/NotFound";
+import Spinner from "../components/ui/Spinner";
 import { ProtectedRoute, PublicRoute } from "./guards";
+
+// Lazy-loaded page components for code splitting
+const Home = lazy(() => import("../pages/Home"));
+const Login = lazy(() => import("../pages/auth/Login"));
+const Register = lazy(() => import("../pages/auth/Register"));
+const Dashboard = lazy(() => import("../pages/dashboard/Dashboard"));
+const Roadmap = lazy(() => import("../pages/roadmap/Roadmap"));
+const Projects = lazy(() => import("../pages/projects/Projects"));
+const ProjectDetail = lazy(() => import("../pages/projects/ProjectDetail"));
+const Tasks = lazy(() => import("../pages/tasks/Tasks"));
+const Analytics = lazy(() => import("../pages/analytics/Analytics"));
+const Profile = lazy(() => import("../pages/profile/Profile"));
+const Settings = lazy(() => import("../pages/settings/Settings"));
+const NotFound = lazy(() => import("../pages/NotFound"));
+
+function PageLoader() {
+  return (
+    <div className="flex min-h-[50vh] items-center justify-center">
+      <Spinner size={20} className="text-brand-400" />
+    </div>
+  );
+}
+
+function SuspenseWrapper({ children }: { children: React.ReactNode }) {
+  return <Suspense fallback={<PageLoader />}>{children}</Suspense>;
+}
 
 export const router = createBrowserRouter([
   {
@@ -25,7 +41,7 @@ export const router = createBrowserRouter([
     children: [
       {
         index: true,
-        element: <Home />,
+        element: <SuspenseWrapper><Home /></SuspenseWrapper>,
       },
     ],
   },
@@ -37,11 +53,11 @@ export const router = createBrowserRouter([
         children: [
           {
             path: "/login",
-            element: <Login />,
+            element: <SuspenseWrapper><Login /></SuspenseWrapper>,
           },
           {
             path: "/register",
-            element: <Register />,
+            element: <SuspenseWrapper><Register /></SuspenseWrapper>,
           },
         ],
       },
@@ -55,35 +71,35 @@ export const router = createBrowserRouter([
         children: [
           {
             path: "/dashboard",
-            element: <Dashboard />,
+            element: <SuspenseWrapper><Dashboard /></SuspenseWrapper>,
           },
           {
             path: "/roadmap",
-            element: <Roadmap />,
+            element: <SuspenseWrapper><Roadmap /></SuspenseWrapper>,
           },
           {
             path: "/projects",
-            element: <Projects />,
+            element: <SuspenseWrapper><Projects /></SuspenseWrapper>,
           },
           {
             path: "/projects/:id",
-            element: <ProjectDetail />,
+            element: <SuspenseWrapper><ProjectDetail /></SuspenseWrapper>,
           },
           {
             path: "/tasks",
-            element: <Tasks />,
+            element: <SuspenseWrapper><Tasks /></SuspenseWrapper>,
           },
           {
             path: "/analytics",
-            element: <Analytics />,
+            element: <SuspenseWrapper><Analytics /></SuspenseWrapper>,
           },
           {
             path: "/profile",
-            element: <Profile />,
+            element: <SuspenseWrapper><Profile /></SuspenseWrapper>,
           },
           {
             path: "/settings",
-            element: <Settings />,
+            element: <SuspenseWrapper><Settings /></SuspenseWrapper>,
           },
         ],
       },
@@ -91,6 +107,6 @@ export const router = createBrowserRouter([
   },
   {
     path: "*",
-    element: <NotFound />,
+    element: <SuspenseWrapper><NotFound /></SuspenseWrapper>,
   },
 ]);
