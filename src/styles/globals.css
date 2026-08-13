@@ -3,13 +3,11 @@
 /*
  * ATLAS Design System
  * -------------------
- * All design tokens live here. Components reference these via
- * Tailwind utilities (e.g. `bg-[var(--surface-primary)]`) or
- * the @theme layer for direct class usage.
+ * Personal Command Center — Developer + Student + Productivity OS
  */
 
 @theme {
-  /* ── Brand Colors ── */
+  /* ── Brand ── */
   --color-brand-50: #eff6ff;
   --color-brand-100: #dbeafe;
   --color-brand-200: #bfdbfe;
@@ -19,25 +17,25 @@
   --color-brand-600: #2563eb;
   --color-brand-700: #1d4ed8;
 
-  /* ── Surfaces ── */
-  --color-surface-base: #09090b;
-  --color-surface-primary: #0c0c0f;
-  --color-surface-secondary: #131316;
-  --color-surface-tertiary: #18181b;
-  --color-surface-elevated: #1c1c20;
-  --color-surface-overlay: #27272a;
+  /* ── Surfaces (carefully layered depth) ── */
+  --color-surface-base: #08080a;
+  --color-surface-primary: #0a0a0d;
+  --color-surface-secondary: #111114;
+  --color-surface-tertiary: #161619;
+  --color-surface-elevated: #1a1a1e;
+  --color-surface-overlay: #222226;
 
   /* ── Borders ── */
-  --color-border-primary: #27272a;
-  --color-border-secondary: #1f1f23;
-  --color-border-hover: #3f3f46;
+  --color-border-primary: #232328;
+  --color-border-secondary: #1a1a1f;
+  --color-border-hover: #333338;
   --color-border-active: #3b82f6;
 
   /* ── Text ── */
-  --color-text-primary: #fafafa;
+  --color-text-primary: #f4f4f5;
   --color-text-secondary: #a1a1aa;
   --color-text-tertiary: #71717a;
-  --color-text-muted: #52525b;
+  --color-text-muted: #4a4a52;
 
   /* ── Semantic ── */
   --color-success: #10b981;
@@ -46,10 +44,10 @@
   --color-info: #3b82f6;
 
   /* ── Shadows ── */
-  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.3);
-  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.4), 0 2px 4px -2px rgb(0 0 0 / 0.3);
-  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.5), 0 4px 6px -4px rgb(0 0 0 / 0.4);
-  --shadow-glow: 0 0 20px rgb(59 130 246 / 0.15);
+  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.4);
+  --shadow-md: 0 4px 12px -2px rgb(0 0 0 / 0.5);
+  --shadow-lg: 0 12px 24px -4px rgb(0 0 0 / 0.6);
+  --shadow-glow: 0 0 24px -4px rgb(59 130 246 / 0.12);
 
   /* ── Radius ── */
   --radius-sm: 0.375rem;
@@ -59,18 +57,13 @@
   --radius-2xl: 1.25rem;
 
   /* ── Transitions ── */
-  --transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
-  --transition-base: 200ms cubic-bezier(0.4, 0, 0.2, 1);
-  --transition-slow: 300ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-fast: 120ms cubic-bezier(0.25, 0.1, 0.25, 1);
+  --transition-base: 180ms cubic-bezier(0.25, 0.1, 0.25, 1);
+  --transition-slow: 280ms cubic-bezier(0.25, 0.1, 0.25, 1);
 
   /* ── Typography ── */
   --font-sans: "Inter", system-ui, -apple-system, sans-serif;
   --font-mono: "JetBrains Mono", ui-monospace, monospace;
-
-  /* ── Spacing rhythm ── */
-  --spacing-page: 1.5rem;
-  --spacing-section: 2rem;
-  --spacing-card: 1.25rem;
 }
 
 /* ── Global Resets ── */
@@ -97,12 +90,13 @@ body {
   font-family: var(--font-sans);
   background-color: var(--color-surface-base);
   color: var(--color-text-primary);
+  font-feature-settings: "cv02", "cv03", "cv04", "cv11";
 }
 
-/* ── Scrollbar styling ── */
+/* ── Scrollbar ── */
 ::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
+  width: 5px;
+  height: 5px;
 }
 
 ::-webkit-scrollbar-track {
@@ -111,31 +105,22 @@ body {
 
 ::-webkit-scrollbar-thumb {
   background: var(--color-border-primary);
-  border-radius: 3px;
+  border-radius: 4px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
   background: var(--color-border-hover);
 }
 
-/* ── Focus ring utility ── */
+/* ── Utilities ── */
 .focus-ring {
   outline: none;
 }
-
 .focus-ring:focus-visible {
   outline: 2px solid var(--color-brand-500);
   outline-offset: 2px;
 }
 
-/* ── Glass surface ── */
-.glass {
-  background: rgb(12 12 15 / 0.8);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-}
-
-/* ── Gradient text utility ── */
 .text-gradient {
   background: linear-gradient(135deg, var(--color-brand-400), var(--color-brand-600));
   -webkit-background-clip: text;
@@ -143,7 +128,19 @@ body {
   background-clip: text;
 }
 
-/* ── Subtle glow on cards ── */
-.glow-border {
-  box-shadow: 0 0 0 1px var(--color-border-secondary), var(--shadow-glow);
+.glass {
+  background: rgb(10 10 13 / 0.85);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+}
+
+/* ── Page transition wrapper ── */
+@media (prefers-reduced-motion: no-preference) {
+  .page-enter {
+    animation: pageIn 200ms ease-out;
+  }
+  @keyframes pageIn {
+    from { opacity: 0; transform: translateY(4px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
 }

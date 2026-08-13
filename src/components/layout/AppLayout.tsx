@@ -17,8 +17,10 @@ function AppLayout({ children }: AppLayoutProps) {
       <div className="flex flex-1 flex-col overflow-hidden">
         <Navbar onMenuToggle={() => setSidebarOpen((prev) => !prev)} />
 
-        <main className="flex-1 overflow-y-auto p-4 lg:p-6">
-          {children}
+        <main className="flex-1 overflow-y-auto px-4 py-5 lg:px-8 lg:py-6">
+          <div className="page-enter">
+            {children}
+          </div>
         </main>
       </div>
     </div>

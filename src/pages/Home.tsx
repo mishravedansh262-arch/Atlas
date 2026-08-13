@@ -1,22 +1,27 @@
 import { Link } from "react-router-dom";
-import { ArrowRight, BarChart3, CheckSquare, Target } from "lucide-react";
+import { ArrowRight, BarChart3, CheckSquare, Map, Target } from "lucide-react";
 import { motion } from "framer-motion";
 
 const features = [
   {
     icon: Target,
-    title: "Goal Tracking",
-    description: "Set and track milestones across your entire B.Tech journey.",
+    title: "Projects & Goals",
+    description: "Track every project from planning to completion with clear progress indicators.",
   },
   {
     icon: CheckSquare,
-    title: "Task Management",
-    description: "Break down goals into actionable daily tasks.",
+    title: "Tasks & Actions",
+    description: "Break work into manageable tasks with priorities, deadlines, and categories.",
+  },
+  {
+    icon: Map,
+    title: "Roadmap & Milestones",
+    description: "Plan your B.Tech journey with milestones mapped to your academic timeline.",
   },
   {
     icon: BarChart3,
-    title: "Progress Analytics",
-    description: "Visualize your productivity and growth over time.",
+    title: "Analytics & Insights",
+    description: "Understand your productivity patterns with real activity-based intelligence.",
   },
 ];
 
@@ -24,24 +29,24 @@ export default function Home() {
   return (
     <div className="flex min-h-screen flex-col bg-surface-base text-text-primary">
       {/* Header */}
-      <header className="flex items-center justify-between px-6 py-4 lg:px-10">
-        <div className="flex items-center gap-2.5">
-          <div className="flex size-8 items-center justify-center rounded-lg bg-brand-600 text-sm font-bold text-white">
+      <header className="flex items-center justify-between px-6 py-5 lg:px-12">
+        <div className="flex items-center gap-2">
+          <div className="flex size-7 items-center justify-center rounded-md bg-brand-600 text-xs font-bold text-white">
             A
           </div>
           <span className="text-sm font-semibold tracking-tight">ATLAS</span>
         </div>
 
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-2">
           <Link
             to="/login"
-            className="rounded-lg px-4 py-2 text-sm font-medium text-text-secondary transition-colors hover:text-text-primary"
+            className="rounded-lg px-3.5 py-1.5 text-sm font-medium text-text-secondary transition-colors hover:text-text-primary"
           >
             Log in
           </Link>
           <Link
             to="/register"
-            className="rounded-lg bg-brand-600 px-4 py-2 text-sm font-medium text-white transition-all hover:bg-brand-700 active:scale-[0.97]"
+            className="rounded-lg bg-brand-600 px-3.5 py-1.5 text-sm font-medium text-white transition-all hover:bg-brand-700 active:scale-[0.98]"
           >
             Get started
           </Link>
@@ -51,40 +56,33 @@ export default function Home() {
       {/* Hero */}
       <main className="flex flex-1 flex-col items-center justify-center px-6 text-center">
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, ease: "easeOut" }}
-          className="max-w-2xl"
+          transition={{ duration: 0.4, ease: "easeOut" }}
+          className="max-w-xl"
         >
-          <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-border-secondary bg-surface-secondary px-3 py-1.5">
-            <span className="size-2 rounded-full bg-brand-500" />
-            <span className="text-xs font-medium text-text-secondary">
-              Built for B.Tech students
-            </span>
-          </div>
-
-          <h1 className="text-4xl font-bold leading-tight tracking-tight md:text-5xl lg:text-6xl">
-            Your academic journey,
+          <h1 className="text-3xl font-bold leading-tight tracking-tight sm:text-4xl lg:text-5xl">
+            Your personal
             <br />
-            <span className="text-gradient">designed to succeed.</span>
+            <span className="text-gradient">command center.</span>
           </h1>
 
-          <p className="mx-auto mt-5 max-w-lg text-base leading-relaxed text-text-secondary md:text-lg">
-            ATLAS is a productivity platform that helps you organize projects,
-            track progress, and stay on top of your B.Tech goals.
+          <p className="mx-auto mt-4 max-w-md text-sm leading-relaxed text-text-secondary sm:text-base">
+            ATLAS helps you organize projects, track tasks, set milestones,
+            and understand your progress through your B.Tech journey.
           </p>
 
-          <div className="mt-8 flex flex-col items-center gap-3 sm:flex-row sm:justify-center">
+          <div className="mt-7 flex flex-col items-center gap-2.5 sm:flex-row sm:justify-center">
             <Link
               to="/register"
-              className="inline-flex items-center gap-2 rounded-xl bg-brand-600 px-6 py-3 text-sm font-semibold text-white transition-all hover:bg-brand-700 active:scale-[0.97]"
+              className="inline-flex items-center gap-2 rounded-lg bg-brand-600 px-5 py-2.5 text-sm font-medium text-white transition-all hover:bg-brand-700 active:scale-[0.98]"
             >
-              Start for free
-              <ArrowRight size={16} />
+              Enter ATLAS
+              <ArrowRight size={15} />
             </Link>
             <Link
               to="/login"
-              className="inline-flex items-center gap-2 rounded-xl border border-border-secondary px-6 py-3 text-sm font-medium text-text-secondary transition-all hover:border-border-hover hover:text-text-primary"
+              className="inline-flex items-center gap-2 rounded-lg border border-border-primary px-5 py-2.5 text-sm font-medium text-text-secondary transition-all hover:border-border-hover hover:text-text-primary"
             >
               I have an account
             </Link>
@@ -93,22 +91,22 @@ export default function Home() {
 
         {/* Features */}
         <motion.div
-          initial={{ opacity: 0, y: 30 }}
+          initial={{ opacity: 0, y: 24 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.2, ease: "easeOut" }}
-          className="mx-auto mt-20 grid max-w-3xl gap-6 sm:grid-cols-3"
+          transition={{ duration: 0.4, delay: 0.15, ease: "easeOut" }}
+          className="mx-auto mt-16 grid max-w-2xl gap-4 sm:grid-cols-2 lg:mt-20"
         >
           {features.map((feature) => {
             const Icon = feature.icon;
             return (
               <div
                 key={feature.title}
-                className="rounded-xl border border-border-secondary bg-surface-secondary p-5 text-left transition-colors hover:border-border-hover"
+                className="rounded-xl border border-border-secondary bg-surface-secondary p-4 text-left transition-colors hover:border-border-hover"
               >
-                <div className="mb-3 inline-flex rounded-lg border border-border-secondary bg-surface-tertiary p-2 text-brand-400">
-                  <Icon size={18} />
+                <div className="mb-2.5 inline-flex rounded-md bg-surface-elevated p-1.5 text-brand-400">
+                  <Icon size={15} />
                 </div>
-                <h3 className="text-sm font-medium text-text-primary">
+                <h3 className="text-[13px] font-medium text-text-primary">
                   {feature.title}
                 </h3>
                 <p className="mt-1 text-xs leading-relaxed text-text-tertiary">
@@ -121,10 +119,8 @@ export default function Home() {
       </main>
 
       {/* Footer */}
-      <footer className="px-6 py-6 text-center">
-        <p className="text-xs text-text-muted">
-          ATLAS v0.1.0 — Built with purpose.
-        </p>
+      <footer className="px-6 py-5 text-center">
+        <p className="text-[11px] text-text-muted">ATLAS — Built with purpose.</p>
       </footer>
     </div>
   );
