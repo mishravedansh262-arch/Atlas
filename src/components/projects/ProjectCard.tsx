@@ -1,4 +1,5 @@
 import { Calendar, Pencil, Trash2 } from "lucide-react";
+import { Link } from "react-router-dom";
 
 import ProgressBar from "../ui/ProgressBar";
 import StatusBadge from "../ui/StatusBadge";
@@ -34,9 +35,9 @@ export default function ProjectCard({ project, onEdit, onDelete }: Props) {
       <div className="flex items-start justify-between gap-3">
         <div className="min-w-0 flex-1">
           <div className="flex flex-wrap items-center gap-2">
-            <h3 className="truncate text-sm font-semibold text-text-primary">
+            <Link to={`/projects/${project.id}`} className="truncate text-sm font-semibold text-text-primary hover:text-brand-400 transition-colors">
               {project.title}
-            </h3>
+            </Link>
             <StatusBadge label={badge.label} variant={badge.variant} />
           </div>
           <p className="mt-1 line-clamp-2 text-xs text-text-tertiary">

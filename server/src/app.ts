@@ -9,6 +9,7 @@ import { healthRouter } from './routes/health.route.js';
 import { authRouter } from './routes/auth.route.js';
 import { projectRouter } from './routes/project.route.js';
 import { taskRouter } from './routes/task.route.js';
+import { userRouter } from './routes/user.route.js';
 import { errorHandler, notFoundHandler } from './middleware/error.middleware.js';
 
 /**
@@ -43,6 +44,7 @@ export function createApp(): Application {
   app.use('/api/auth', authRouter);
   app.use('/api/projects', projectRouter);
   app.use('/api/tasks', taskRouter);
+  app.use('/api/users', userRouter);
 
   // --- 404 + error handling (must come last) --------------------------------
   app.use(notFoundHandler);

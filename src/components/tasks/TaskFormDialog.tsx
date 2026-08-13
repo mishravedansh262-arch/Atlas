@@ -11,10 +11,11 @@ import type { Task } from "../../types";
 type Props = {
   open: boolean;
   onClose: () => void;
-  task?: Task; // If provided, we're editing
+  task?: Task;
+  defaultProjectId?: string;
 };
 
-export default function TaskFormDialog({ open, onClose, task }: Props) {
+export default function TaskFormDialog({ open, onClose, task, defaultProjectId }: Props) {
   const isEditing = !!task;
   const createMutation = useCreateTask();
   const updateMutation = useUpdateTask();
@@ -24,9 +25,9 @@ export default function TaskFormDialog({ open, onClose, task }: Props) {
   const [title, setTitle] = useState(task?.title ?? "");
   const [description, setDescription] = useState(task?.description ?? "");
   const [priority, setPriority] = useState(task?.priority ?? "medium");
-  const [category, setCategory] = useState(task?.category ?? "personal");
+  const [category, setCategory] = useState(task?.category ?? "project");
   const [dueDate, setDueDate] = useState(task?.dueDate?.split("T")[0] ?? "");
-  const [projectId, setProjectId] = useState(task?.projectId ?? "");
+  const [projectId, setProjectId] = useState(task?.projectId ?? defaultProjectId ?? "");
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -67,25 +68,12 @@ export default function TaskFormDialog({ open, onClose, task }: Props) {
       <form onSubmit={handleSubmit} className="space-y-4">
         <div>
           <label className={labelClass}>Title</label>
-          <input
-            type="text"
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
-            placeholder="What needs to be done?"
-            required
-            className={inputClass}
-          />
+          <input type="text" value={title} onChange={(e) => setTitle(e.target.value)} placeholder="What needs to be done?" required className={inputClass} />
         </div>
 
         <div>
           <label className={labelClass}>Description (optional)</label>
-          <textarea
-            value={description}
-            onChange={(e) => setDescription(e.target.value)}
-            placeholder="Additional details..."
-            rows={2}
-            className={inputClass + " resize-none"}
-          />
+          <textarea value={description} onChange={(e) => setDescription(e.target.value)} placeholder="Additional details..." rows={2} className={inputClass + " resize-none"} />
         </div>
 
         <div className="grid grid-cols-2 gap-3">
@@ -112,12 +100,7 @@ export default function TaskFormDialog({ open, onClose, task }: Props) {
         <div className="grid grid-cols-2 gap-3">
           <div>
             <label className={labelClass}>Due Date (optional)</label>
-            <input
-              type="date"
-              value={dueDate}
-              onChange={(e) => setDueDate(e.target.value)}
-              className={inputClass}
-            />
+            <input type="date" value={dueDate} onChange={(e) => setDueDate(e.target.value)} className={inputClass} />
           </div>
           <div>
             <label className={labelClass}>Project (optional)</label>
@@ -131,18 +114,8 @@ export default function TaskFormDialog({ open, onClose, task }: Props) {
         </div>
 
         <div className="flex justify-end gap-2 pt-2">
-          <button
-            type="button"
-            onClick={onClose}
-            className="rounded-lg px-4 py-2 text-xs font-medium text-text-secondary hover:text-text-primary"
-          >
-            Cancel
-          </button>
-          <button
-            type="submit"
-            disabled={isPending || !title.trim()}
-            className="inline-flex items-center gap-2 rounded-lg bg-brand-600 px-4 py-2 text-xs font-medium text-white transition-colors hover:bg-brand-700 disabled:opacity-60"
-          >
+          <button type="button" onClick={onClose} className="rounded-lg px-4 py-2 text-xs font-medium text-text-secondary hover:text-text-primary">Cancel</button>
+          <button type="submit" disabled={isPending || !title.trim()} className="inline-flex items-center gap-2 rounded-lg bg-brand-600 px-4 py-2 text-xs font-medium text-white transition-colors hover:bg-brand-700 disabled:opacity-60">
             {isPending && <Spinner />}
             {isEditing ? "Save Changes" : "Add Task"}
           </button>

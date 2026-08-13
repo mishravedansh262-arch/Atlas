@@ -7,6 +7,14 @@ export interface IUser {
   email: string;
   /** bcrypt hash — excluded from queries by default (`select: false`). */
   password: string;
+  // Profile fields (optional — may not exist for older users)
+  bio?: string;
+  branch?: string;
+  year?: number;
+  semester?: number;
+  university?: string;
+  skills?: string[];
+  interests?: string[];
   createdAt: Date;
   updatedAt: Date;
 }
@@ -31,6 +39,13 @@ const userSchema = new Schema<IUser, UserModel, IUserMethods>(
       index: true,
     },
     password: { type: String, required: true, select: false },
+    bio: { type: String, trim: true, maxlength: 500 },
+    branch: { type: String, trim: true, maxlength: 100 },
+    year: { type: Number, min: 1, max: 6 },
+    semester: { type: Number, min: 1, max: 12 },
+    university: { type: String, trim: true, maxlength: 200 },
+    skills: [{ type: String, trim: true, maxlength: 50 }],
+    interests: [{ type: String, trim: true, maxlength: 50 }],
   },
   { timestamps: true },
 );

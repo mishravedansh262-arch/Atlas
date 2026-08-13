@@ -10,6 +10,7 @@ import Register from "../pages/auth/Register";
 import Dashboard from "../pages/dashboard/Dashboard";
 import Roadmap from "../pages/roadmap/Roadmap";
 import Projects from "../pages/projects/Projects";
+import ProjectDetail from "../pages/projects/ProjectDetail";
 import Tasks from "../pages/tasks/Tasks";
 import Analytics from "../pages/analytics/Analytics";
 import Profile from "../pages/profile/Profile";
@@ -63,6 +64,10 @@ export const router = createBrowserRouter([
           {
             path: "/projects",
             element: <Projects />,
+          },
+          {
+            path: "/projects/:id",
+            element: <ProjectDetail />,
           },
           {
             path: "/tasks",
