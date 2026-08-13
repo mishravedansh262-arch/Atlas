@@ -2,20 +2,20 @@ import { CheckCircle2, Circle, Clock, Lock } from "lucide-react";
 
 import { cn } from "../../lib/cn";
 import StatusBadge from "../ui/StatusBadge";
-import type { MilestoneStatus, RoadmapMilestone, RoadmapStage } from "../../types";
+import type { LegacyMilestoneStatus, RoadmapMilestone, RoadmapStage } from "../../types";
 
 type Props = {
   stages: RoadmapStage[];
 };
 
-const statusIcon: Record<MilestoneStatus, typeof CheckCircle2> = {
+const statusIcon: Record<LegacyMilestoneStatus, typeof CheckCircle2> = {
   completed: CheckCircle2,
   current: Clock,
   upcoming: Circle,
   locked: Lock,
 };
 
-const statusColor: Record<MilestoneStatus, string> = {
+const statusColor: Record<LegacyMilestoneStatus, string> = {
   completed: "text-success",
   current: "text-brand-400",
   upcoming: "text-text-muted",

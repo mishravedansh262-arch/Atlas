@@ -14,6 +14,7 @@ import ProjectFormDialog from "../../components/projects/ProjectFormDialog";
 import TaskFormDialog from "../../components/tasks/TaskFormDialog";
 import { useProjects, useDeleteProject } from "../../hooks/useProjects";
 import { useTasks, useUpdateTask, useDeleteTask } from "../../hooks/useTasks";
+import { useMilestones } from "../../hooks/useMilestones";
 import { extractApiError } from "../../lib/api";
 import type { ProjectStatus, Task } from "../../types";
 
@@ -32,6 +33,7 @@ export default function ProjectDetail() {
   const deleteMutation = useDeleteProject();
   const updateTaskMutation = useUpdateTask();
   const deleteTaskMutation = useDeleteTask();
+  const { data: milestones } = useMilestones();
 
   const [editOpen, setEditOpen] = useState(false);
   const [taskFormOpen, setTaskFormOpen] = useState(false);
@@ -39,6 +41,7 @@ export default function ProjectDetail() {
 
   const project = projects?.find((p) => p.id === id);
   const relatedTasks = tasks?.filter((t) => t.projectId === id) ?? [];
+  const relatedMilestones = milestones?.filter((m) => m.projectId === id) ?? [];
 
   async function handleDelete() {
     if (!project) return;
@@ -183,6 +186,21 @@ export default function ProjectDetail() {
           </div>
         )}
       </SectionCard>
+
+      {/* Related Milestones */}
+      {relatedMilestones.length > 0 && (
+        <SectionCard title="Related Milestones" description={`${relatedMilestones.filter((m) => m.status === "completed").length}/${relatedMilestones.length} completed`}>
+          <div className="space-y-2">
+            {relatedMilestones.map((ms) => (
+              <div key={ms.id} className="flex items-center gap-3 rounded-lg bg-surface-tertiary px-3 py-2.5">
+                <StatusBadge label={ms.status.replace("_", " ")} variant={ms.status === "completed" ? "success" : ms.status === "in_progress" ? "info" : "muted"} />
+                <span className="min-w-0 flex-1 truncate text-xs text-text-primary">{ms.title}</span>
+                <span className="text-[11px] text-text-muted">{ms.progress}%</span>
+              </div>
+            ))}
+          </div>
+        </SectionCard>
+      )}
 
       {/* Dialogs */}
       <ProjectFormDialog open={editOpen} onClose={() => setEditOpen(false)} project={project} />

@@ -4,11 +4,14 @@ import ProgressOverview from "../../components/dashboard/ProgressOverview";
 import RecentActivity from "../../components/dashboard/RecentActivity";
 import UpcomingTasks from "../../components/dashboard/UpcomingTasks";
 import StatsGrid from "../../components/dashboard/StatsGrid";
+import NextAction from "../../components/dashboard/NextAction";
 
 function Dashboard() {
   return (
     <div className="mx-auto max-w-7xl space-y-6">
       <DashboardHeader />
+
+      <NextAction />
 
       <StatsGrid />
 

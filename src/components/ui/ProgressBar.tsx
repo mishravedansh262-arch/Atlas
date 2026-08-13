@@ -5,6 +5,7 @@ type ProgressBarProps = {
   size?: "sm" | "md";
   color?: string;
   showLabel?: boolean;
+  className?: string;
 };
 
 export default function ProgressBar({
@@ -12,11 +13,12 @@ export default function ProgressBar({
   size = "sm",
   color = "bg-brand-500",
   showLabel = false,
+  className,
 }: ProgressBarProps) {
   const clamped = Math.min(100, Math.max(0, value));
 
   return (
-    <div className="flex items-center gap-2">
+    <div className={cn("flex items-center gap-2", className)}>
       <div
         className={cn(
           "flex-1 overflow-hidden rounded-full bg-surface-overlay",
