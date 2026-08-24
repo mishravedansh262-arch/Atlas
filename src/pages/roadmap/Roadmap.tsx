@@ -1,30 +1,20 @@
 import { useState } from "react";
-import { Calendar, CheckCircle2, Circle, Clock, AlertTriangle, Map, Pencil, Plus, Trash2 } from "lucide-react";
+import { Map, Plus } from "lucide-react";
 import { toast } from "sonner";
 
 import PageHeader from "../../components/ui/PageHeader";
 import EmptyState from "../../components/ui/EmptyState";
 import Spinner from "../../components/ui/Spinner";
-import StatusBadge from "../../components/ui/StatusBadge";
-import ProgressBar from "../../components/ui/ProgressBar";
-import PriorityIndicator from "../../components/ui/PriorityIndicator";
+import ProgressRing from "../../components/ui/ProgressRing";
+import MilestoneTimeline from "../../components/roadmap/MilestoneTimeline";
 import MilestoneFormDialog from "../../components/roadmap/MilestoneFormDialog";
-import { useMilestones, useUpdateMilestone, useDeleteMilestone } from "../../hooks/useMilestones";
+import {
+  useMilestones,
+  useUpdateMilestone,
+  useDeleteMilestone,
+} from "../../hooks/useMilestones";
 import { extractApiError } from "../../lib/api";
-import { cn } from "../../lib/cn";
 import type { Milestone, MilestoneStatus } from "../../types";
-
-const statusConfig: Record<MilestoneStatus, { icon: typeof Circle; color: string; label: string; badge: "muted" | "info" | "success" | "error" }> = {
-  not_started: { icon: Circle, color: "text-text-muted", label: "Not Started", badge: "muted" },
-  in_progress: { icon: Clock, color: "text-brand-400", label: "In Progress", badge: "info" },
-  completed: { icon: CheckCircle2, color: "text-success", label: "Completed", badge: "success" },
-  blocked: { icon: AlertTriangle, color: "text-error", label: "Blocked", badge: "error" },
-};
-
-function isOverdue(ms: Milestone): boolean {
-  if (!ms.targetDate || ms.status === "completed") return false;
-  return new Date(ms.targetDate) < new Date();
-}
 
 export default function Roadmap() {
   const { data: milestones, isLoading, isError } = useMilestones();
@@ -33,103 +23,122 @@ export default function Roadmap() {
   const [formOpen, setFormOpen] = useState(false);
   const [editingMilestone, setEditingMilestone] = useState<Milestone | undefined>();
 
-  function handleCreate() { setEditingMilestone(undefined); setFormOpen(true); }
-  function handleEdit(ms: Milestone) { setEditingMilestone(ms); setFormOpen(true); }
+  function handleCreate() {
+    setEditingMilestone(undefined);
+    setFormOpen(true);
+  }
+
+  function handleEdit(ms: Milestone) {
+    setEditingMilestone(ms);
+    setFormOpen(true);
+  }
 
   async function handleDelete(id: string) {
     if (!confirm("Delete this milestone?")) return;
-    try { await deleteMutation.mutateAsync(id); toast.success("Milestone deleted."); }
-    catch (e) { toast.error(extractApiError(e).message); }
+    try {
+      await deleteMutation.mutateAsync(id);
+      toast.success("Milestone deleted.");
+    } catch (e) {
+      toast.error(extractApiError(e).message);
+    }
   }
 
-  async function handleStatusToggle(ms: Milestone) {
-    const next: MilestoneStatus = ms.status === "completed" ? "in_progress" : "completed";
-    try { await updateMutation.mutateAsync({ id: ms.id, payload: { status: next } }); }
-    catch (e) { toast.error(extractApiError(e).message); }
+  async function handleToggle(ms: Milestone) {
+    const next: MilestoneStatus =
+      ms.status === "completed" ? "in_progress" : "completed";
+    try {
+      await updateMutation.mutateAsync({ id: ms.id, payload: { status: next } });
+    } catch (e) {
+      toast.error(extractApiError(e).message);
+    }
   }
 
   const all = milestones ?? [];
-  const inProgress = all.filter((m) => m.status === "in_progress");
-  const completed = all.filter((m) => m.status === "completed");
-  const completionRate = all.length > 0 ? Math.round((completed.length / all.length) * 100) : 0;
+  const inProgress = all.filter((m) => m.status === "in_progress").length;
+  const completed = all.filter((m) => m.status === "completed").length;
+  const blocked = all.filter((m) => m.status === "blocked").length;
+  const completionRate =
+    all.length > 0 ? Math.round((completed / all.length) * 100) : 0;
 
   return (
-    <div className="mx-auto max-w-7xl space-y-6">
-      <PageHeader title="Roadmap" description="Your journey milestones — plan, track, and achieve." action={
-        <button onClick={handleCreate} className="label-mono inline-flex items-center gap-2 rounded-lg bg-brand-500 px-3.5 py-2 text-white transition-colors hover:bg-brand-600 active:scale-[0.98]">
-          <Plus size={13} strokeWidth={2} /> Add Milestone
-        </button>
-      } />
+    <div className="mx-auto max-w-5xl space-y-6">
+      <PageHeader
+        title="Roadmap"
+        description="Your journey milestones — plan, track, and achieve."
+        action={
+          <button
+            onClick={handleCreate}
+            className="label-mono inline-flex items-center gap-2 rounded-lg bg-brand-500 px-3.5 py-2 text-white transition-colors hover:bg-brand-600 active:scale-[0.98]"
+          >
+            <Plus size={13} strokeWidth={2} /> Add Milestone
+          </button>
+        }
+      />
 
-      {/* Summary */}
+      {/* Journey summary */}
       {all.length > 0 && (
-        <div className="grid gap-3 sm:grid-cols-3">
-          <div className="rounded-xl border border-border-primary bg-surface-secondary p-4">
-            <p className="label-mono text-text-muted">Total</p>
-            <p className="mt-2 text-2xl font-bold tracking-tight text-text-primary">{all.length}</p>
-          </div>
-          <div className="rounded-xl border border-border-primary bg-surface-secondary p-4">
-            <p className="label-mono text-text-muted">In Progress</p>
-            <p className="mt-2 text-2xl font-bold tracking-tight text-brand-400">{inProgress.length}</p>
-          </div>
-          <div className="rounded-xl border border-border-primary bg-surface-secondary p-4">
-            <p className="label-mono text-text-muted">Completion</p>
-            <p className="mt-2 text-2xl font-bold tracking-tight text-success">{completionRate}%</p>
-            <ProgressBar value={completionRate} color="bg-success" className="mt-2" />
-          </div>
-        </div>
-      )}
+        <div className="flex items-center gap-5 rounded-xl border border-border-primary bg-surface-secondary p-4">
+          <ProgressRing value={completionRate} size={80} caption="complete" />
 
-      {/* Milestones list */}
-      {isLoading ? (
-        <div className="flex justify-center py-16"><Spinner size={24} className="text-brand-400" /></div>
-      ) : isError ? (
-        <EmptyState icon={Map} title="Could not load milestones" description="Server may be unavailable. Try again later." />
-      ) : all.length === 0 ? (
-        <EmptyState icon={Map} title="No milestones yet" description="Add your first milestone to start tracking your journey." action={
-          <button onClick={handleCreate} className="rounded-lg bg-brand-500 px-4 py-2 text-xs font-medium text-white hover:bg-brand-600">Create Milestone</button>
-        } />
-      ) : (
-        <div className="space-y-2">
-          {all.map((ms) => {
-            const cfg = statusConfig[ms.status];
-            const Icon = cfg.icon;
-            const overdue = isOverdue(ms);
-            return (
-              <div key={ms.id} className={cn("group relative flex items-start gap-3 overflow-hidden rounded-xl border bg-surface-secondary p-4 transition-colors", overdue ? "border-error/30 hover:border-error/50" : "border-border-primary hover:border-border-hover")}>
-                {overdue && <span className="absolute inset-y-0 left-0 w-1 bg-error" aria-hidden="true" />}
-                <button onClick={() => handleStatusToggle(ms)} className={cn("mt-0.5 shrink-0 transition-colors", cfg.color, overdue && "ml-1")} aria-label={`Toggle status for ${ms.title}`}>
-                  <Icon size={18} strokeWidth={1.5} />
-                </button>
-                <div className="min-w-0 flex-1">
-                  <div className="flex flex-wrap items-center gap-2">
-                    <p className={cn("text-sm font-medium", ms.status === "completed" ? "text-text-secondary line-through" : "text-text-primary")}>{ms.title}</p>
-                    <StatusBadge label={cfg.label} variant={cfg.badge} />
-                    {overdue && <StatusBadge label="Overdue" variant="error" />}
-                    {ms.projectTitle && <StatusBadge label={ms.projectTitle} variant="info" />}
-                  </div>
-                  {ms.description && <p className="mt-0.5 text-xs text-text-tertiary">{ms.description}</p>}
-                  <div className="mt-2 flex flex-wrap items-center gap-3">
-                    <PriorityIndicator priority={ms.priority} showLabel />
-                    <ProgressBar value={ms.progress} showLabel className="w-24" />
-                    {ms.targetDate && (
-                      <span className={cn("meta-mono flex items-center gap-1 text-[10px]", overdue ? "text-error" : "text-text-muted")}>
-                        <Calendar size={10} strokeWidth={1.5} /> {new Date(ms.targetDate).toLocaleDateString("en-US", { month: "short", day: "numeric" })}
-                      </span>
-                    )}
-                  </div>
-                </div>
-                <div className="flex shrink-0 items-center gap-1 opacity-0 transition-opacity group-hover:opacity-100">
-                  <button onClick={() => handleEdit(ms)} className="rounded p-1.5 text-text-muted hover:bg-surface-overlay hover:text-text-secondary" aria-label="Edit"><Pencil size={13} /></button>
-                  <button onClick={() => handleDelete(ms.id)} className="rounded p-1.5 text-text-muted hover:bg-error/10 hover:text-error" aria-label="Delete"><Trash2 size={13} /></button>
-                </div>
+          <div className="grid min-w-0 flex-1 grid-cols-2 gap-x-6 gap-y-3 sm:grid-cols-4">
+            {[
+              { label: "Total", value: all.length, tone: "text-text-primary" },
+              { label: "Active", value: inProgress, tone: "text-brand-400" },
+              { label: "Done", value: completed, tone: "text-success" },
+              { label: "Blocked", value: blocked, tone: "text-error" },
+            ].map((stat) => (
+              <div key={stat.label}>
+                <p className="label-mono text-text-muted">{stat.label}</p>
+                <p
+                  className={`mt-1 text-xl font-bold leading-none tracking-tight ${stat.tone}`}
+                >
+                  {stat.value}
+                </p>
               </div>
-            );
-          })}
+            ))}
+          </div>
         </div>
       )}
 
-      <MilestoneFormDialog open={formOpen} onClose={() => setFormOpen(false)} milestone={editingMilestone} />
+      {/* Timeline */}
+      {isLoading ? (
+        <div className="flex justify-center py-16">
+          <Spinner size={24} className="text-brand-400" />
+        </div>
+      ) : isError ? (
+        <EmptyState
+          icon={Map}
+          title="Could not load milestones"
+          description="We couldn't reach the server. Check your connection and try again."
+        />
+      ) : all.length === 0 ? (
+        <EmptyState
+          icon={Map}
+          title="Your roadmap starts here"
+          description="Add your first milestone and start mapping the journey ahead."
+          action={
+            <button
+              onClick={handleCreate}
+              className="label-mono rounded-lg bg-brand-500 px-4 py-2 text-white transition-colors hover:bg-brand-600"
+            >
+              Create Milestone
+            </button>
+          }
+        />
+      ) : (
+        <MilestoneTimeline
+          milestones={all}
+          onToggle={handleToggle}
+          onEdit={handleEdit}
+          onDelete={handleDelete}
+        />
+      )}
+
+      <MilestoneFormDialog
+        open={formOpen}
+        onClose={() => setFormOpen(false)}
+        milestone={editingMilestone}
+      />
     </div>
   );
 }

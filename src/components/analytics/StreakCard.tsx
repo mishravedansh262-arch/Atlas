@@ -1,5 +1,12 @@
 import { Flame } from "lucide-react";
 
+import ProgressRing from "../ui/ProgressRing";
+import {
+  calculateStreaks,
+  getCompletionCounts,
+  countInWindow,
+  activeDaysInWindow,
+} from "../../lib/activity";
 import type { Milestone, Task } from "../../types";
 
 type Props = {
@@ -8,99 +15,62 @@ type Props = {
 };
 
 /**
- * Calculates current and longest streak from completion dates.
- * A day is "active" if at least one task or milestone was completed.
+ * Activity streak.
+ * Consistency is expressed as active days out of the trailing 30, shown as a
+ * ring so it reads at a glance next to the raw streak figures.
  */
-function calculateStreaks(tasks: Task[], milestones: Milestone[]): { current: number; longest: number } {
-  // Collect all completion dates as date strings (YYYY-MM-DD)
-  const dates = new Set<string>();
-  tasks.forEach((t) => { if (t.completedAt) dates.add(t.completedAt.split("T")[0]!); });
-  milestones.forEach((m) => { if (m.completedAt) dates.add(m.completedAt.split("T")[0]!); });
-
-  if (dates.size === 0) return { current: 0, longest: 0 };
-
-  // Calculate current streak (from today backwards)
-  const today = new Date();
-  today.setHours(0, 0, 0, 0);
-  const checkDate = new Date(today);
-
-  const todayStr = checkDate.toISOString().split("T")[0]!;
-  const yesterdayDate = new Date(checkDate);
-  yesterdayDate.setDate(yesterdayDate.getDate() - 1);
-  const yesterdayStr = yesterdayDate.toISOString().split("T")[0]!;
-
-  let current = 0;
-
-  if (dates.has(todayStr)) {
-    current = 1;
-    checkDate.setDate(checkDate.getDate() - 1);
-    while (dates.has(checkDate.toISOString().split("T")[0]!)) {
-      current++;
-      checkDate.setDate(checkDate.getDate() - 1);
-    }
-  } else if (dates.has(yesterdayStr)) {
-    current = 1;
-    checkDate.setDate(checkDate.getDate() - 2); // skip to day before yesterday
-    while (dates.has(checkDate.toISOString().split("T")[0]!)) {
-      current++;
-      checkDate.setDate(checkDate.getDate() - 1);
-    }
-  }
-
-  // Calculate longest streak
-  let longest = 0;
-  let streak = 1;
-  const ascending = [...dates].sort();
-  for (let i = 1; i < ascending.length; i++) {
-    const prev = new Date(ascending[i - 1]!);
-    const curr = new Date(ascending[i]!);
-    const diffDays = (curr.getTime() - prev.getTime()) / (1000 * 60 * 60 * 24);
-    if (diffDays === 1) {
-      streak++;
-    } else {
-      longest = Math.max(longest, streak);
-      streak = 1;
-    }
-  }
-  longest = Math.max(longest, streak);
-
-  return { current, longest };
-}
-
 export default function StreakCard({ tasks, milestones }: Props) {
-  const { current, longest } = calculateStreaks(tasks, milestones);
+  const counts = getCompletionCounts(tasks, milestones);
+  const { current, longest } = calculateStreaks(counts);
+  const hasActivity = counts.size > 0;
 
-  const hasActivity = tasks.some((t) => t.completedAt) || milestones.some((m) => m.completedAt);
+  // Consistency = days active out of the trailing 30, not raw volume.
+  const consistency = Math.round((activeDaysInWindow(counts, 30) / 30) * 100);
+  const last30 = countInWindow(counts, 30);
 
   return (
-    <div className="rounded-xl border border-border-secondary bg-surface-secondary p-5">
+    <div className="rounded-xl border border-border-primary bg-surface-secondary p-4">
       <div className="flex items-center gap-2">
-        <div className="rounded-lg bg-warning/10 p-2 text-warning">
-          <Flame size={18} />
-        </div>
-        <h3 className="text-sm font-semibold text-text-primary">Activity Streak</h3>
+        <Flame size={15} strokeWidth={1.5} className="text-warning" />
+        <h3 className="label-mono text-text-secondary">Streak</h3>
       </div>
 
       {hasActivity ? (
-        <div className="mt-4 grid grid-cols-2 gap-4">
-          <div>
-            <p className="text-2xl font-bold text-text-primary">{current}</p>
-            <p className="text-[11px] text-text-muted">Current streak (days)</p>
-          </div>
-          <div>
-            <p className="text-2xl font-bold text-text-primary">{longest}</p>
-            <p className="text-[11px] text-text-muted">Longest streak (days)</p>
+        <div className="mt-4 flex items-center gap-4">
+          <ProgressRing
+            value={consistency}
+            size={68}
+            color="text-warning"
+            caption="30d"
+          />
+          <div className="min-w-0 space-y-2.5">
+            <div>
+              <p className="text-xl font-bold leading-none tracking-tight text-text-primary">
+                {current}
+                <span className="meta-mono ml-1 text-[10px] font-medium text-text-muted">
+                  day{current === 1 ? "" : "s"}
+                </span>
+              </p>
+              <p className="meta-mono mt-1 text-[9px] text-text-muted">
+                Current streak
+              </p>
+            </div>
+            <div>
+              <p className="text-sm font-semibold leading-none text-text-secondary">
+                {longest}
+                <span className="meta-mono ml-1 text-[10px] font-medium text-text-muted">
+                  best
+                </span>
+              </p>
+              <p className="meta-mono mt-1 text-[9px] text-text-muted">
+                {last30} done in 30d
+              </p>
+            </div>
           </div>
         </div>
       ) : (
-        <p className="mt-4 text-xs text-text-muted">
+        <p className="mt-4 text-xs leading-relaxed text-text-muted">
           Complete a task or milestone to start building your streak.
-        </p>
-      )}
-
-      {current > 0 && (
-        <p className="mt-3 text-[11px] text-success">
-          You&apos;re on a {current}-day streak. Keep it going!
         </p>
       )}
     </div>
