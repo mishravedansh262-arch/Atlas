@@ -28,7 +28,11 @@ export default function AuthLayout() {
   return (
     <div className="flex min-h-screen bg-surface-base text-text-primary">
       {/* Brand panel */}
-      <aside className="hidden w-1/2 flex-col justify-between border-r border-border-primary bg-surface-primary p-10 lg:flex xl:p-12">
+      <aside className="relative hidden w-1/2 flex-col justify-between overflow-hidden border-r border-border-primary bg-surface-primary p-10 lg:flex xl:p-12">
+        <div className="pointer-events-none absolute inset-0" aria-hidden="true">
+          <div className="absolute -left-20 top-0 size-[30rem] rounded-full bg-brand-500/[0.09] blur-[100px]" />
+          <div className="absolute -bottom-20 -right-10 size-[24rem] rounded-full bg-accent-cyan/[0.06] blur-[90px]" />
+        </div>
         <div className="flex items-center gap-2.5">
           <div className="flex size-8 items-center justify-center rounded-lg bg-brand-500 text-xs font-bold text-white">
             A

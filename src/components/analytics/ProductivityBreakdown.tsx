@@ -47,7 +47,7 @@ export default function ProductivityBreakdown({ tasks, projects, milestones }: P
                     <span className="text-xs text-text-secondary">{cat.name}</span>
                     <span className="text-[11px] text-text-muted">{cat.completed}/{cat.count}</span>
                   </div>
-                  <ProgressBar value={totalTasks > 0 ? Math.round((cat.count / totalTasks) * 100) : 0} color="bg-brand-500" />
+                  <ProgressBar value={totalTasks > 0 ? Math.round((cat.count / totalTasks) * 100) : 0} />
                 </div>
               ))}
             </div>

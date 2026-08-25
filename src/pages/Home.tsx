@@ -58,14 +58,25 @@ export default function Home() {
       </header>
 
       {/* Hero */}
-      <main className="flex flex-1 flex-col items-center justify-center px-5 py-16 text-center">
+      <main className="relative flex flex-1 flex-col items-center justify-center px-5 py-16 text-center">
+        {/* Gradient mesh — anchors the hero without washing out the copy */}
+        <div
+          className="pointer-events-none absolute inset-0 overflow-hidden"
+          aria-hidden="true"
+        >
+          <div className="absolute left-1/2 top-0 size-[36rem] -translate-x-1/2 -translate-y-1/3 rounded-full bg-brand-500/[0.10] blur-[100px]" />
+          <div className="absolute bottom-0 right-1/4 size-[26rem] translate-y-1/3 rounded-full bg-accent-cyan/[0.07] blur-[90px]" />
+          <div className="absolute bottom-1/4 left-1/4 size-[22rem] rounded-full bg-accent-violet/[0.06] blur-[90px]" />
+        </div>
+
         <motion.div
           initial={{ opacity: 0, y: 14 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.4, ease: "easeOut" }}
-          className="max-w-2xl"
+          className="relative max-w-2xl"
         >
-          <p className="label-mono text-text-muted">
+          <p className="label-mono inline-flex items-center gap-2 rounded-full border border-border-primary bg-surface-secondary/70 px-3 py-1.5 text-text-tertiary backdrop-blur-sm">
+            <span className="size-1.5 rounded-full bg-brand-500 pulse-soft" />
             Personal Productivity Platform
           </p>
 
@@ -83,7 +94,7 @@ export default function Home() {
           <div className="mt-8 flex flex-col items-center gap-2.5 sm:flex-row sm:justify-center">
             <Link
               to="/register"
-              className="label-mono inline-flex w-full items-center justify-center gap-2 rounded-lg bg-brand-500 px-5 py-3 text-white transition-colors hover:bg-brand-600 active:scale-[0.98] sm:w-auto"
+              className="label-mono glow-accent-sm inline-flex w-full items-center justify-center gap-2 rounded-lg bg-brand-500 px-5 py-3 text-white transition-all hover:bg-brand-600 active:scale-[0.98] sm:w-auto"
             >
               Enter ATLAS
               <ArrowRight size={14} strokeWidth={2} />

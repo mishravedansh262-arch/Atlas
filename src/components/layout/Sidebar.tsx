@@ -46,15 +46,22 @@ export default function Sidebar() {
               to={item.href}
               className={({ isActive }) =>
                 cn(
-                  "flex h-10 shrink-0 items-center border-l-2 pl-[22px] pr-4 transition-colors duration-[var(--transition-fast)]",
+                  "relative flex h-10 shrink-0 items-center border-l-2 pl-[22px] pr-4 transition-colors duration-[var(--transition-fast)]",
                   isActive
-                    ? "border-brand-500 bg-brand-500/10 text-brand-400"
+                    ? "border-brand-500 bg-gradient-to-r from-brand-500/15 to-transparent text-brand-400"
                     : "border-transparent text-text-tertiary hover:bg-surface-tertiary hover:text-text-secondary",
                 )
               }
             >
               {({ isActive }) => (
                 <>
+                  {/* Emitted light from the active accent rail */}
+                  {isActive && (
+                    <span
+                      className="pointer-events-none absolute -left-px top-1/2 h-6 w-px -translate-y-1/2 bg-brand-400 glow-accent-sm"
+                      aria-hidden="true"
+                    />
+                  )}
                   <Icon
                     size={20}
                     strokeWidth={1.5}

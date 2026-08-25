@@ -13,8 +13,10 @@ type StatCardProps = {
 
 /**
  * Metric card.
- * Spec: mono lowercase label prefixed by a status dot, oversized numeral,
- * quiet supporting metadata. Tonal surface + ghost border, no icon chrome.
+ *
+ * Mono lowercase label prefixed by a status dot, oversized numeral, quiet
+ * supporting metadata. The dot is the only coloured element — the surface
+ * stays neutral so a grid of these reads as data, not as decoration.
  */
 export default function StatCard({
   title,
@@ -25,43 +27,57 @@ export default function StatCard({
   accentColor = "text-brand-400",
 }: StatCardProps) {
   return (
-    <div className="rounded-xl border border-border-primary bg-surface-secondary p-4 transition-colors duration-[var(--transition-fast)] hover:border-border-hover">
-      <div className="flex items-start justify-between gap-3">
-        <span
-          className={cn(
-            "meta-mono flex min-w-0 items-center gap-2 text-text-tertiary",
-            accentColor,
-          )}
-        >
-          <span className="size-1.5 shrink-0 rounded-full bg-current" />
-          <span className="truncate lowercase text-text-tertiary">{title}</span>
-        </span>
-        <Icon
-          size={15}
-          strokeWidth={1.5}
-          className="shrink-0 text-text-muted"
-          aria-hidden="true"
-        />
-      </div>
+    <div className="group relative overflow-hidden rounded-xl border border-border-primary bg-surface-secondary p-4 transition-colors duration-[var(--transition-base)] hover:border-border-hover">
+      {/* Corner bloom, revealed on hover — rewards interaction without shouting */}
+      <div
+        className={cn(
+          "pointer-events-none absolute -right-12 -top-12 size-28 rounded-full bg-brand-500/[0.07] opacity-0 blur-2xl transition-opacity duration-500 group-hover:opacity-100",
+        )}
+        aria-hidden="true"
+      />
 
-      <p className="mt-2 text-[28px] font-bold leading-9 tracking-[-0.01em] text-text-primary">
-        {value}
-      </p>
+      <div className="relative">
+        <div className="flex items-start justify-between gap-3">
+          <span
+            className={cn(
+              "meta-mono flex min-w-0 items-center gap-2",
+              accentColor,
+            )}
+          >
+            <span className="size-1.5 shrink-0 rounded-full bg-current" />
+            <span className="truncate lowercase text-text-tertiary">
+              {title}
+            </span>
+          </span>
+          <Icon
+            size={15}
+            strokeWidth={1.5}
+            className="shrink-0 text-text-muted transition-colors group-hover:text-text-tertiary"
+            aria-hidden="true"
+          />
+        </div>
 
-      {subtitle && (
-        <p className="meta-mono mt-1 text-[10px] text-text-muted">{subtitle}</p>
-      )}
-
-      {trend && (
-        <p
-          className={cn(
-            "meta-mono mt-1 text-[10px]",
-            trend.positive ? "text-success" : "text-error",
-          )}
-        >
-          {trend.positive ? "↑" : "↓"} {trend.value}
+        <p className="mt-2 text-[28px] font-bold leading-9 tracking-[-0.01em] text-text-primary">
+          {value}
         </p>
-      )}
+
+        {subtitle && (
+          <p className="meta-mono mt-1 text-[10px] text-text-muted">
+            {subtitle}
+          </p>
+        )}
+
+        {trend && (
+          <p
+            className={cn(
+              "meta-mono mt-1 text-[10px]",
+              trend.positive ? "text-success" : "text-error",
+            )}
+          >
+            {trend.positive ? "↑" : "↓"} {trend.value}
+          </p>
+        )}
+      </div>
     </div>
   );
 }

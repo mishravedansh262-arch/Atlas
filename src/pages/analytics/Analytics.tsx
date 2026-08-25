@@ -107,15 +107,15 @@ export default function Analytics() {
         <h3 className="label-mono text-text-secondary">Completion</h3>
         <div className="mt-4 grid grid-cols-3 gap-4">
           {[
-            { value: taskRate, caption: "tasks", color: "text-brand-500" },
-            { value: projectRate, caption: "projects", color: "text-success" },
-            { value: milestoneRate, caption: "roadmap", color: "text-warning" },
+            { value: taskRate, caption: "tasks", tone: "accent" as const },
+            { value: projectRate, caption: "projects", tone: "success" as const },
+            { value: milestoneRate, caption: "roadmap", tone: "violet" as const },
           ].map((ring) => (
             <div key={ring.caption} className="flex justify-center">
               <ProgressRing
                 value={ring.value}
                 size={84}
-                color={ring.color}
+                tone={ring.tone}
                 caption={ring.caption}
               />
             </div>

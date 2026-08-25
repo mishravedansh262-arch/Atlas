@@ -3,20 +3,29 @@ import { cn } from "../../lib/cn";
 type ProgressBarProps = {
   value: number; // 0-100
   size?: "sm" | "md";
+  /**
+   * Tailwind background class. Defaults to the accent gradient.
+   * Pass a flat class (e.g. "bg-success") to opt out of the gradient.
+   */
   color?: string;
   showLabel?: boolean;
+  /** Animated sweep across the fill — signals actively-in-progress work. */
+  animated?: boolean;
   className?: string;
 };
 
 /**
  * Linear progress indicator.
- * Spec: 4px height, dedicated dark track, accent indicator, mono label.
+ * 4px track per the design system. The fill carries a gradient so progress
+ * reads as energy rather than a flat block; `animated` adds a slow sweep for
+ * in-progress items (suppressed under prefers-reduced-motion).
  */
 export default function ProgressBar({
   value,
   size = "sm",
-  color = "bg-brand-500",
+  color = "fill-gradient-accent",
   showLabel = false,
+  animated = false,
   className,
 }: ProgressBarProps) {
   const clamped = Math.min(100, Math.max(0, Math.round(value)));
@@ -34,7 +43,11 @@ export default function ProgressBar({
         aria-valuemax={100}
       >
         <div
-          className={cn("h-full rounded-full transition-all duration-500", color)}
+          className={cn(
+            "h-full rounded-full transition-[width] duration-700 ease-out",
+            color,
+            animated && clamped > 0 && clamped < 100 && "shimmer",
+          )}
           style={{ width: `${clamped}%` }}
         />
       </div>

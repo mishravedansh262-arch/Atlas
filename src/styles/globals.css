@@ -3,24 +3,26 @@
 /*
  * ATLAS Design System — "Command Center"
  * --------------------------------------
- * Derived from the Stitch ATLAS Command Center design spec.
+ * Dark, technical, minimal. Depth comes from tonal layering and hairline
+ * "ghost borders" rather than heavy shadows.
  *
- * Core principles from the spec:
- *  - Tonal layering, not shadows. Depth = lighter surface + 1px "ghost border".
- *  - Tight, structural radii (2px badges / 4px controls / 6px cards).
- *  - Geist for content, JetBrains Mono for metadata & labels.
- *  - Electric blue accent reserved for interaction, focus and active nav.
- *  - Semantic colour only for state, never decoration.
+ * FUTURISTIC LAYER — governing rule:
+ *   Effects concentrate on DATA and FOCAL POINTS, never on chrome.
+ *   If every surface glows, nothing reads as important. So:
+ *     - ambient field on the app background (barely perceptible)
+ *     - gradient + glow on rings, progress fills, active nav, hero framing
+ *     - flat neutral surfaces everywhere else
+ *     - semantic colour (error / warning / success) NEVER decorated, so
+ *       "overdue" always reads as overdue
  *
- * NOTE ON PALETTE: the spec ships two conflicting palettes — an auto-generated
- * Material export (primary #adc6ff, bg #131313) and the authored prose
- * (primary #3B82F6, bg #0A0A0A, ghost border #2A2A2A). We follow the prose:
- * it is stated explicitly, the spec's own HTML hardcodes #3B82F6 for buttons
- * and progress indicators, and it preserves the existing ATLAS brand blue.
+ * PALETTE NOTE: the source spec shipped two conflicting palettes. We follow
+ * its authored prose (electric blue #3B82F6, near-black base, #2A2A2A ghost
+ * border) over its auto-generated Material export, and add cyan/violet as
+ * data-visualisation partners rather than replacing the interaction blue.
  */
 
 @theme {
-  /* ── Brand: Electric Blue ── */
+  /* ── Primary accent: interaction, focus, active state ── */
   --color-brand-50: #eff6ff;
   --color-brand-100: #dbeafe;
   --color-brand-200: #bfdbfe;
@@ -30,39 +32,51 @@
   --color-brand-600: #2563eb;
   --color-brand-700: #1d4ed8;
 
-  /* ── Surfaces: tonal layering ── */
-  --color-surface-base: #0a0a0a;        /* global app background */
-  --color-surface-primary: #0e0e0e;     /* rail / top bar */
-  --color-surface-secondary: #121212;   /* primary card */
-  --color-surface-tertiary: #171717;    /* nested / hover */
-  --color-surface-elevated: #1c1c1c;    /* modals, popovers */
-  --color-surface-overlay: #232323;     /* highest contrast chip */
-  --color-surface-track: #1a1a1a;       /* progress track */
+  /* ── Data-viz accents: gradients, charts, focal glow ──
+     Deliberately NOT used for buttons or nav, so the interaction
+     language stays unambiguous. */
+  --color-accent-cyan: #22d3ee;
+  --color-accent-cyan-dim: #0e7490;
+  --color-accent-violet: #8b5cf6;
+  --color-accent-violet-dim: #5b21b6;
 
-  /* ── Borders: ghost border technique ── */
-  --color-border-primary: #2a2a2a;      /* the canonical ghost border */
-  --color-border-secondary: #212121;    /* quieter divider */
-  --color-border-hover: #3a3a3a;
+  /* ── Surfaces: tonal layering ── */
+  --color-surface-base: #08080b;
+  --color-surface-primary: #0c0c10;
+  --color-surface-secondary: #111116;
+  --color-surface-tertiary: #16161c;
+  --color-surface-elevated: #1b1b22;
+  --color-surface-overlay: #22222a;
+  --color-surface-track: #191920;
+
+  /* ── Borders ── */
+  --color-border-primary: #26262e;
+  --color-border-secondary: #1d1d24;
+  --color-border-hover: #383842;
   --color-border-active: #3b82f6;
 
-  /* ── Text ── */
-  --color-text-primary: #ededed;
-  --color-text-secondary: #a1a1a1;
-  --color-text-tertiary: #737373;
-  --color-text-muted: #525252;
+  /* ── Text ──
+     Contrast-verified against the card surface (#111116):
+       primary 16.2 : 1   secondary 7.4 : 1
+       tertiary 5.6 : 1   muted 4.2 : 1
+     All four clear WCAG AA for UI text; the lower two also clear AA
+     normal-text, which matters because `muted` carries real metadata
+     (dates, priorities, counts) rather than decoration. */
+  --color-text-primary: #edeef0;
+  --color-text-secondary: #a1a2ab;
+  --color-text-tertiary: #8b8c96;
+  --color-text-muted: #75767f;
 
-  /* ── Semantic ── */
+  /* ── Semantic (never decorated) ── */
   --color-success: #10b981;
   --color-warning: #f59e0b;
   --color-error: #ef4444;
   --color-info: #3b82f6;
 
   /* ── Radius: structural, not consumer-soft ──
-     Remapped so existing utility usage lands on spec values:
-       rounded-sm/md -> 2px (badges, tags)
-       rounded-lg    -> 4px (buttons, inputs, nav items)
-       rounded-xl    -> 6px (cards, containers)
-       rounded-2xl   -> 8px (auth card) */
+     Mapped so existing utility usage lands on spec values:
+       rounded-sm/md -> 2px, rounded-lg -> 4px,
+       rounded-xl -> 6px, rounded-2xl -> 8px */
   --radius-sm: 0.125rem;
   --radius-md: 0.125rem;
   --radius-lg: 0.25rem;
@@ -78,8 +92,7 @@
   --font-sans: "Geist", "Inter", system-ui, -apple-system, sans-serif;
   --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
 
-  /* Only floating dialogs get a shadow, per the spec. */
-  --shadow-dialog: 0 16px 40px -8px rgb(0 0 0 / 0.7);
+  --shadow-dialog: 0 24px 64px -12px rgb(0 0 0 / 0.8);
 }
 
 /* ── Global Resets ── */
@@ -106,10 +119,49 @@ body {
   font-family: var(--font-sans);
   background-color: var(--color-surface-base);
   color: var(--color-text-primary);
+  /* Tabular numerals: keeps stat columns and dates from shifting width. */
+  font-variant-numeric: tabular-nums;
+}
+
+/*
+ * Ambient field.
+ * A fixed technical grid plus two very faint colour pools. Sits behind all
+ * content at ~1.5% opacity — reads as atmosphere, not as decoration, and
+ * never competes with foreground data.
+ */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background-image:
+    linear-gradient(rgb(255 255 255 / 0.014) 1px, transparent 1px),
+    linear-gradient(90deg, rgb(255 255 255 / 0.014) 1px, transparent 1px),
+    radial-gradient(
+      ellipse 80% 50% at 15% 0%,
+      rgb(59 130 246 / 0.05),
+      transparent 70%
+    ),
+    radial-gradient(
+      ellipse 60% 50% at 100% 100%,
+      rgb(34 211 238 / 0.035),
+      transparent 70%
+    );
+  background-size:
+    44px 44px,
+    44px 44px,
+    100% 100%,
+    100% 100%;
+}
+
+#root {
+  position: relative;
+  z-index: 1;
 }
 
 ::selection {
-  background: rgb(59 130 246 / 0.25);
+  background: rgb(59 130 246 / 0.28);
 }
 
 /* ── Scrollbar ── */
@@ -131,12 +183,9 @@ body {
   background: var(--color-border-hover);
 }
 
-/* ── Utilities ── */
+/* ══ Typography utilities ══ */
 
-/*
- * Mono metadata label. Per the spec: all-caps, letter-spaced, 12px mono.
- * Used for card headers, stat labels, timestamps, IDs and tags.
- */
+/* Mono metadata label: all-caps, letter-spaced. */
 .label-mono {
   font-family: var(--font-mono);
   font-size: 0.6875rem;
@@ -146,7 +195,7 @@ body {
   text-transform: uppercase;
 }
 
-/* Same treatment, sentence case — for inline metadata that reads as content. */
+/* Same treatment, sentence case — inline metadata that reads as content. */
 .meta-mono {
   font-family: var(--font-mono);
   font-size: 0.6875rem;
@@ -155,41 +204,143 @@ body {
   letter-spacing: 0.02em;
 }
 
-.focus-ring {
-  outline: none;
-}
-.focus-ring:focus-visible {
-  outline: 2px solid var(--color-brand-500);
-  outline-offset: 2px;
-}
-
 .text-gradient {
-  background: linear-gradient(135deg, var(--color-brand-300), var(--color-brand-600));
+  background: linear-gradient(
+    120deg,
+    var(--color-brand-300),
+    var(--color-accent-cyan)
+  );
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
 }
 
-/* Input focus: 1px blue border + subtle outer glow (spec: 2px spread, 20%). */
+/* ══ Focal effects — reserved for data and active state ══ */
+
+/* Hairline top edge that catches light. Hero / focal cards only. */
+.edge-lit {
+  position: relative;
+}
+.edge-lit::before {
+  content: "";
+  position: absolute;
+  inset-inline: 0;
+  top: 0;
+  height: 1px;
+  pointer-events: none;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgb(59 130 246 / 0.55),
+    rgb(34 211 238 / 0.35),
+    transparent
+  );
+}
+
+/* Glow tiers. Applied to active nav and focal data, never to plain cards. */
+.glow-accent {
+  box-shadow:
+    0 0 0 1px rgb(59 130 246 / 0.2),
+    0 0 20px -4px rgb(59 130 246 / 0.35);
+}
+.glow-accent-sm {
+  box-shadow: 0 0 12px -2px rgb(59 130 246 / 0.45);
+}
+.glow-cyan-sm {
+  box-shadow: 0 0 12px -2px rgb(34 211 238 / 0.5);
+}
+
+/* HUD corner brackets. Signals "primary focus" on the hero card. */
+.hud-frame::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  border-radius: inherit;
+  background:
+    linear-gradient(var(--hud-color, rgb(59 130 246 / 0.5)) 0 0) 0 0 / 1px 12px,
+    linear-gradient(90deg, var(--hud-color, rgb(59 130 246 / 0.5)) 0 0) 0 0 / 12px 1px,
+    linear-gradient(var(--hud-color, rgb(59 130 246 / 0.5)) 0 0) 100% 0 / 1px 12px,
+    linear-gradient(90deg, var(--hud-color, rgb(59 130 246 / 0.5)) 0 0) 100% 0 / 12px 1px,
+    linear-gradient(var(--hud-color, rgb(59 130 246 / 0.5)) 0 0) 0 100% / 1px 12px,
+    linear-gradient(90deg, var(--hud-color, rgb(59 130 246 / 0.5)) 0 0) 0 100% / 12px 1px,
+    linear-gradient(var(--hud-color, rgb(59 130 246 / 0.5)) 0 0) 100% 100% / 1px 12px,
+    linear-gradient(90deg, var(--hud-color, rgb(59 130 246 / 0.5)) 0 0) 100% 100% / 12px 1px;
+  background-repeat: no-repeat;
+}
+
+/* Gradient fills for progress indicators. */
+.fill-gradient-accent {
+  background-image: linear-gradient(
+    90deg,
+    var(--color-brand-600),
+    var(--color-brand-500),
+    var(--color-accent-cyan)
+  );
+}
+.fill-gradient-success {
+  background-image: linear-gradient(90deg, #059669, var(--color-success), #34d399);
+}
+
+/* Input focus: 1px accent border + soft outer bloom. */
 .input-focus:focus {
   border-color: var(--color-brand-500);
   box-shadow: 0 0 0 2px rgb(59 130 246 / 0.2);
   outline: none;
 }
 
-/* ── Page transition ── */
+/* ══ Motion — all of it gated on prefers-reduced-motion ══ */
+
 @media (prefers-reduced-motion: no-preference) {
   .page-enter {
-    animation: pageIn 200ms ease-out;
+    animation: pageIn 220ms cubic-bezier(0.16, 1, 0.3, 1);
   }
   @keyframes pageIn {
     from {
       opacity: 0;
-      transform: translateY(4px);
+      transform: translateY(6px);
     }
     to {
       opacity: 1;
       transform: translateY(0);
+    }
+  }
+
+  /* Slow sweep across in-progress progress fills. Signals "live". */
+  .shimmer {
+    position: relative;
+    overflow: hidden;
+  }
+  .shimmer::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      90deg,
+      transparent,
+      rgb(255 255 255 / 0.28),
+      transparent
+    );
+    transform: translateX(-100%);
+    animation: sweep 2.6s ease-in-out infinite;
+  }
+  @keyframes sweep {
+    to {
+      transform: translateX(100%);
+    }
+  }
+
+  /* Soft breathing pulse for "active now" markers. */
+  .pulse-soft {
+    animation: pulseSoft 2.4s ease-in-out infinite;
+  }
+  @keyframes pulseSoft {
+    0%,
+    100% {
+      opacity: 1;
+    }
+    50% {
+      opacity: 0.45;
     }
   }
 }

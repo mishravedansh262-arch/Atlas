@@ -40,7 +40,7 @@ export default function StreakCard({ tasks, milestones }: Props) {
           <ProgressRing
             value={consistency}
             size={68}
-            color="text-warning"
+            tone="warning"
             caption="30d"
           />
           <div className="min-w-0 space-y-2.5">

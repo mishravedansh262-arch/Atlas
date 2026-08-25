@@ -114,7 +114,8 @@ export default function ProjectCard({
         <ProgressBar
           value={project.progress}
           showLabel
-          color={project.status === "completed" ? "bg-success" : "bg-brand-500"}
+          color={project.status === "completed" ? "fill-gradient-success" : "fill-gradient-accent"}
+          animated={project.status === "in-progress"}
         />
       </div>
 

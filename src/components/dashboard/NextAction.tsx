@@ -111,15 +111,29 @@ export default function NextAction() {
   return (
     <div
       className={cn(
-        "relative overflow-hidden rounded-xl border bg-surface-secondary p-4 sm:p-5",
+        "hud-frame edge-lit relative overflow-hidden rounded-xl border bg-surface-secondary p-4 sm:p-5",
         isUrgent ? "border-error/30" : "border-border-primary",
       )}
+      style={
+        {
+          "--hud-color": isUrgent
+            ? "rgb(239 68 68 / 0.55)"
+            : "rgb(59 130 246 / 0.5)",
+        } as React.CSSProperties
+      }
     >
-      {/* Ambient tint — communicates urgency without a loud border */}
+      {/* Ambient bloom — communicates urgency without a loud border */}
       <div
         className={cn(
-          "pointer-events-none absolute -right-24 -top-24 size-56 rounded-full blur-3xl",
-          isUrgent ? "bg-error/[0.07]" : "bg-brand-500/[0.06]",
+          "pointer-events-none absolute -right-20 -top-24 size-60 rounded-full blur-3xl",
+          isUrgent ? "bg-error/[0.09]" : "bg-brand-500/[0.09]",
+        )}
+        aria-hidden="true"
+      />
+      <div
+        className={cn(
+          "pointer-events-none absolute -bottom-28 left-1/3 size-52 rounded-full blur-3xl",
+          isUrgent ? "bg-error/[0.05]" : "bg-accent-cyan/[0.06]",
         )}
         aria-hidden="true"
       />
@@ -127,6 +141,13 @@ export default function NextAction() {
       <div className="relative">
         {/* Meta row */}
         <div className="flex flex-wrap items-center gap-2">
+          <span
+            className={cn(
+              "size-1.5 rounded-full pulse-soft",
+              isUrgent ? "bg-error" : "bg-brand-500",
+            )}
+            aria-hidden="true"
+          />
           <span className="label-mono text-text-muted">Next Action</span>
           <span className="text-text-muted">·</span>
           <StatusBadge label={badge.label} variant={badge.variant} />
@@ -153,7 +174,7 @@ export default function NextAction() {
           />
           <Link
             to={action.href}
-            className="label-mono inline-flex items-center gap-2 rounded-lg bg-brand-500 px-3.5 py-2 text-white transition-colors hover:bg-brand-500 active:scale-[0.98]"
+            className="label-mono glow-accent-sm inline-flex items-center gap-2 rounded-lg bg-brand-500 px-3.5 py-2 text-white transition-all hover:bg-brand-400 active:scale-[0.98]"
           >
             Start Work
             <ArrowRight size={13} strokeWidth={2} />

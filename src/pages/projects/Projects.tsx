@@ -97,7 +97,7 @@ export default function Projects() {
             activeFilter === "all" ? (
               <button
                 onClick={handleCreate}
-                className="label-mono rounded-lg bg-brand-500 px-4 py-2 text-white transition-colors hover:bg-brand-500"
+                className="label-mono rounded-lg bg-brand-500 px-4 py-2 text-white transition-colors hover:bg-brand-400"
               >
                 Create Project
               </button>

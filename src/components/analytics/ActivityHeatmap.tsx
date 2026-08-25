@@ -17,13 +17,21 @@ type Props = {
   weeks?: number;
 };
 
-/** Five intensity steps, mapped from completions-per-day. */
+/**
+ * Five intensity steps, ramping blue -> cyan so peak days read as hotter
+ * rather than merely more opaque.
+ */
 function intensityClass(count: number): string {
   if (count === 0) return "bg-surface-track";
-  if (count === 1) return "bg-brand-500/25";
-  if (count === 2) return "bg-brand-500/45";
-  if (count <= 4) return "bg-brand-500/70";
-  return "bg-brand-500";
+  if (count === 1) return "bg-brand-600/40";
+  if (count === 2) return "bg-brand-500/65";
+  if (count <= 4) return "bg-brand-400/85";
+  return "bg-accent-cyan";
+}
+
+/** Peak days get a faint bloom so streaks are visible at a glance. */
+function isPeak(count: number): boolean {
+  return count >= 5;
 }
 
 const DAY_LABELS = ["S", "M", "T", "W", "T", "F", "S"];
@@ -149,10 +157,11 @@ export default function ActivityHeatmap({
                         : `${day.count} ${day.count === 1 ? "completion" : "completions"} on ${day.key}`
                     }
                     className={cn(
-                      "size-[11px] rounded-sm",
+                      "size-[11px] rounded-sm transition-transform duration-150 hover:scale-125",
                       day.future
                         ? "bg-transparent"
                         : intensityClass(day.count),
+                      !day.future && isPeak(day.count) && "glow-cyan-sm",
                     )}
                   />
                 ))}
