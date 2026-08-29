@@ -46,7 +46,7 @@ export default function Sidebar() {
               to={item.href}
               className={({ isActive }) =>
                 cn(
-                  "relative flex h-10 shrink-0 items-center border-l-2 pl-[22px] pr-4 transition-colors duration-[var(--transition-fast)]",
+                  "focus-ring-inset relative flex h-10 shrink-0 items-center border-l-2 pl-[22px] pr-4 transition-colors duration-[var(--transition-fast)]",
                   isActive
                     ? "border-brand-500 bg-gradient-to-r from-brand-500/15 to-transparent text-brand-400"
                     : "border-transparent text-text-tertiary hover:bg-surface-tertiary hover:text-text-secondary",

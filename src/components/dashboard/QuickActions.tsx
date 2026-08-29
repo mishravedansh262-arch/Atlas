@@ -22,7 +22,7 @@ export default function QuickActions() {
             <Link
               key={link.label}
               to={link.href}
-              className="flex items-center gap-2 rounded-lg border border-border-secondary bg-surface-tertiary px-3 py-2.5 text-xs font-medium text-text-secondary transition-all duration-[var(--transition-fast)] hover:border-border-hover hover:bg-surface-elevated hover:text-text-primary active:scale-[0.97]"
+              className="focus-ring flex items-center gap-2 rounded-lg border border-border-secondary bg-surface-tertiary px-3 py-2.5 text-xs font-medium text-text-secondary transition-all duration-[var(--transition-fast)] hover:border-border-hover hover:bg-surface-elevated hover:text-text-primary active:scale-[0.97]"
             >
               <Icon size={14} />
               <span>{link.label}</span>

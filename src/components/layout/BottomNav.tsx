@@ -25,7 +25,7 @@ export default function BottomNav() {
             to={item.href}
             className={({ isActive }) =>
               cn(
-                "relative flex flex-1 flex-col items-center justify-center gap-1 transition-colors duration-[var(--transition-fast)]",
+                "focus-ring-inset relative flex flex-1 flex-col items-center justify-center gap-1 transition-colors duration-[var(--transition-fast)]",
                 isActive ? "text-brand-400" : "text-text-muted active:text-text-secondary",
               )
             }

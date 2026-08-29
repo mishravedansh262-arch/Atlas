@@ -289,6 +289,65 @@ body::before {
   outline: none;
 }
 
+/* ══ Keyboard focus ══
+ *
+ * One focus treatment for the whole application. Uses `outline` rather than a
+ * ring so it needs no background-colour matching and renders correctly over
+ * gradients, blurred surfaces and the ambient field.
+ *
+ * The indicator is deliberately geometric — an offset outline appears as new
+ * shape, not merely a hue change — so it does not rely on colour alone.
+ * It is also forced visible in forced-colors mode.
+ */
+.focus-ring {
+  outline: none;
+}
+.focus-ring:focus-visible {
+  outline: 2px solid var(--color-brand-500);
+  outline-offset: 2px;
+  border-radius: inherit;
+}
+
+/* For controls flush against a container edge, where an outset outline
+   would be clipped (e.g. bottom-bar items). Draws inside instead. */
+.focus-ring-inset {
+  outline: none;
+}
+.focus-ring-inset:focus-visible {
+  outline: 2px solid var(--color-brand-500);
+  outline-offset: -3px;
+  border-radius: inherit;
+}
+
+@media (forced-colors: active) {
+  .focus-ring:focus-visible,
+  .focus-ring-inset:focus-visible {
+    outline: 3px solid Highlight;
+  }
+}
+
+/* ══ Skip to content ══
+ * Off-screen until focused. No transition, so it appears instantly and needs
+ * no reduced-motion exception.
+ */
+.skip-link {
+  position: fixed;
+  top: 0;
+  left: 50%;
+  z-index: 100;
+  transform: translate(-50%, -200%);
+  padding: 0.625rem 1rem;
+  border: 1px solid var(--color-brand-500);
+  border-radius: var(--radius-lg);
+  background-color: var(--color-surface-elevated);
+  color: var(--color-text-primary);
+  box-shadow: 0 0 0 2px rgb(59 130 246 / 0.25);
+}
+.skip-link:focus {
+  transform: translate(-50%, 0.75rem);
+  outline: none;
+}
+
 /* ══ Motion — all of it gated on prefers-reduced-motion ══ */
 
 @media (prefers-reduced-motion: no-preference) {

@@ -52,7 +52,7 @@ export default function Navbar() {
               aria-label={item.name}
               className={({ isActive }) =>
                 cn(
-                  "rounded-lg p-2 transition-colors lg:hidden",
+                  "focus-ring rounded-lg p-2 transition-colors lg:hidden",
                   isActive
                     ? "text-brand-400"
                     : "text-text-muted hover:bg-surface-tertiary hover:text-text-secondary",
@@ -67,7 +67,7 @@ export default function Navbar() {
         <button
           onClick={handleLogout}
           aria-label="Log out"
-          className="rounded-lg p-2 text-text-muted transition-colors hover:bg-surface-tertiary hover:text-text-secondary"
+          className="focus-ring rounded-lg p-2 text-text-muted transition-colors hover:bg-surface-tertiary hover:text-text-secondary"
         >
           <LogOut size={16} strokeWidth={1.5} />
         </button>
