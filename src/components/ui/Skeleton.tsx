@@ -7,15 +7,18 @@ type SkeletonProps = {
 /**
  * Base skeleton block.
  *
- * `animate-pulse` is a Tailwind utility driven by an `animation` property,
- * which Tailwind's own preflight disables under `prefers-reduced-motion`.
- * The block therefore still occupies correct space for reduced-motion users,
- * it simply doesn't pulse.
+ * Uses `motion-safe:animate-pulse` rather than bare `animate-pulse`: Tailwind
+ * does NOT gate animation utilities behind `prefers-reduced-motion` on its
+ * own, so the explicit variant is what keeps reduced-motion users from getting
+ * a pulsing screen. The block still reserves identical space either way.
  */
 export default function Skeleton({ className }: SkeletonProps) {
   return (
     <div
-      className={cn("animate-pulse rounded-lg bg-surface-tertiary", className)}
+      className={cn(
+        "rounded-lg bg-surface-tertiary motion-safe:animate-pulse",
+        className,
+      )}
       aria-hidden="true"
     />
   );

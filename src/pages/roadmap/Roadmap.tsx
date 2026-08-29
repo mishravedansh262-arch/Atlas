@@ -8,6 +8,7 @@ import Spinner from "../../components/ui/Spinner";
 import ProgressRing from "../../components/ui/ProgressRing";
 import MilestoneTimeline from "../../components/roadmap/MilestoneTimeline";
 import MilestoneFormDialog from "../../components/roadmap/MilestoneFormDialog";
+import ConfirmDialog from "../../components/ui/ConfirmDialog";
 import {
   useMilestones,
   useUpdateMilestone,
@@ -15,6 +16,8 @@ import {
 } from "../../hooks/useMilestones";
 import { extractApiError } from "../../lib/api";
 import type { Milestone, MilestoneStatus } from "../../types";
+import PageContainer from "../../components/ui/PageContainer";
+import { buttonClasses } from "../../lib/buttonStyles";
 
 export default function Roadmap() {
   const { data: milestones, isLoading, isError } = useMilestones();
@@ -22,6 +25,7 @@ export default function Roadmap() {
   const deleteMutation = useDeleteMilestone();
   const [formOpen, setFormOpen] = useState(false);
   const [editingMilestone, setEditingMilestone] = useState<Milestone | undefined>();
+  const [pendingDeleteId, setPendingDeleteId] = useState<string | null>(null);
 
   function handleCreate() {
     setEditingMilestone(undefined);
@@ -33,13 +37,19 @@ export default function Roadmap() {
     setFormOpen(true);
   }
 
-  async function handleDelete(id: string) {
-    if (!confirm("Delete this milestone?")) return;
+  function requestDelete(id: string) {
+    setPendingDeleteId(id);
+  }
+
+  async function confirmDelete() {
+    if (!pendingDeleteId) return;
     try {
-      await deleteMutation.mutateAsync(id);
+      await deleteMutation.mutateAsync(pendingDeleteId);
       toast.success("Milestone deleted.");
     } catch (e) {
       toast.error(extractApiError(e).message);
+    } finally {
+      setPendingDeleteId(null);
     }
   }
 
@@ -60,15 +70,18 @@ export default function Roadmap() {
   const completionRate =
     all.length > 0 ? Math.round((completed / all.length) * 100) : 0;
 
+  const pendingDeleteTitle =
+    all.find((m) => m.id === pendingDeleteId)?.title ?? null;
+
   return (
-    <div className="mx-auto max-w-5xl space-y-6">
+    <PageContainer width="narrow">
       <PageHeader
         title="Roadmap"
         description="Your journey milestones — plan, track, and achieve."
         action={
           <button
             onClick={handleCreate}
-            className="label-mono inline-flex items-center gap-2 rounded-lg bg-brand-500 px-3.5 py-2 text-white transition-colors hover:bg-brand-600 active:scale-[0.98]"
+            className={buttonClasses()}
           >
             <Plus size={13} strokeWidth={2} /> Add Milestone
           </button>
@@ -119,7 +132,7 @@ export default function Roadmap() {
           action={
             <button
               onClick={handleCreate}
-              className="label-mono rounded-lg bg-brand-500 px-4 py-2 text-white transition-colors hover:bg-brand-600"
+              className={buttonClasses()}
             >
               Create Milestone
             </button>
@@ -130,7 +143,7 @@ export default function Roadmap() {
           milestones={all}
           onToggle={handleToggle}
           onEdit={handleEdit}
-          onDelete={handleDelete}
+          onDelete={requestDelete}
         />
       )}
 
@@ -139,6 +152,20 @@ export default function Roadmap() {
         onClose={() => setFormOpen(false)}
         milestone={editingMilestone}
       />
-    </div>
+
+      <ConfirmDialog
+        open={pendingDeleteId !== null}
+        title="Delete milestone"
+        description={
+          pendingDeleteTitle
+            ? `"${pendingDeleteTitle}" will be removed from your roadmap. This cannot be undone.`
+            : "This milestone will be permanently removed. This cannot be undone."
+        }
+        confirmLabel="Delete"
+        isPending={deleteMutation.isPending}
+        onConfirm={confirmDelete}
+        onCancel={() => setPendingDeleteId(null)}
+      />
+    </PageContainer>
   );
 }

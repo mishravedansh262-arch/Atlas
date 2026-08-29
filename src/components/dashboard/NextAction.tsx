@@ -3,8 +3,11 @@ import { AlertCircle, ArrowRight, Calendar, Target } from "lucide-react";
 
 import { cn } from "../../lib/cn";
 import StatusBadge from "../ui/StatusBadge";
+import Skeleton from "../ui/Skeleton";
+import WidgetError from "../ui/WidgetError";
 import { useTasks } from "../../hooks/useTasks";
 import { useMilestones } from "../../hooks/useMilestones";
+import { buttonClasses } from "../../lib/buttonStyles";
 
 type Action = {
   kind: "overdue" | "priority" | "milestone";
@@ -25,8 +28,51 @@ type Action = {
  * then the active roadmap milestone.
  */
 export default function NextAction() {
-  const { data: tasks } = useTasks();
-  const { data: milestones } = useMilestones();
+  const {
+    data: tasks,
+    isPending: tasksPending,
+    isError: tasksError,
+    refetch: refetchTasks,
+  } = useTasks();
+  const {
+    data: milestones,
+    isPending: milestonesPending,
+    isError: milestonesError,
+    refetch: refetchMilestones,
+  } = useMilestones();
+
+  // Skeleton mirrors the loaded hero block so the card doesn't jump height.
+  if (tasksPending || milestonesPending) {
+    return (
+      <div className="rounded-xl border border-border-primary bg-surface-secondary p-4 sm:p-5">
+        <div className="flex items-center gap-2">
+          <Skeleton className="size-1.5 rounded-full" />
+          <Skeleton className="h-3 w-24 rounded-sm" />
+          <Skeleton className="h-4 w-20 rounded-sm" />
+        </div>
+        <Skeleton className="mt-3 h-6 w-2/3" />
+        <Skeleton className="mt-2 h-3 w-full rounded-sm" />
+        <Skeleton className="mt-1.5 h-3 w-4/5 rounded-sm" />
+        <div className="mt-4 flex items-center justify-between border-t border-border-secondary pt-3">
+          <Skeleton className="size-4 rounded-sm" />
+          <Skeleton className="h-8 w-28" />
+        </div>
+      </div>
+    );
+  }
+
+  if (tasksError || milestonesError) {
+    return (
+      <WidgetError
+        variant="card"
+        message="Couldn't work out your next action."
+        onRetry={() => {
+          void refetchTasks();
+          void refetchMilestones();
+        }}
+      />
+    );
+  }
 
   const now = new Date();
 
@@ -174,7 +220,7 @@ export default function NextAction() {
           />
           <Link
             to={action.href}
-            className="label-mono glow-accent-sm inline-flex items-center gap-2 rounded-lg bg-brand-500 px-3.5 py-2 text-white transition-all hover:bg-brand-400 active:scale-[0.98]"
+            className={buttonClasses({ glow: true })}
           >
             Start Work
             <ArrowRight size={13} strokeWidth={2} />

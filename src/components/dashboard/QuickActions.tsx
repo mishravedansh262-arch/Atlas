@@ -1,6 +1,9 @@
 import { Link } from "react-router-dom";
 import { Map, FolderKanban, CheckSquare, BarChart3 } from "lucide-react";
 
+import SectionCard from "../ui/SectionCard";
+import { buttonClasses } from "../../lib/buttonStyles";
+
 const links = [
   { label: "Roadmap", href: "/roadmap", icon: Map },
   { label: "Projects", href: "/projects", icon: FolderKanban },
@@ -8,13 +11,15 @@ const links = [
   { label: "Analytics", href: "/analytics", icon: BarChart3 },
 ];
 
+/**
+ * Jump-off points to the main sections.
+ *
+ * Tiles adopt the shared secondary-button styling via `buttonClasses`, so
+ * hover, active and focus behaviour match every other control in the app.
+ */
 export default function QuickActions() {
   return (
-    <div className="rounded-xl border border-border-secondary bg-surface-secondary p-5">
-      <h2 className="mb-4 text-sm font-semibold text-text-primary">
-        Quick Navigation
-      </h2>
-
+    <SectionCard title="Jump to">
       <div className="grid grid-cols-2 gap-2">
         {links.map((link) => {
           const Icon = link.icon;
@@ -22,14 +27,18 @@ export default function QuickActions() {
             <Link
               key={link.label}
               to={link.href}
-              className="focus-ring flex items-center gap-2 rounded-lg border border-border-secondary bg-surface-tertiary px-3 py-2.5 text-xs font-medium text-text-secondary transition-all duration-[var(--transition-fast)] hover:border-border-hover hover:bg-surface-elevated hover:text-text-primary active:scale-[0.97]"
+              className={buttonClasses({
+                variant: "secondary",
+                size: "sm",
+                className: "justify-start",
+              })}
             >
-              <Icon size={14} />
+              <Icon size={14} strokeWidth={1.5} aria-hidden="true" />
               <span>{link.label}</span>
             </Link>
           );
         })}
       </div>
-    </div>
+    </SectionCard>
   );
 }

@@ -2,7 +2,7 @@ import { useState } from "react";
 import { toast } from "sonner";
 
 import Dialog from "../ui/Dialog";
-import Spinner from "../ui/Spinner";
+import Button from "../ui/Button";
 import { useCreateProject, useUpdateProject } from "../../hooks/useProjects";
 import { extractApiError } from "../../lib/api";
 import type { Project } from "../../types";
@@ -131,21 +131,16 @@ export default function ProjectFormDialog({ open, onClose, project }: Props) {
         </div>
 
         <div className="flex justify-end gap-2 pt-2">
-          <button
-            type="button"
-            onClick={onClose}
-            className="rounded-lg px-4 py-2 text-xs font-medium text-text-secondary hover:text-text-primary"
-          >
+          <Button type="button" variant="ghost" onClick={onClose}>
             Cancel
-          </button>
-          <button
+          </Button>
+          <Button
             type="submit"
-            disabled={isPending || !title.trim() || !description.trim()}
-            className="inline-flex items-center gap-2 rounded-lg bg-brand-500 px-4 py-2 text-xs font-medium text-white transition-colors hover:bg-brand-600 disabled:opacity-60"
+            isLoading={isPending}
+            disabled={!title.trim() || !description.trim()}
           >
-            {isPending && <Spinner />}
             {isEditing ? "Save Changes" : "Create Project"}
-          </button>
+          </Button>
         </div>
       </form>
     </Dialog>

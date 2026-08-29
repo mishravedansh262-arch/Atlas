@@ -8,15 +8,19 @@ import { CardSkeleton } from "../../components/ui/Skeleton";
 import ProjectCard from "../../components/projects/ProjectCard";
 import ProjectFilters from "../../components/projects/ProjectFilters";
 import ProjectFormDialog from "../../components/projects/ProjectFormDialog";
+import ConfirmDialog from "../../components/ui/ConfirmDialog";
 import { useProjects, useDeleteProject } from "../../hooks/useProjects";
 import { useTasks } from "../../hooks/useTasks";
 import { extractApiError } from "../../lib/api";
 import type { Project, ProjectStatus } from "../../types";
+import PageContainer from "../../components/ui/PageContainer";
+import { buttonClasses } from "../../lib/buttonStyles";
 
 export default function Projects() {
   const [activeFilter, setActiveFilter] = useState<ProjectStatus | "all">("all");
   const [formOpen, setFormOpen] = useState(false);
   const [editingProject, setEditingProject] = useState<Project | undefined>();
+  const [pendingDeleteId, setPendingDeleteId] = useState<string | null>(null);
   const { data: projects, isLoading, isError } = useProjects();
   const { data: tasks } = useTasks();
   const deleteMutation = useDeleteProject();
@@ -26,6 +30,9 @@ export default function Projects() {
     : activeFilter === "all"
       ? projects
       : projects.filter((p) => p.status === activeFilter);
+
+  const pendingDeleteTitle =
+    projects?.find((p) => p.id === pendingDeleteId)?.title ?? null;
 
   function handleEdit(project: Project) {
     setEditingProject(project);
@@ -37,25 +44,31 @@ export default function Projects() {
     setFormOpen(true);
   }
 
-  async function handleDelete(id: string) {
-    if (!confirm("Delete this project? This action cannot be undone.")) return;
+  function requestDelete(id: string) {
+    setPendingDeleteId(id);
+  }
+
+  async function confirmDelete() {
+    if (!pendingDeleteId) return;
     try {
-      await deleteMutation.mutateAsync(id);
+      await deleteMutation.mutateAsync(pendingDeleteId);
       toast.success("Project deleted.");
+      setPendingDeleteId(null);
     } catch (error) {
       toast.error(extractApiError(error).message);
+      setPendingDeleteId(null);
     }
   }
 
   return (
-    <div className="mx-auto max-w-7xl space-y-6">
+    <PageContainer>
       <PageHeader
         title="Projects"
         description="Track and manage all your projects in one place."
         action={
           <button
             onClick={handleCreate}
-            className="label-mono inline-flex items-center gap-2 rounded-lg bg-brand-500 px-3.5 py-2 text-white transition-colors hover:bg-brand-500 active:scale-[0.98]"
+            className={buttonClasses()}
           >
             <Plus size={13} strokeWidth={2} />
             New Project
@@ -97,7 +110,7 @@ export default function Projects() {
             activeFilter === "all" ? (
               <button
                 onClick={handleCreate}
-                className="label-mono rounded-lg bg-brand-500 px-4 py-2 text-white transition-colors hover:bg-brand-400"
+                className={buttonClasses()}
               >
                 Create Project
               </button>
@@ -117,7 +130,7 @@ export default function Projects() {
                   projectTasks?.filter((t) => t.status === "completed").length
                 }
                 onEdit={handleEdit}
-                onDelete={handleDelete}
+                onDelete={requestDelete}
               />
             );
           })}
@@ -129,6 +142,21 @@ export default function Projects() {
         onClose={() => setFormOpen(false)}
         project={editingProject}
       />
-    </div>
+
+      <ConfirmDialog
+        open={pendingDeleteId !== null}
+        title="Delete project"
+        description={
+          pendingDeleteTitle
+            ? `"${pendingDeleteTitle}" and its link to any related tasks will be removed. This cannot be undone.`
+            : "This project will be permanently removed. This cannot be undone."
+        }
+        confirmLabel="Delete"
+        isPending={deleteMutation.isPending}
+        onConfirm={confirmDelete}
+        onCancel={() => setPendingDeleteId(null)}
+      />
+    </PageContainer>
   );
+
 }

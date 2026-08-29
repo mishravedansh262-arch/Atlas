@@ -33,9 +33,18 @@ export default function BottomNav() {
             {({ isActive }) => (
               <>
                 <Icon size={20} strokeWidth={isActive ? 2 : 1.5} />
-                <span className="meta-mono text-[9px] leading-none">{item.name}</span>
+                {/*
+                  10px (was 9px) for legibility, with truncation as the safety
+                  valve at 320px where each slot is only ~64px wide.
+                */}
+                <span className="meta-mono max-w-full truncate px-0.5 text-[10px] leading-none">
+                  {item.shortName ?? item.name}
+                </span>
                 {isActive && (
-                  <span className="absolute top-0 h-0.5 w-8 rounded-full bg-brand-500" />
+                  <span
+                    className="absolute top-0 h-0.5 w-8 rounded-full bg-brand-500"
+                    aria-hidden="true"
+                  />
                 )}
               </>
             )}

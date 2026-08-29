@@ -10,6 +10,8 @@ import { useProfile, useUpdateProfile } from "../../hooks/useProfile";
 import { useProjects } from "../../hooks/useProjects";
 import { useTasks } from "../../hooks/useTasks";
 import { extractApiError } from "../../lib/api";
+import PageContainer from "../../components/ui/PageContainer";
+import { buttonClasses } from "../../lib/buttonStyles";
 
 export default function Profile() {
   const { user } = useAuth();
@@ -73,15 +75,15 @@ export default function Profile() {
 
   if (isLoading) {
     return (
-      <div className="mx-auto max-w-7xl space-y-6">
+      <PageContainer>
         <PageHeader title="Profile" />
         <div className="flex justify-center py-16"><Spinner size={24} className="text-brand-400" /></div>
-      </div>
+      </PageContainer>
     );
   }
 
   return (
-    <div className="mx-auto max-w-7xl space-y-6">
+    <PageContainer>
       <PageHeader title="Profile" />
 
       {/* Hero card */}
@@ -164,7 +166,7 @@ export default function Profile() {
               <button
                 onClick={handleSave}
                 disabled={updateMutation.isPending}
-                className="inline-flex items-center gap-2 rounded-lg bg-brand-500 px-4 py-2 text-xs font-medium text-white transition-colors hover:bg-brand-600 disabled:opacity-60"
+                className={buttonClasses()}
               >
                 {updateMutation.isPending && <Spinner />}
                 Save Changes
@@ -233,6 +235,7 @@ export default function Profile() {
           </div>
         </SectionCard>
       )}
-    </div>
+    </PageContainer>
   );
+
 }

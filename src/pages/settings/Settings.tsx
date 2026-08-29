@@ -7,6 +7,7 @@ import SettingsAccount from "../../components/settings/SettingsAccount";
 import SettingsAppearance from "../../components/settings/SettingsAppearance";
 import SettingsNotifications from "../../components/settings/SettingsNotifications";
 import SettingsSecurity from "../../components/settings/SettingsSecurity";
+import PageContainer from "../../components/ui/PageContainer";
 
 type SettingsSection = "account" | "appearance" | "notifications" | "security";
 
@@ -21,7 +22,7 @@ export default function Settings() {
   const [active, setActive] = useState<SettingsSection>("account");
 
   return (
-    <div className="mx-auto max-w-7xl space-y-6">
+    <PageContainer>
       <PageHeader
         title="Settings"
         description="Manage your account preferences and application settings."
@@ -60,6 +61,7 @@ export default function Settings() {
           {active === "security" && <SettingsSecurity />}
         </div>
       </div>
-    </div>
+    </PageContainer>
   );
+
 }

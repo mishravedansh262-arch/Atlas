@@ -13,15 +13,17 @@ export type NavItem = {
   name: string;
   href: string;
   icon: LucideIcon;
+  /** Compact label for the mobile bottom bar, where slots are ~64px wide. */
+  shortName?: string;
 };
 
 /** Full navigation — used by the desktop rail. */
 export const navigation: NavItem[] = [
-  { name: "Dashboard", href: "/dashboard", icon: LayoutDashboard },
+  { name: "Dashboard", href: "/dashboard", icon: LayoutDashboard, shortName: "Home" },
   { name: "Roadmap", href: "/roadmap", icon: Map },
   { name: "Projects", href: "/projects", icon: FolderKanban },
   { name: "Tasks", href: "/tasks", icon: CheckSquare },
-  { name: "Analytics", href: "/analytics", icon: BarChart3 },
+  { name: "Analytics", href: "/analytics", icon: BarChart3, shortName: "Stats" },
   { name: "Profile", href: "/profile", icon: User },
   { name: "Settings", href: "/settings", icon: Settings },
 ];

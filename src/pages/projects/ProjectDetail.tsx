@@ -12,11 +12,14 @@ import PriorityIndicator from "../../components/ui/PriorityIndicator";
 import TaskItem from "../../components/tasks/TaskItem";
 import ProjectFormDialog from "../../components/projects/ProjectFormDialog";
 import TaskFormDialog from "../../components/tasks/TaskFormDialog";
+import ConfirmDialog from "../../components/ui/ConfirmDialog";
 import { useProjects, useDeleteProject } from "../../hooks/useProjects";
 import { useTasks, useUpdateTask, useDeleteTask } from "../../hooks/useTasks";
 import { useMilestones } from "../../hooks/useMilestones";
 import { extractApiError } from "../../lib/api";
 import type { ProjectStatus, Task } from "../../types";
+import PageContainer from "../../components/ui/PageContainer";
+import { buttonClasses } from "../../lib/buttonStyles";
 
 const statusBadge: Record<ProjectStatus, { label: string; variant: "success" | "info" | "warning" | "muted" }> = {
   completed: { label: "Completed", variant: "success" },
@@ -36,6 +39,7 @@ export default function ProjectDetail() {
   const { data: milestones } = useMilestones();
 
   const [editOpen, setEditOpen] = useState(false);
+  const [deleteOpen, setDeleteOpen] = useState(false);
   const [taskFormOpen, setTaskFormOpen] = useState(false);
   const [editingTask, setEditingTask] = useState<Task | undefined>();
 
@@ -43,15 +47,16 @@ export default function ProjectDetail() {
   const relatedTasks = tasks?.filter((t) => t.projectId === id) ?? [];
   const relatedMilestones = milestones?.filter((m) => m.projectId === id) ?? [];
 
-  async function handleDelete() {
+  async function confirmDelete() {
     if (!project) return;
-    if (!confirm(`Delete "${project.title}"? This cannot be undone.`)) return;
     try {
       await deleteMutation.mutateAsync(project.id);
       toast.success("Project deleted.");
+      setDeleteOpen(false);
       navigate("/projects", { replace: true });
     } catch (error) {
       toast.error(extractApiError(error).message);
+      setDeleteOpen(false);
     }
   }
 
@@ -85,26 +90,26 @@ export default function ProjectDetail() {
 
   if (isLoading) {
     return (
-      <div className="mx-auto max-w-7xl space-y-6">
+      <PageContainer>
         <div className="flex justify-center py-16"><Spinner size={24} className="text-brand-400" /></div>
-      </div>
+      </PageContainer>
     );
   }
 
   if (!project) {
     return (
-      <div className="mx-auto max-w-7xl space-y-6">
+      <PageContainer>
         <EmptyState
           icon={Trash2}
           title="Project not found"
           description="This project doesn't exist or you don't have access to it."
           action={
-            <Link to="/projects" className="inline-flex items-center gap-2 rounded-lg bg-brand-500 px-4 py-2 text-xs font-medium text-white hover:bg-brand-600">
+            <Link to="/projects" className={buttonClasses()}>
               <ArrowLeft size={14} /> Back to Projects
             </Link>
           }
         />
-      </div>
+      </PageContainer>
     );
   }
 
@@ -112,7 +117,7 @@ export default function ProjectDetail() {
   const completedRelated = relatedTasks.filter((t) => t.status === "completed").length;
 
   return (
-    <div className="mx-auto max-w-7xl space-y-6">
+    <PageContainer>
       {/* Breadcrumb */}
       <nav className="flex items-center gap-2 text-xs text-text-muted">
         <Link to="/projects" className="transition-colors hover:text-text-secondary">Projects</Link>
@@ -133,7 +138,7 @@ export default function ProjectDetail() {
           <button onClick={() => setEditOpen(true)} className="inline-flex items-center gap-1.5 rounded-lg border border-border-secondary bg-surface-tertiary px-3 py-2 text-xs font-medium text-text-secondary transition-colors hover:border-border-hover hover:text-text-primary">
             <Pencil size={12} /> Edit
           </button>
-          <button onClick={handleDelete} className="inline-flex items-center gap-1.5 rounded-lg border border-error/30 bg-error/5 px-3 py-2 text-xs font-medium text-error transition-colors hover:bg-error/10">
+          <button onClick={() => setDeleteOpen(true)} className="focus-ring inline-flex items-center gap-1.5 rounded-lg border border-error/30 bg-error/5 px-3 py-2 text-xs font-medium text-error transition-colors hover:bg-error/10">
             <Trash2 size={12} /> Delete
           </button>
         </div>
@@ -168,7 +173,7 @@ export default function ProjectDetail() {
         title="Tasks"
         description={relatedTasks.length > 0 ? `${completedRelated}/${relatedTasks.length} completed` : undefined}
         action={
-          <button onClick={handleAddTask} className="inline-flex items-center gap-1.5 rounded-lg bg-brand-500 px-3 py-1.5 text-[11px] font-medium text-white transition-colors hover:bg-brand-600">
+          <button onClick={handleAddTask} className={buttonClasses({ size: "sm" })}>
             <Plus size={12} /> Add Task
           </button>
         }
@@ -204,15 +209,27 @@ export default function ProjectDetail() {
       {/* Dialogs */}
       <ProjectFormDialog open={editOpen} onClose={() => setEditOpen(false)} project={project} />
       <TaskFormDialog open={taskFormOpen} onClose={() => setTaskFormOpen(false)} task={editingTask} defaultProjectId={id} />
-    </div>
+
+      <ConfirmDialog
+        open={deleteOpen}
+        title="Delete project"
+        description={`"${project.title}" and its link to any related tasks will be removed. This cannot be undone.`}
+        confirmLabel="Delete"
+        isPending={deleteMutation.isPending}
+        onConfirm={confirmDelete}
+        onCancel={() => setDeleteOpen(false)}
+      />
+    </PageContainer>
   );
 }
 
+
 function InfoItem({ label, children }: { label: string; children: React.ReactNode }) {
   return (
-    <div className="rounded-lg border border-border-secondary bg-surface-secondary p-3">
-      <p className="mb-1 text-[11px] font-medium uppercase tracking-wider text-text-muted">{label}</p>
+    <div className="rounded-lg border border-border-primary bg-surface-secondary p-3">
+      <p className="label-mono mb-1 text-text-muted">{label}</p>
       <div className="text-xs text-text-primary">{children}</div>
     </div>
   );
+
 }

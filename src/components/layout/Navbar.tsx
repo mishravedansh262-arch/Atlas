@@ -1,22 +1,40 @@
 import { LogOut } from "lucide-react";
-import { NavLink, useNavigate } from "react-router-dom";
+import { NavLink, useLocation, useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 
 import { cn } from "../../lib/cn";
-import { secondaryNavigation } from "../../lib/navigation";
+import { navigation, secondaryNavigation } from "../../lib/navigation";
 import { useAuth } from "../../hooks/useAuth";
 import { extractApiError } from "../../lib/api";
+
+/** Longest-prefix match so nested routes still resolve to their section. */
+function useCurrentSection(): string | null {
+  const { pathname } = useLocation();
+
+  const match = navigation
+    .filter(
+      (item) =>
+        pathname === item.href || pathname.startsWith(`${item.href}/`),
+    )
+    .sort((a, b) => b.href.length - a.href.length)[0];
+
+  return match?.name ?? null;
+}
 
 /**
  * Slim top bar.
  *
- * On desktop it carries the wordmark and the logout control — navigation
- * lives in the rail. On mobile it additionally carries Profile and
- * Settings, since the bottom bar holds only primary destinations.
+ * Desktop: names the current section — previously this bar held only a spacer
+ * and a logout button, so the sole indicator of location was the rail
+ * highlight, which is icon-only unless expanded.
+ *
+ * Mobile: also carries Profile and Settings, since the bottom bar holds only
+ * the primary destinations.
  */
 export default function Navbar() {
   const navigate = useNavigate();
   const { logout } = useAuth();
+  const section = useCurrentSection();
 
   async function handleLogout() {
     try {
@@ -29,7 +47,7 @@ export default function Navbar() {
   }
 
   return (
-    <header className="flex h-14 shrink-0 items-center justify-between border-b border-border-primary bg-surface-primary px-4 md:px-6">
+    <header className="flex h-14 shrink-0 items-center justify-between gap-3 border-b border-border-primary bg-surface-primary px-4 md:px-6">
       {/* Mobile wordmark */}
       <div className="flex items-center gap-2 lg:hidden">
         <div className="flex size-6 items-center justify-center rounded-lg bg-brand-500 text-[10px] font-bold text-white">
@@ -38,11 +56,16 @@ export default function Navbar() {
         <span className="label-mono text-text-secondary">Atlas</span>
       </div>
 
-      <div className="hidden lg:block" />
+      {/* Desktop page context */}
+      <div className="hidden min-w-0 items-center gap-2 lg:flex">
+        <span className="size-1 shrink-0 rounded-full bg-brand-500" aria-hidden="true" />
+        <span className="label-mono truncate text-text-secondary">
+          {section ?? "Atlas"}
+        </span>
+      </div>
 
       {/* Actions */}
-      <div className="flex items-center gap-1">
-        {/* Profile + Settings, mobile only (bottom bar has no room) */}
+      <div className="flex shrink-0 items-center gap-1">
         {secondaryNavigation.map((item) => {
           const Icon = item.icon;
           return (
@@ -52,7 +75,9 @@ export default function Navbar() {
               aria-label={item.name}
               className={({ isActive }) =>
                 cn(
-                  "focus-ring rounded-lg p-2 transition-colors lg:hidden",
+                  // 44px touch target on mobile; icon size unchanged so
+                  // visual density holds.
+                  "focus-ring flex size-11 items-center justify-center rounded-lg transition-colors lg:hidden",
                   isActive
                     ? "text-brand-400"
                     : "text-text-muted hover:bg-surface-tertiary hover:text-text-secondary",
@@ -67,7 +92,7 @@ export default function Navbar() {
         <button
           onClick={handleLogout}
           aria-label="Log out"
-          className="focus-ring rounded-lg p-2 text-text-muted transition-colors hover:bg-surface-tertiary hover:text-text-secondary"
+          className="focus-ring flex size-11 items-center justify-center rounded-lg text-text-muted transition-colors hover:bg-surface-tertiary hover:text-text-secondary lg:size-9"
         >
           <LogOut size={16} strokeWidth={1.5} />
         </button>

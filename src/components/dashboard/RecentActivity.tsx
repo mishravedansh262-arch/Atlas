@@ -1,85 +1,174 @@
 import { Link } from "react-router-dom";
-import { CheckCircle2, FolderKanban } from "lucide-react";
+import { ArrowRight, CheckCircle2, FolderKanban } from "lucide-react";
 
+import SectionCard from "../ui/SectionCard";
+import { ListRowSkeleton } from "../ui/Skeleton";
+import WidgetError from "../ui/WidgetError";
 import { useTasks } from "../../hooks/useTasks";
 import { useProjects } from "../../hooks/useProjects";
+
+const MAX_ENTRIES = 5;
 
 type ActivityEntry = {
   id: string;
   title: string;
   type: "task" | "project";
-  time: string;
+  /** Epoch ms — the real sort key. */
+  timestamp: number;
+  label: string;
+  fullDate: string;
 };
 
-export default function RecentActivity() {
-  const { data: tasks } = useTasks();
-  const { data: projects } = useProjects();
+/**
+ * Safely parses an ISO string to epoch ms. Returns null for missing or
+ * unparseable values so they can be excluded rather than sorted as NaN.
+ */
+function parseTimestamp(iso?: string): number | null {
+  if (!iso) return null;
+  const ms = new Date(iso).getTime();
+  return Number.isNaN(ms) ? null : ms;
+}
 
-  // Build activity from recently completed tasks + recently created projects
+function formatShort(ms: number): string {
+  return new Date(ms).toLocaleDateString("en-US", {
+    month: "short",
+    day: "numeric",
+  });
+}
+
+function formatFull(ms: number): string {
+  return new Date(ms).toLocaleString("en-US", {
+    dateStyle: "medium",
+    timeStyle: "short",
+  });
+}
+
+export default function RecentActivity() {
+  const {
+    data: tasks,
+    isPending: tasksPending,
+    isError: tasksError,
+    refetch: refetchTasks,
+  } = useTasks();
+  const {
+    data: projects,
+    isPending: projectsPending,
+    isError: projectsError,
+    refetch: refetchProjects,
+  } = useProjects();
+
+  const isPending = tasksPending || projectsPending;
+  const isError = tasksError || projectsError;
+
+  /*
+   * One timeline from two sources, sorted by real timestamp.
+   *
+   * Each entry keeps the verb matching the field it came from — tasks use
+   * `completedAt` ("Completed"), projects use `createdAt` ("Created") — so a
+   * row never implies an event that didn't happen. Entries with missing or
+   * invalid dates are dropped rather than back-filled.
+   */
   const entries: ActivityEntry[] = [];
 
-  tasks
-    ?.filter((t) => t.status === "completed" && t.completedAt)
-    .slice(0, 3)
-    .forEach((t) => {
-      entries.push({
-        id: t.id,
-        title: `Completed: ${t.title}`,
-        type: "task",
-        time: new Date(t.completedAt!).toLocaleDateString("en-US", { month: "short", day: "numeric" }),
-      });
+  for (const t of tasks ?? []) {
+    if (t.status !== "completed") continue;
+    const ts = parseTimestamp(t.completedAt);
+    if (ts === null) continue;
+    entries.push({
+      id: `task-${t.id}`,
+      title: `Completed: ${t.title}`,
+      type: "task",
+      timestamp: ts,
+      label: formatShort(ts),
+      fullDate: formatFull(ts),
     });
+  }
 
-  projects
-    ?.slice(0, 3)
-    .forEach((p) => {
-      entries.push({
-        id: p.id,
-        title: `Project: ${p.title}`,
-        type: "project",
-        time: new Date(p.createdAt).toLocaleDateString("en-US", { month: "short", day: "numeric" }),
-      });
+  for (const p of projects ?? []) {
+    const ts = parseTimestamp(p.createdAt);
+    if (ts === null) continue;
+    entries.push({
+      id: `project-${p.id}`,
+      title: `Created: ${p.title}`,
+      type: "project",
+      timestamp: ts,
+      label: formatShort(ts),
+      fullDate: formatFull(ts),
     });
+  }
 
-  // Sort by recency (newest first) - limit to 5
-  const sorted = entries.slice(0, 5);
+  const recent = entries
+    .sort((a, b) => b.timestamp - a.timestamp)
+    .slice(0, MAX_ENTRIES);
 
   return (
-    <div className="rounded-xl border border-border-secondary bg-surface-secondary p-5">
-      <div className="mb-4 flex items-center justify-between">
-        <h2 className="text-sm font-semibold text-text-primary">Recent Activity</h2>
+    <SectionCard
+      title="Recent Activity"
+      action={
         <Link
           to="/projects"
-          className="text-[11px] font-medium text-text-tertiary transition-colors hover:text-text-secondary"
+          className="focus-ring meta-mono inline-flex items-center gap-1 rounded-lg px-1 py-0.5 text-[10px] text-text-tertiary transition-colors hover:text-text-secondary"
         >
-          View projects →
+          Projects
+          <ArrowRight size={10} strokeWidth={2} aria-hidden="true" />
         </Link>
-      </div>
-
-      {sorted.length === 0 ? (
-        <p className="py-4 text-center text-xs text-text-muted">
-          No activity yet. Create a project or complete a task to see updates here.
-        </p>
-      ) : (
+      }
+    >
+      {isPending ? (
         <div className="space-y-1">
-          {sorted.map((entry) => (
-            <div
-              key={entry.id}
-              className="flex items-start gap-3 rounded-lg px-2 py-2.5 transition-colors hover:bg-surface-tertiary"
-            >
-              {entry.type === "task" ? (
-                <CheckCircle2 size={14} className="mt-0.5 shrink-0 text-success" />
-              ) : (
-                <FolderKanban size={14} className="mt-0.5 shrink-0 text-brand-400" />
-              )}
-              <div className="min-w-0 flex-1">
-                <p className="truncate text-xs text-text-primary">{entry.title}</p>
-              </div>
-              <span className="shrink-0 text-[11px] text-text-muted">{entry.time}</span>
-            </div>
+          {Array.from({ length: 4 }).map((_, i) => (
+            <ListRowSkeleton key={i} />
           ))}
         </div>
+      ) : isError ? (
+        <WidgetError
+          message="Couldn't load recent activity."
+          onRetry={() => {
+            void refetchTasks();
+            void refetchProjects();
+          }}
+        />
+      ) : recent.length === 0 ? (
+        <div className="py-4 text-center">
+          <p className="text-xs text-text-secondary">No activity yet.</p>
+          <p className="mt-1 text-[11px] text-text-muted">
+            Completed tasks and new projects will appear here.
+          </p>
+        </div>
+      ) : (
+        <ul className="space-y-0.5">
+          {recent.map((entry) => (
+            <li
+              key={entry.id}
+              className="flex items-start gap-3 rounded-lg px-2 py-2 transition-colors hover:bg-surface-tertiary"
+            >
+              {entry.type === "task" ? (
+                <CheckCircle2
+                  size={14}
+                  className="mt-0.5 shrink-0 text-success"
+                  aria-hidden="true"
+                />
+              ) : (
+                <FolderKanban
+                  size={14}
+                  className="mt-0.5 shrink-0 text-brand-400"
+                  aria-hidden="true"
+                />
+              )}
+              <p className="min-w-0 flex-1 truncate text-xs text-text-primary">
+                {entry.title}
+              </p>
+              <time
+                dateTime={new Date(entry.timestamp).toISOString()}
+                title={entry.fullDate}
+                className="meta-mono shrink-0 text-[10px] text-text-muted"
+              >
+                {entry.label}
+              </time>
+            </li>
+          ))}
+        </ul>
       )}
-    </div>
+    </SectionCard>
   );
 }

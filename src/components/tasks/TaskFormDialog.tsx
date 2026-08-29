@@ -2,7 +2,7 @@ import { useState } from "react";
 import { toast } from "sonner";
 
 import Dialog from "../ui/Dialog";
-import Spinner from "../ui/Spinner";
+import Button from "../ui/Button";
 import { useCreateTask, useUpdateTask } from "../../hooks/useTasks";
 import { useProjects } from "../../hooks/useProjects";
 import { extractApiError } from "../../lib/api";
@@ -114,11 +114,12 @@ export default function TaskFormDialog({ open, onClose, task, defaultProjectId }
         </div>
 
         <div className="flex justify-end gap-2 pt-2">
-          <button type="button" onClick={onClose} className="rounded-lg px-4 py-2 text-xs font-medium text-text-secondary hover:text-text-primary">Cancel</button>
-          <button type="submit" disabled={isPending || !title.trim()} className="inline-flex items-center gap-2 rounded-lg bg-brand-500 px-4 py-2 text-xs font-medium text-white transition-colors hover:bg-brand-600 disabled:opacity-60">
-            {isPending && <Spinner />}
+          <Button type="button" variant="ghost" onClick={onClose}>
+            Cancel
+          </Button>
+          <Button type="submit" isLoading={isPending} disabled={!title.trim()}>
             {isEditing ? "Save Changes" : "Add Task"}
-          </button>
+          </Button>
         </div>
       </form>
     </Dialog>

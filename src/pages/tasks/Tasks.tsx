@@ -11,6 +11,8 @@ import TaskFormDialog from "../../components/tasks/TaskFormDialog";
 import { useTasks, useUpdateTask, useDeleteTask } from "../../hooks/useTasks";
 import { extractApiError } from "../../lib/api";
 import type { Task } from "../../types";
+import PageContainer from "../../components/ui/PageContainer";
+import { buttonClasses } from "../../lib/buttonStyles";
 
 function isToday(dateStr?: string): boolean {
   if (!dateStr) return false;
@@ -84,14 +86,14 @@ export default function Tasks() {
   }
 
   return (
-    <div className="mx-auto max-w-7xl space-y-6">
+    <PageContainer>
       <PageHeader
         title="Tasks"
         description="Stay on top of your daily work and long-term goals."
         action={
           <button
             onClick={handleCreate}
-            className="inline-flex items-center gap-2 rounded-lg bg-brand-500 px-3.5 py-2 text-xs font-medium text-white transition-colors hover:bg-brand-600 active:scale-[0.97]"
+            className={buttonClasses()}
           >
             <Plus size={14} />
             Add Task
@@ -124,7 +126,7 @@ export default function Tasks() {
           }
           action={
             view === "all" ? (
-              <button onClick={handleCreate} className="rounded-lg bg-brand-500 px-4 py-2 text-xs font-medium text-white hover:bg-brand-600">
+              <button onClick={handleCreate} className={buttonClasses()}>
                 Add Task
               </button>
             ) : undefined
@@ -149,6 +151,7 @@ export default function Tasks() {
         onClose={() => setFormOpen(false)}
         task={editingTask}
       />
-    </div>
+    </PageContainer>
   );
+
 }

@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import { ArrowRight, BarChart3, CheckSquare, Map, Target } from "lucide-react";
 import { motion } from "framer-motion";
+import { buttonClasses } from "../lib/buttonStyles";
 
 const capabilities = [
   {
@@ -50,7 +51,7 @@ export default function Home() {
           </Link>
           <Link
             to="/register"
-            className="label-mono rounded-lg bg-brand-500 px-3.5 py-2 text-white transition-colors hover:bg-brand-600 active:scale-[0.98]"
+            className={buttonClasses({ size: "sm" })}
           >
             Get started
           </Link>
@@ -94,14 +95,20 @@ export default function Home() {
           <div className="mt-8 flex flex-col items-center gap-2.5 sm:flex-row sm:justify-center">
             <Link
               to="/register"
-              className="label-mono glow-accent-sm inline-flex w-full items-center justify-center gap-2 rounded-lg bg-brand-500 px-5 py-3 text-white transition-all hover:bg-brand-600 active:scale-[0.98] sm:w-auto"
+              className={buttonClasses({
+                glow: true,
+                className: "h-11 w-full px-5 sm:w-auto",
+              })}
             >
               Enter ATLAS
               <ArrowRight size={14} strokeWidth={2} />
             </Link>
             <Link
               to="/login"
-              className="label-mono inline-flex w-full items-center justify-center rounded-lg border border-border-primary px-5 py-3 text-text-secondary transition-colors hover:border-border-hover hover:text-text-primary sm:w-auto"
+              className={buttonClasses({
+                variant: "secondary",
+                className: "h-11 w-full px-5 sm:w-auto",
+              })}
             >
               I have an account
             </Link>

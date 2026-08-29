@@ -27,6 +27,10 @@ const capabilities = [
 export default function AuthLayout() {
   return (
     <div className="flex min-h-screen bg-surface-base text-text-primary">
+      <a href="#main-content" className="skip-link label-mono">
+        Skip to content
+      </a>
+
       {/* Brand panel */}
       <aside className="relative hidden w-1/2 flex-col justify-between overflow-hidden border-r border-border-primary bg-surface-primary p-10 lg:flex xl:p-12">
         <div className="pointer-events-none absolute inset-0" aria-hidden="true">
@@ -82,7 +86,11 @@ export default function AuthLayout() {
       </aside>
 
       {/* Form panel */}
-      <main className="flex flex-1 items-center justify-center p-4 sm:p-6">
+      <main
+        id="main-content"
+        tabIndex={-1}
+        className="flex flex-1 items-center justify-center p-4 focus:outline-none sm:p-6"
+      >
         <Outlet />
       </main>
     </div>

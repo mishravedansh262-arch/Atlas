@@ -14,6 +14,7 @@ import NeedsAttention from "../../components/analytics/NeedsAttention";
 import { useProjects } from "../../hooks/useProjects";
 import { useTasks } from "../../hooks/useTasks";
 import { useMilestones } from "../../hooks/useMilestones";
+import PageContainer from "../../components/ui/PageContainer";
 
 export default function Analytics() {
   const { data: projects, isLoading: pL } = useProjects();
@@ -24,7 +25,7 @@ export default function Analytics() {
 
   if (isLoading) {
     return (
-      <div className="mx-auto max-w-7xl space-y-6">
+      <PageContainer>
         <PageHeader
           title="Analytics"
           description="Track your productivity and progress."
@@ -32,7 +33,7 @@ export default function Analytics() {
         <div className="flex justify-center py-16">
           <Spinner size={24} className="text-brand-400" />
         </div>
-      </div>
+      </PageContainer>
     );
   }
 
@@ -45,7 +46,7 @@ export default function Analytics() {
 
   if (!hasData) {
     return (
-      <div className="mx-auto max-w-7xl space-y-6">
+      <PageContainer>
         <PageHeader
           title="Analytics"
           description="Track your productivity and progress."
@@ -55,7 +56,7 @@ export default function Analytics() {
           title="Not enough activity yet"
           description="Complete a few tasks to unlock meaningful insights about how you work."
         />
-      </div>
+      </PageContainer>
     );
   }
 
@@ -80,7 +81,7 @@ export default function Analytics() {
       : 0;
 
   return (
-    <div className="mx-auto max-w-7xl space-y-6">
+    <PageContainer>
       <PageHeader
         title="Analytics"
         description="Your productivity intelligence — derived from real ATLAS activity."
@@ -141,6 +142,7 @@ export default function Analytics() {
         projects={allProjects}
         milestones={allMilestones}
       />
-    </div>
+    </PageContainer>
   );
+
 }
