@@ -213,7 +213,7 @@ export default function NextAction() {
         {/* Action */}
         <div className="mt-4 flex items-center justify-between border-t border-border-secondary pt-3">
           <Icon
-            size={15}
+            size={16}
             strokeWidth={1.5}
             className={cn(isUrgent ? "text-error" : "text-brand-400")}
             aria-hidden="true"
@@ -223,7 +223,7 @@ export default function NextAction() {
             className={buttonClasses({ glow: true })}
           >
             Start Work
-            <ArrowRight size={13} strokeWidth={2} />
+            <ArrowRight size={14} strokeWidth={2} />
           </Link>
         </div>
       </div>

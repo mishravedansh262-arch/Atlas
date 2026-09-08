@@ -85,7 +85,7 @@ export default function AnalyticsInsights({ tasks, projects, milestones }: Props
       <div className="space-y-2.5">
         {insights.map((insight, idx) => (
           <div key={idx} className="flex items-start gap-2.5">
-            <Lightbulb size={13} className="mt-0.5 shrink-0 text-brand-400" />
+            <Lightbulb size={14} className="mt-0.5 shrink-0 text-brand-400" />
             <p className="text-xs text-text-secondary">{insight}</p>
           </div>
         ))}

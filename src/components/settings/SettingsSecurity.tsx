@@ -45,7 +45,7 @@ export default function SettingsSecurity() {
           <div className="flex items-center justify-between">
             <div>
               <p className="text-xs font-medium text-text-primary">Current Session</p>
-              <p className="text-[11px] text-text-tertiary">macOS — Chrome — Active now</p>
+              <p className="text-micro text-text-tertiary">macOS — Chrome — Active now</p>
             </div>
             <span className="size-2 rounded-full bg-success" />
           </div>

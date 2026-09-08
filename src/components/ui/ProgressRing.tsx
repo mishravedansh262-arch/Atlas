@@ -104,7 +104,7 @@ export default function ProgressRing({
           {label ?? `${pct}%`}
         </span>
         {caption && (
-          <span className="meta-mono mt-0.5 text-[9px] leading-none text-text-muted">
+          <span className="meta-mono mt-0.5 text-nano leading-none text-text-tertiary">
             {caption}
           </span>
         )}

@@ -199,7 +199,7 @@ export default function ProjectDetail() {
               <div key={ms.id} className="flex items-center gap-3 rounded-lg bg-surface-tertiary px-3 py-2.5">
                 <StatusBadge label={ms.status.replace("_", " ")} variant={ms.status === "completed" ? "success" : ms.status === "in_progress" ? "info" : "muted"} />
                 <span className="min-w-0 flex-1 truncate text-xs text-text-primary">{ms.title}</span>
-                <span className="text-[11px] text-text-muted">{ms.progress}%</span>
+                <span className="text-micro text-text-muted">{ms.progress}%</span>
               </div>
             ))}
           </div>

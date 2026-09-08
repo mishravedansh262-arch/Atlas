@@ -89,7 +89,7 @@ export default function ProjectCard({
               aria-label={`Edit ${project.title}`}
               className="rounded-lg p-1.5 text-text-muted transition-colors hover:bg-surface-overlay hover:text-text-secondary"
             >
-              <Pencil size={13} strokeWidth={1.5} />
+              <Pencil size={14} strokeWidth={1.5} />
             </button>
           )}
           {onDelete && (
@@ -98,7 +98,7 @@ export default function ProjectCard({
               aria-label={`Delete ${project.title}`}
               className="rounded-lg p-1.5 text-text-muted transition-colors hover:bg-error/10 hover:text-error"
             >
-              <Trash2 size={13} strokeWidth={1.5} />
+              <Trash2 size={14} strokeWidth={1.5} />
             </button>
           )}
         </div>
@@ -147,7 +147,7 @@ export default function ProjectCard({
         <div className="flex items-center gap-3">
           {taskCount !== undefined && taskCount > 0 && (
             <span className="meta-mono flex items-center gap-1 text-[10px] text-text-muted">
-              <CheckSquare size={10} strokeWidth={1.5} />
+              <CheckSquare size={12} strokeWidth={1.5} />
               {completedTaskCount ?? 0}/{taskCount}
             </span>
           )}
@@ -158,7 +158,7 @@ export default function ProjectCard({
                 overdue ? "text-error" : "text-text-muted",
               )}
             >
-              <Calendar size={10} strokeWidth={1.5} />
+              <Calendar size={12} strokeWidth={1.5} />
               {new Date(project.deadline).toLocaleDateString("en-US", {
                 month: "short",
                 day: "numeric",

@@ -85,7 +85,7 @@ export default function NeedsAttention({ tasks, milestones, projects }: Props) {
                 <Icon size={14} className={cn("mt-0.5 shrink-0", item.color)} />
                 <div className="min-w-0 flex-1">
                   <p className="truncate text-xs font-medium text-text-primary">{item.title}</p>
-                  <p className="text-[11px] text-text-tertiary">{item.reason}</p>
+                  <p className="text-micro text-text-tertiary">{item.reason}</p>
                 </div>
               </Link>
             );

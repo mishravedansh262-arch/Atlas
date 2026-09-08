@@ -84,7 +84,7 @@ export default function Navbar() {
                 )
               }
             >
-              <Icon size={17} strokeWidth={1.5} />
+              <Icon size={16} strokeWidth={1.5} />
             </NavLink>
           );
         })}

@@ -110,7 +110,7 @@ export default function RecentActivity() {
           className="focus-ring meta-mono inline-flex items-center gap-1 rounded-lg px-1 py-0.5 text-[10px] text-text-tertiary transition-colors hover:text-text-secondary"
         >
           Projects
-          <ArrowRight size={10} strokeWidth={2} aria-hidden="true" />
+          <ArrowRight size={12} strokeWidth={2} aria-hidden="true" />
         </Link>
       }
     >
@@ -131,7 +131,7 @@ export default function RecentActivity() {
       ) : recent.length === 0 ? (
         <div className="py-4 text-center">
           <p className="text-xs text-text-secondary">No activity yet.</p>
-          <p className="mt-1 text-[11px] text-text-muted">
+          <p className="mt-1 text-micro text-text-muted">
             Completed tasks and new projects will appear here.
           </p>
         </div>

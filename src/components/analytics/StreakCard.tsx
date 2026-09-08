@@ -31,7 +31,7 @@ export default function StreakCard({ tasks, milestones }: Props) {
   return (
     <div className="rounded-xl border border-border-primary bg-surface-secondary p-4">
       <div className="flex items-center gap-2">
-        <Flame size={15} strokeWidth={1.5} className="text-warning" />
+        <Flame size={16} strokeWidth={1.5} className="text-warning" />
         <h3 className="label-mono text-text-secondary">Streak</h3>
       </div>
 
@@ -51,7 +51,7 @@ export default function StreakCard({ tasks, milestones }: Props) {
                   day{current === 1 ? "" : "s"}
                 </span>
               </p>
-              <p className="meta-mono mt-1 text-[9px] text-text-muted">
+              <p className="meta-mono mt-1 text-nano text-text-tertiary">
                 Current streak
               </p>
             </div>
@@ -62,7 +62,7 @@ export default function StreakCard({ tasks, milestones }: Props) {
                   best
                 </span>
               </p>
-              <p className="meta-mono mt-1 text-[9px] text-text-muted">
+              <p className="meta-mono mt-1 text-nano text-text-tertiary">
                 {last30} done in 30d
               </p>
             </div>

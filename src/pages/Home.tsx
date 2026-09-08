@@ -36,7 +36,7 @@ export default function Home() {
       {/* Header */}
       <header className="flex items-center justify-between border-b border-border-primary px-5 py-4 lg:px-12">
         <div className="flex items-center gap-2.5">
-          <div className="flex size-7 items-center justify-center rounded-lg bg-brand-500 text-[11px] font-bold text-white">
+          <div className="flex size-7 items-center justify-center rounded-lg bg-brand-500 text-micro font-bold text-white">
             A
           </div>
           <span className="label-mono text-text-secondary">Atlas</span>
@@ -131,7 +131,7 @@ export default function Home() {
               >
                 <div className="flex items-center gap-2.5">
                   <Icon
-                    size={15}
+                    size={16}
                     strokeWidth={1.5}
                     className="text-brand-400"
                     aria-hidden="true"

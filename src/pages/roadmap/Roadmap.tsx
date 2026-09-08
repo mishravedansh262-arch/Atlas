@@ -83,7 +83,7 @@ export default function Roadmap() {
             onClick={handleCreate}
             className={buttonClasses()}
           >
-            <Plus size={13} strokeWidth={2} /> Add Milestone
+            <Plus size={14} strokeWidth={2} /> Add Milestone
           </button>
         }
       />

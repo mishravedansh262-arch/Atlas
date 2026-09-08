@@ -118,7 +118,7 @@ export default function ActivityHeatmap({
               return (
                 <div key={col.key} className="w-[11px] shrink-0">
                   {mark && (
-                    <span className="meta-mono block whitespace-nowrap text-[9px] text-text-muted">
+                    <span className="meta-mono block whitespace-nowrap text-nano text-text-tertiary">
                       {mark.label}
                     </span>
                   )}
@@ -138,7 +138,7 @@ export default function ActivityHeatmap({
                   aria-hidden="true"
                 >
                   {i % 2 === 1 && (
-                    <span className="meta-mono text-[8px] leading-none text-text-muted">
+                    <span className="meta-mono text-nano leading-none text-text-tertiary">
                       {label}
                     </span>
                   )}
@@ -173,11 +173,11 @@ export default function ActivityHeatmap({
 
       {/* Legend */}
       <div className="mt-3 flex items-center justify-between gap-4">
-        <p className="meta-mono text-[9px] text-text-muted">
+        <p className="meta-mono text-nano text-text-tertiary">
           Last {weeks} weeks
         </p>
         <div className="flex items-center gap-1.5">
-          <span className="meta-mono text-[9px] text-text-muted">Less</span>
+          <span className="meta-mono text-nano text-text-tertiary">Less</span>
           {[0, 1, 2, 3, 5].map((n) => (
             <span
               key={n}
@@ -185,12 +185,12 @@ export default function ActivityHeatmap({
               aria-hidden="true"
             />
           ))}
-          <span className="meta-mono text-[9px] text-text-muted">More</span>
+          <span className="meta-mono text-nano text-text-tertiary">More</span>
         </div>
       </div>
 
       {!hasAny && (
-        <p className="mt-3 text-center text-[11px] text-text-muted">
+        <p className="mt-3 text-center text-micro text-text-muted">
           Complete a task or milestone to start building your activity history.
         </p>
       )}

@@ -195,7 +195,7 @@ export default function Profile() {
               <div className="rounded-lg bg-surface-elevated p-2 text-text-tertiary"><Icon size={16} /></div>
               <div>
                 <p className="text-lg font-bold text-text-primary">{stat.value}</p>
-                <p className="text-[11px] text-text-muted">{stat.label}</p>
+                <p className="text-micro text-text-muted">{stat.label}</p>
               </div>
             </div>
           );
@@ -230,7 +230,7 @@ export default function Profile() {
       {profile?.createdAt && (
         <SectionCard title="Journey">
           <div className="flex items-center gap-2 text-xs text-text-secondary">
-            <Calendar size={13} className="text-text-muted" />
+            <Calendar size={14} className="text-text-muted" />
             <span>Joined ATLAS on {new Date(profile.createdAt).toLocaleDateString("en-US", { month: "long", year: "numeric" })}</span>
           </div>
         </SectionCard>

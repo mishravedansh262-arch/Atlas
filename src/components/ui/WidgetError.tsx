@@ -56,7 +56,7 @@ export default function WidgetError({
           onClick={onRetry}
           className="focus-ring label-mono mt-0.5 inline-flex items-center gap-1.5 rounded-lg border border-border-primary bg-surface-tertiary px-2.5 py-1.5 text-text-secondary transition-colors hover:border-border-hover hover:text-text-primary"
         >
-          <RotateCw size={11} strokeWidth={2} aria-hidden="true" />
+          <RotateCw size={12} strokeWidth={2} aria-hidden="true" />
           Retry
         </button>
       )}

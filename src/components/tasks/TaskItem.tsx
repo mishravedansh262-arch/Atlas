@@ -156,7 +156,7 @@ export default function TaskItem({ task, onToggle, onEdit, onDelete }: Props) {
             aria-label={`Edit ${task.title}`}
             className="rounded-lg p-1.5 text-text-muted transition-colors hover:bg-surface-overlay hover:text-text-secondary"
           >
-            <Pencil size={13} strokeWidth={1.5} />
+            <Pencil size={14} strokeWidth={1.5} />
           </button>
         )}
         {onDelete && (
@@ -165,7 +165,7 @@ export default function TaskItem({ task, onToggle, onEdit, onDelete }: Props) {
             aria-label={`Delete ${task.title}`}
             className="rounded-lg p-1.5 text-text-muted transition-colors hover:bg-error/10 hover:text-error"
           >
-            <Trash2 size={13} strokeWidth={1.5} />
+            <Trash2 size={14} strokeWidth={1.5} />
           </button>
         )}
       </div>

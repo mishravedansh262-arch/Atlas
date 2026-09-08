@@ -45,7 +45,7 @@ export default function Settings() {
                       : "text-text-secondary hover:bg-surface-elevated hover:text-text-primary",
                   )}
                 >
-                  <Icon size={15} />
+                  <Icon size={16} />
                   {section.label}
                 </button>
               );

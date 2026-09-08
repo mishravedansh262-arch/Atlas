@@ -52,7 +52,7 @@ export default function AuthLayout() {
         </div>
 
         <div className="max-w-sm">
-          <h2 className="text-[32px] font-semibold leading-10 tracking-tight text-text-primary">
+          <h2 className="text-title text-text-primary">
             Your B.Tech journey,
             <br />
             <span className="text-gradient">under control.</span>
@@ -68,7 +68,7 @@ export default function AuthLayout() {
               return (
                 <li key={item.name} className="flex items-start gap-3">
                   <div className="rounded-lg border border-border-primary bg-surface-secondary p-2 text-brand-400">
-                    <Icon size={15} strokeWidth={1.5} aria-hidden="true" />
+                    <Icon size={16} strokeWidth={1.5} aria-hidden="true" />
                   </div>
                   <div>
                     <p className="label-mono text-text-primary">{item.name}</p>

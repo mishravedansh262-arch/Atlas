@@ -69,7 +69,7 @@ export default function WeeklyActivity({ tasks, milestones }: Props) {
       </div>
 
       {total === 0 && (
-        <p className="mt-3 text-center text-[11px] text-text-muted">
+        <p className="mt-3 text-center text-micro text-text-muted">
           No completions this week yet.
         </p>
       )}

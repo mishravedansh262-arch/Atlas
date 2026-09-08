@@ -94,7 +94,7 @@ export default function MilestoneTimeline({
                 )}
               >
                 {done ? (
-                  <Check size={11} strokeWidth={3} />
+                  <Check size={12} strokeWidth={3} />
                 ) : ms.status === "in_progress" ? (
                   <span className="size-1.5 rounded-full bg-brand-500" />
                 ) : ms.status === "blocked" ? (
@@ -168,7 +168,7 @@ export default function MilestoneTimeline({
                           overdue ? "text-error" : "text-text-muted",
                         )}
                       >
-                        <Calendar size={10} strokeWidth={1.5} />
+                        <Calendar size={12} strokeWidth={1.5} />
                         {new Date(ms.targetDate).toLocaleDateString("en-US", {
                           month: "short",
                           day: "numeric",
@@ -194,14 +194,14 @@ export default function MilestoneTimeline({
                     aria-label={`Edit ${ms.title}`}
                     className="rounded-lg p-1.5 text-text-muted transition-colors hover:bg-surface-overlay hover:text-text-secondary"
                   >
-                    <Pencil size={13} strokeWidth={1.5} />
+                    <Pencil size={14} strokeWidth={1.5} />
                   </button>
                   <button
                     onClick={() => onDelete(ms.id)}
                     aria-label={`Delete ${ms.title}`}
                     className="rounded-lg p-1.5 text-text-muted transition-colors hover:bg-error/10 hover:text-error"
                   >
-                    <Trash2 size={13} strokeWidth={1.5} />
+                    <Trash2 size={14} strokeWidth={1.5} />
                   </button>
                 </div>
               </div>

@@ -76,7 +76,7 @@ export default function Dialog({
                 className="shrink-0 rounded-lg p-1 text-text-muted transition-colors hover:bg-surface-overlay hover:text-text-secondary"
                 aria-label="Close dialog"
               >
-                <X size={15} strokeWidth={1.5} />
+                <X size={16} strokeWidth={1.5} />
               </button>
             </div>
             {children}

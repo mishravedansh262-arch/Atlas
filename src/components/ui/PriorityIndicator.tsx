@@ -23,7 +23,7 @@ export default function PriorityIndicator({
     <div className="flex items-center gap-1.5">
       <span className={cn("size-2 rounded-full", color)} />
       {showLabel && (
-        <span className="text-[11px] font-medium text-text-secondary">
+        <span className="text-micro font-medium text-text-secondary">
           {label}
         </span>
       )}

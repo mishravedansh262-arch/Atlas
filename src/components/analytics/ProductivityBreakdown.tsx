@@ -39,13 +39,13 @@ export default function ProductivityBreakdown({ tasks, projects, milestones }: P
         {/* Tasks by category */}
         {taskCategories.length > 0 && (
           <div>
-            <p className="mb-2 text-[11px] font-medium uppercase tracking-wider text-text-muted">Tasks by Category</p>
+            <p className="mb-2 text-micro font-medium uppercase tracking-wider text-text-muted">Tasks by Category</p>
             <div className="space-y-2.5">
               {taskCategories.map((cat) => (
                 <div key={cat.name} className="space-y-1">
                   <div className="flex items-center justify-between">
                     <span className="text-xs text-text-secondary">{cat.name}</span>
-                    <span className="text-[11px] text-text-muted">{cat.completed}/{cat.count}</span>
+                    <span className="text-micro text-text-muted">{cat.completed}/{cat.count}</span>
                   </div>
                   <ProgressBar value={totalTasks > 0 ? Math.round((cat.count / totalTasks) * 100) : 0} />
                 </div>
@@ -57,7 +57,7 @@ export default function ProductivityBreakdown({ tasks, projects, milestones }: P
         {/* Projects by status */}
         {projectStatuses.length > 0 && (
           <div>
-            <p className="mb-2 text-[11px] font-medium uppercase tracking-wider text-text-muted">Projects by Status</p>
+            <p className="mb-2 text-micro font-medium uppercase tracking-wider text-text-muted">Projects by Status</p>
             <div className="space-y-2">
               {projectStatuses.map((item) => (
                 <div key={item.name} className="flex items-center justify-between rounded-lg bg-surface-tertiary px-3 py-2">
@@ -72,12 +72,12 @@ export default function ProductivityBreakdown({ tasks, projects, milestones }: P
         {/* Milestones by category */}
         {milestoneCategories.length > 0 && (
           <div>
-            <p className="mb-2 text-[11px] font-medium uppercase tracking-wider text-text-muted">Milestones by Category</p>
+            <p className="mb-2 text-micro font-medium uppercase tracking-wider text-text-muted">Milestones by Category</p>
             <div className="space-y-2">
               {milestoneCategories.map((cat) => (
                 <div key={cat.name} className="flex items-center justify-between rounded-lg bg-surface-tertiary px-3 py-2">
                   <span className="text-xs text-text-secondary">{cat.name}</span>
-                  <span className="text-[11px] text-text-muted">{cat.completed}/{cat.count}</span>
+                  <span className="text-micro text-text-muted">{cat.completed}/{cat.count}</span>
                 </div>
               ))}
             </div>

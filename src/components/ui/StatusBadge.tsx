@@ -29,7 +29,7 @@ export default function StatusBadge({
       className={cn(
         "meta-mono inline-flex shrink-0 items-center whitespace-nowrap rounded-sm border uppercase",
         variantStyles[variant],
-        size === "sm" ? "px-1.5 py-0.5 text-[10px]" : "px-2 py-1 text-[11px]",
+        size === "sm" ? "px-1.5 py-0.5 text-[10px]" : "px-2 py-1 text-micro",
       )}
     >
       {label}

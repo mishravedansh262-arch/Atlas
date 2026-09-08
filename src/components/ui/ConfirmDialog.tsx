@@ -102,7 +102,7 @@ export default function ConfirmDialog({
                 : "bg-brand-500/10 text-brand-400",
             )}
           >
-            <AlertTriangle size={15} strokeWidth={1.5} aria-hidden="true" />
+            <AlertTriangle size={16} strokeWidth={1.5} aria-hidden="true" />
           </div>
           <p className="text-xs leading-relaxed text-text-secondary">
             {description}

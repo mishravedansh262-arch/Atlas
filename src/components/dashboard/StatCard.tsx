@@ -50,14 +50,14 @@ export default function StatCard({
             </span>
           </span>
           <Icon
-            size={15}
+            size={16}
             strokeWidth={1.5}
             className="shrink-0 text-text-muted transition-colors group-hover:text-text-tertiary"
             aria-hidden="true"
           />
         </div>
 
-        <p className="mt-2 text-[28px] font-bold leading-9 tracking-[-0.01em] text-text-primary">
+        <p className="mt-2 text-stat text-text-primary">
           {value}
         </p>
 

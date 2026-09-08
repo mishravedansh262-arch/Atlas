@@ -18,7 +18,7 @@ export default function PageHeader({
   return (
     <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
       <div className="min-w-0 space-y-1">
-        <h1 className="text-2xl font-semibold tracking-tight text-text-primary lg:text-[32px] lg:leading-10">
+        <h1 className="text-2xl font-semibold tracking-tight text-text-primary lg:text-title">
           {title}
         </h1>
         {description && (

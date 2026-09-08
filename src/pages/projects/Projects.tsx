@@ -70,7 +70,7 @@ export default function Projects() {
             onClick={handleCreate}
             className={buttonClasses()}
           >
-            <Plus size={13} strokeWidth={2} />
+            <Plus size={14} strokeWidth={2} />
             New Project
           </button>
         }

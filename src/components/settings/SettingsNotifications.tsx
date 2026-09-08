@@ -46,7 +46,7 @@ function Toggle({ label, description, checked, onChange }: ToggleProps) {
     <div className="flex items-center justify-between gap-4 py-2">
       <div>
         <p className="text-xs font-medium text-text-primary">{label}</p>
-        <p className="text-[11px] text-text-tertiary">{description}</p>
+        <p className="text-micro text-text-tertiary">{description}</p>
       </div>
       <label className="relative inline-flex cursor-pointer">
         <input

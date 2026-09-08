@@ -53,7 +53,7 @@ export default function SettingsAppearance() {
           ))}
         </div>
         {theme !== "dark" && (
-          <p className="mt-3 text-[11px] text-text-muted">
+          <p className="mt-3 text-micro text-text-muted">
             Note: Only Dark mode is currently available. Light and System modes are coming soon.
           </p>
         )}
@@ -74,7 +74,7 @@ export default function SettingsAppearance() {
             />
           ))}
         </div>
-        <p className="mt-3 text-[11px] text-text-muted">
+        <p className="mt-3 text-micro text-text-muted">
           Accent color customization will apply in a future update.
         </p>
       </SectionCard>

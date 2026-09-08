@@ -27,7 +27,7 @@ export default function DashboardHeader() {
   return (
     <div>
       <p className="label-mono text-text-muted">{date}</p>
-      <h1 className="mt-2 text-2xl font-bold tracking-tight text-text-primary sm:text-[32px] sm:leading-10 lg:text-5xl lg:leading-[3.5rem] lg:tracking-[-0.02em]">
+      <h1 className="mt-2 text-2xl font-bold tracking-tight text-text-primary sm:text-title lg:text-display">
         {getGreeting()}, {firstName}.
       </h1>
       <p className="mt-2 text-sm text-text-secondary lg:text-base">

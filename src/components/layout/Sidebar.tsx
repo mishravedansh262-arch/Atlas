@@ -57,7 +57,7 @@ export default function Sidebar() {
     >
       {/* Brand + pin toggle */}
       <div className="flex h-14 w-[240px] shrink-0 items-center border-b border-border-primary pl-[22px] pr-3">
-        <div className="flex size-7 shrink-0 items-center justify-center rounded-lg bg-brand-500 text-[11px] font-bold text-white">
+        <div className="flex size-7 shrink-0 items-center justify-center rounded-lg bg-brand-500 text-micro font-bold text-white">
           A
         </div>
 
@@ -86,9 +86,9 @@ export default function Sidebar() {
           )}
         >
           {pinned ? (
-            <PanelLeftClose size={15} strokeWidth={1.5} />
+            <PanelLeftClose size={16} strokeWidth={1.5} />
           ) : (
-            <PanelLeftOpen size={15} strokeWidth={1.5} />
+            <PanelLeftOpen size={16} strokeWidth={1.5} />
           )}
         </button>
       </div>
