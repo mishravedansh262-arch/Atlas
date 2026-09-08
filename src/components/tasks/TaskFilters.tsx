@@ -39,7 +39,7 @@ export default function TaskFilters({ active, onChange, counts }: Props) {
             {filter.label}
             <span
               className={cn(
-                "rounded-sm px-1 text-[10px]",
+                "meta-mono rounded-sm px-1",
                 isActive
                   ? "bg-brand-500/20 text-brand-300"
                   : "bg-surface-overlay text-text-muted",

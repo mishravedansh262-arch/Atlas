@@ -70,7 +70,7 @@ export default function Sidebar() {
           <span className="text-sm font-bold tracking-tight text-text-primary">
             ATLAS
           </span>
-          <span className="meta-mono text-[10px] text-text-muted">
+          <span className="meta-mono text-text-muted">
             Command Center
           </span>
         </div>
@@ -162,7 +162,7 @@ export default function Sidebar() {
             <p className="truncate text-xs font-medium text-text-primary">
               {user?.name}
             </p>
-            <p className="meta-mono truncate text-[10px] text-text-muted">
+            <p className="meta-mono truncate text-text-muted">
               {user?.email}
             </p>
           </div>

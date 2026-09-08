@@ -87,10 +87,10 @@ export default function ProgressOverview() {
           {rows.map((row) => (
             <div key={row.label} className="space-y-2">
               <div className="flex items-baseline justify-between gap-2">
-                <span className="meta-mono text-[10px] text-text-tertiary">
+                <span className="meta-mono text-text-tertiary">
                   {row.label}
                 </span>
-                <span className="meta-mono text-[10px] text-text-secondary">
+                <span className="meta-mono text-text-secondary">
                   {row.total > 0 ? `${row.done}/${row.total}` : "—"}
                 </span>
               </div>

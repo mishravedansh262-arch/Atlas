@@ -45,7 +45,7 @@ export default function AuthLayout() {
             <p className="text-sm font-bold tracking-tight text-text-primary">
               ATLAS
             </p>
-            <p className="meta-mono text-[10px] text-text-muted">
+            <p className="meta-mono text-text-muted">
               Command Center
             </p>
           </div>
@@ -82,7 +82,7 @@ export default function AuthLayout() {
           </ul>
         </div>
 
-        <p className="meta-mono text-[10px] text-text-muted">v1.0.0</p>
+        <p className="meta-mono text-text-muted">v1.0.0</p>
       </aside>
 
       {/* Form panel */}

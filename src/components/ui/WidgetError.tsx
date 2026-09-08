@@ -46,7 +46,7 @@ export default function WidgetError({
 
       <div className="space-y-0.5">
         <p className="text-xs font-medium text-text-primary">{message}</p>
-        <p className="meta-mono text-[10px] text-text-muted">
+        <p className="meta-mono text-text-muted">
           This isn&apos;t an empty account — the request failed.
         </p>
       </div>

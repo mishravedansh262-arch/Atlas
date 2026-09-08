@@ -144,7 +144,7 @@ export default function MilestoneTimeline({
 
                   {/* Metadata */}
                   <div className="mt-2.5 flex flex-wrap items-center gap-x-3 gap-y-1.5">
-                    <span className="meta-mono flex items-center gap-1.5 text-[10px] text-text-muted">
+                    <span className="meta-mono flex items-center gap-1.5 text-text-muted">
                       <span
                         className={cn(
                           "size-1.5 shrink-0 rounded-full",
@@ -153,18 +153,18 @@ export default function MilestoneTimeline({
                       />
                       {ms.priority}
                     </span>
-                    <span className="meta-mono text-[10px] text-text-muted">
+                    <span className="meta-mono text-text-muted">
                       {categoryLabel[ms.category]}
                     </span>
                     {ms.projectTitle && (
-                      <span className="meta-mono truncate text-[10px] text-text-tertiary">
+                      <span className="meta-mono truncate text-text-tertiary">
                         {ms.projectTitle}
                       </span>
                     )}
                     {ms.targetDate && (
                       <span
                         className={cn(
-                          "meta-mono flex items-center gap-1 text-[10px]",
+                          "meta-mono flex items-center gap-1",
                           overdue ? "text-error" : "text-text-muted",
                         )}
                       >

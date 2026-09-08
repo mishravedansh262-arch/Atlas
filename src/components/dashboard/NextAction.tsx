@@ -197,7 +197,7 @@ export default function NextAction() {
           <span className="label-mono text-text-muted">Next Action</span>
           <span className="text-text-muted">·</span>
           <StatusBadge label={badge.label} variant={badge.variant} />
-          <span className="meta-mono text-[10px] text-text-tertiary">
+          <span className="meta-mono text-text-tertiary">
             {action.meta}
           </span>
         </div>

@@ -47,7 +47,7 @@ export default function StreakCard({ tasks, milestones }: Props) {
             <div>
               <p className="text-xl font-bold leading-none tracking-tight text-text-primary">
                 {current}
-                <span className="meta-mono ml-1 text-[10px] font-medium text-text-muted">
+                <span className="meta-mono ml-1 font-medium text-text-muted">
                   day{current === 1 ? "" : "s"}
                 </span>
               </p>
@@ -58,7 +58,7 @@ export default function StreakCard({ tasks, milestones }: Props) {
             <div>
               <p className="text-sm font-semibold leading-none text-text-secondary">
                 {longest}
-                <span className="meta-mono ml-1 text-[10px] font-medium text-text-muted">
+                <span className="meta-mono ml-1 font-medium text-text-muted">
                   best
                 </span>
               </p>

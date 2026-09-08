@@ -209,7 +209,7 @@ export default function Profile() {
             <SectionCard title="Technical Skills">
               <div className="flex flex-wrap gap-1.5">
                 {profile!.skills.map((skill) => (
-                  <span key={skill} className="meta-mono rounded-sm border border-border-primary bg-surface-tertiary px-2 py-1 text-[10px] text-text-tertiary">{skill}</span>
+                  <span key={skill} className="meta-mono rounded-sm border border-border-primary bg-surface-tertiary px-2 py-1 text-text-tertiary">{skill}</span>
                 ))}
               </div>
             </SectionCard>
@@ -218,7 +218,7 @@ export default function Profile() {
             <SectionCard title="Interests">
               <div className="flex flex-wrap gap-1.5">
                 {profile!.interests.map((interest) => (
-                  <span key={interest} className="meta-mono rounded-sm border border-brand-500/20 bg-brand-500/10 px-2 py-1 text-[10px] text-brand-400">{interest}</span>
+                  <span key={interest} className="meta-mono rounded-sm border border-brand-500/20 bg-brand-500/10 px-2 py-1 text-brand-400">{interest}</span>
                 ))}
               </div>
             </SectionCard>

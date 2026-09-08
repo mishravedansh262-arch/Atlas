@@ -234,9 +234,16 @@ body::before {
 }
 
 /* Same treatment, sentence case — inline metadata that reads as content. */
+/* Dense mono metadata: timestamps, counts, IDs, secondary stat labels.
+   Declares 10px because that is what it is actually used at — 46 of its 48
+   call sites were overriding the previous 11px with `text-[10px]`, so the
+   declared default was effectively dead. line-height stays at 1rem so the
+   stripped overrides render identically (Tailwind's arbitrary `text-[10px]`
+   set font-size only). Use `label-mono` for 11px uppercase section labels;
+   that one is never overridden and keeps its size. */
 .meta-mono {
   font-family: var(--font-mono);
-  font-size: 0.6875rem;
+  font-size: 0.625rem;
   line-height: 1rem;
   font-weight: 500;
   letter-spacing: 0.02em;

@@ -52,7 +52,7 @@ export default function ProgressBar({
         />
       </div>
       {showLabel && (
-        <span className="meta-mono shrink-0 text-[10px] text-text-secondary">
+        <span className="meta-mono shrink-0 text-text-secondary">
           {clamped}%
         </span>
       )}

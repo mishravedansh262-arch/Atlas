@@ -50,7 +50,7 @@ export default function Navbar() {
     <header className="flex h-14 shrink-0 items-center justify-between gap-3 border-b border-border-primary bg-surface-primary px-4 md:px-6">
       {/* Mobile wordmark */}
       <div className="flex items-center gap-2 lg:hidden">
-        <div className="flex size-6 items-center justify-center rounded-lg bg-brand-500 text-[10px] font-bold text-white">
+        <div className="flex size-6 items-center justify-center rounded-lg bg-brand-500 text-micro font-bold text-white">
           A
         </div>
         <span className="label-mono text-text-secondary">Atlas</span>

@@ -40,7 +40,7 @@ export default function WeeklyActivity({ tasks, milestones }: Props) {
       <div className="flex items-end justify-between gap-2 pt-1" style={{ height: 128 }}>
         {days.map((day) => (
           <div key={day.key} className="flex flex-1 flex-col items-center gap-1.5">
-            <span className="meta-mono text-[10px] text-text-secondary">
+            <span className="meta-mono text-text-secondary">
               {day.count || ""}
             </span>
             <div className="flex w-full flex-1 items-end justify-center">
@@ -58,7 +58,7 @@ export default function WeeklyActivity({ tasks, milestones }: Props) {
             </div>
             <span
               className={cn(
-                "meta-mono text-[10px]",
+                "meta-mono",
                 day.isToday ? "text-brand-400" : "text-text-muted",
               )}
             >

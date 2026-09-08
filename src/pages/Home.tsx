@@ -149,7 +149,7 @@ export default function Home() {
 
       {/* Footer */}
       <footer className="border-t border-border-primary px-5 py-5 text-center">
-        <p className="meta-mono text-[10px] text-text-muted">
+        <p className="meta-mono text-text-muted">
           ATLAS v1.0.0 — Built with purpose.
         </p>
       </footer>

@@ -37,7 +37,7 @@ export default function BottomNav() {
                   10px (was 9px) for legibility, with truncation as the safety
                   valve at 320px where each slot is only ~64px wide.
                 */}
-                <span className="meta-mono max-w-full truncate px-0.5 text-[10px] leading-none">
+                <span className="meta-mono max-w-full truncate px-0.5 leading-none">
                   {item.shortName ?? item.name}
                 </span>
                 {isActive && (

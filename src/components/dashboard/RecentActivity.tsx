@@ -107,7 +107,7 @@ export default function RecentActivity() {
       action={
         <Link
           to="/projects"
-          className="focus-ring meta-mono inline-flex items-center gap-1 rounded-lg px-1 py-0.5 text-[10px] text-text-tertiary transition-colors hover:text-text-secondary"
+          className="focus-ring meta-mono inline-flex items-center gap-1 rounded-lg px-1 py-0.5 text-text-tertiary transition-colors hover:text-text-secondary"
         >
           Projects
           <ArrowRight size={12} strokeWidth={2} aria-hidden="true" />
@@ -161,7 +161,7 @@ export default function RecentActivity() {
               <time
                 dateTime={new Date(entry.timestamp).toISOString()}
                 title={entry.fullDate}
-                className="meta-mono shrink-0 text-[10px] text-text-muted"
+                className="meta-mono shrink-0 text-text-muted"
               >
                 {entry.label}
               </time>

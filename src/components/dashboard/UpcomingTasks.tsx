@@ -33,7 +33,7 @@ export default function UpcomingTasks() {
       action={
         <Link
           to="/tasks"
-          className="focus-ring meta-mono inline-flex items-center gap-1 rounded-lg px-1 py-0.5 text-[10px] text-text-tertiary transition-colors hover:text-text-secondary"
+          className="focus-ring meta-mono inline-flex items-center gap-1 rounded-lg px-1 py-0.5 text-text-tertiary transition-colors hover:text-text-secondary"
         >
           View all
           <ArrowRight size={12} strokeWidth={2} aria-hidden="true" />

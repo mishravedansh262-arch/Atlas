@@ -62,7 +62,7 @@ export default function StatCard({
         </p>
 
         {subtitle && (
-          <p className="meta-mono mt-1 text-[10px] text-text-muted">
+          <p className="meta-mono mt-1 text-text-muted">
             {subtitle}
           </p>
         )}
@@ -70,7 +70,7 @@ export default function StatCard({
         {trend && (
           <p
             className={cn(
-              "meta-mono mt-1 text-[10px]",
+              "meta-mono mt-1",
               trend.positive ? "text-success" : "text-error",
             )}
           >

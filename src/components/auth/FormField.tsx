@@ -60,7 +60,7 @@ export default function FormField({
       </div>
 
       {error && (
-        <p id={errorId} role="alert" className="meta-mono mt-1.5 text-[10px] text-error">
+        <p id={errorId} role="alert" className="meta-mono mt-1.5 text-error">
           {error}
         </p>
       )}

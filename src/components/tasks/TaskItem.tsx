@@ -110,7 +110,7 @@ export default function TaskItem({ task, onToggle, onEdit, onDelete }: Props) {
         )}
 
         <div className="mt-2 flex flex-wrap items-center gap-x-3 gap-y-1.5">
-          <span className="meta-mono flex items-center gap-1.5 text-[10px] text-text-muted">
+          <span className="meta-mono flex items-center gap-1.5 text-text-muted">
             <span
               className={cn(
                 "size-1.5 shrink-0 rounded-full",
@@ -120,18 +120,18 @@ export default function TaskItem({ task, onToggle, onEdit, onDelete }: Props) {
             {task.priority}
           </span>
 
-          <span className="meta-mono text-[10px] text-text-muted">
+          <span className="meta-mono text-text-muted">
             {categoryLabel[task.category]}
           </span>
 
           {task.projectTitle && (
-            <span className="meta-mono truncate text-[10px] text-text-tertiary">
+            <span className="meta-mono truncate text-text-tertiary">
               {task.projectTitle}
             </span>
           )}
 
           {task.dueDate && !overdue && (
-            <span className="meta-mono text-[10px] text-text-muted">
+            <span className="meta-mono text-text-muted">
               {new Date(task.dueDate).toLocaleDateString("en-US", {
                 month: "short",
                 day: "numeric",

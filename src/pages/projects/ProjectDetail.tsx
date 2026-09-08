@@ -163,7 +163,7 @@ export default function ProjectDetail() {
       {project.technologies.length > 0 && (
         <div className="flex flex-wrap gap-1.5">
           {project.technologies.map((tech) => (
-            <span key={tech} className="meta-mono rounded-sm border border-border-primary bg-surface-tertiary px-2 py-1 text-[10px] text-text-tertiary">{tech}</span>
+            <span key={tech} className="meta-mono rounded-sm border border-border-primary bg-surface-tertiary px-2 py-1 text-text-tertiary">{tech}</span>
           ))}
         </div>
       )}

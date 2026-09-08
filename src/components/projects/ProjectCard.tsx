@@ -70,7 +70,7 @@ export default function ProjectCard({
           </Link>
           <div className="mt-1.5 flex flex-wrap items-center gap-1.5">
             <StatusBadge label={badge.label} variant={badge.variant} />
-            <span className="meta-mono flex items-center gap-1.5 text-[10px] text-text-muted">
+            <span className="meta-mono flex items-center gap-1.5 text-text-muted">
               <span
                 className={cn(
                   "size-1.5 shrink-0 rounded-full",
@@ -125,13 +125,13 @@ export default function ProjectCard({
           {project.technologies.slice(0, 3).map((tech) => (
             <span
               key={tech}
-              className="meta-mono rounded-sm border border-border-primary bg-surface-tertiary px-1.5 py-0.5 text-[10px] text-text-tertiary"
+              className="meta-mono rounded-sm border border-border-primary bg-surface-tertiary px-1.5 py-0.5 text-text-tertiary"
             >
               {tech}
             </span>
           ))}
           {project.technologies.length > 3 && (
-            <span className="meta-mono rounded-sm border border-border-primary bg-surface-tertiary px-1.5 py-0.5 text-[10px] text-text-muted">
+            <span className="meta-mono rounded-sm border border-border-primary bg-surface-tertiary px-1.5 py-0.5 text-text-muted">
               +{project.technologies.length - 3}
             </span>
           )}
@@ -140,13 +140,13 @@ export default function ProjectCard({
 
       {/* Footer */}
       <div className="mt-auto flex items-center justify-between gap-2 border-t border-border-secondary pt-3">
-        <span className="meta-mono text-[10px] text-text-muted">
+        <span className="meta-mono text-text-muted">
           {typeLabel[project.type]}
         </span>
 
         <div className="flex items-center gap-3">
           {taskCount !== undefined && taskCount > 0 && (
-            <span className="meta-mono flex items-center gap-1 text-[10px] text-text-muted">
+            <span className="meta-mono flex items-center gap-1 text-text-muted">
               <CheckSquare size={12} strokeWidth={1.5} />
               {completedTaskCount ?? 0}/{taskCount}
             </span>
@@ -154,7 +154,7 @@ export default function ProjectCard({
           {project.deadline && (
             <span
               className={cn(
-                "meta-mono flex items-center gap-1 text-[10px]",
+                "meta-mono flex items-center gap-1",
                 overdue ? "text-error" : "text-text-muted",
               )}
             >
