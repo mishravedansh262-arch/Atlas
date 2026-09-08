@@ -8,6 +8,11 @@ import {
   todayKey,
   fromDayKey,
 } from "../../lib/activity";
+import {
+  intensityClass,
+  isPeak,
+  LEGEND_STEPS,
+} from "../../lib/activityScale";
 import type { Milestone, Task } from "../../types";
 
 type Props = {
@@ -16,23 +21,6 @@ type Props = {
   /** Number of trailing weeks to render. */
   weeks?: number;
 };
-
-/**
- * Five intensity steps, ramping blue -> cyan so peak days read as hotter
- * rather than merely more opaque.
- */
-function intensityClass(count: number): string {
-  if (count === 0) return "bg-surface-track";
-  if (count === 1) return "bg-brand-600/40";
-  if (count === 2) return "bg-brand-500/65";
-  if (count <= 4) return "bg-brand-400/85";
-  return "bg-accent-cyan";
-}
-
-/** Peak days get a faint bloom so streaks are visible at a glance. */
-function isPeak(count: number): boolean {
-  return count >= 5;
-}
 
 const DAY_LABELS = ["S", "M", "T", "W", "T", "F", "S"];
 
@@ -178,7 +166,7 @@ export default function ActivityHeatmap({
         </p>
         <div className="flex items-center gap-1.5">
           <span className="meta-mono text-nano text-text-tertiary">Less</span>
-          {[0, 1, 2, 3, 5].map((n) => (
+          {LEGEND_STEPS.map((n) => (
             <span
               key={n}
               className={cn("size-[9px] rounded-sm", intensityClass(n))}

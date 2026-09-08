@@ -4,6 +4,7 @@ import NextAction from "../../components/dashboard/NextAction";
 import StatsGrid from "../../components/dashboard/StatsGrid";
 import UpcomingTasks from "../../components/dashboard/UpcomingTasks";
 import RecentActivity from "../../components/dashboard/RecentActivity";
+import MomentumCard from "../../components/dashboard/MomentumCard";
 import ProgressOverview from "../../components/dashboard/ProgressOverview";
 import QuickActions from "../../components/dashboard/QuickActions";
 
@@ -35,8 +36,13 @@ function Dashboard() {
             <RecentActivity />
           </div>
 
-          {/* Context — narrower, quieter */}
+          {/* Context — narrower, quieter.
+              Momentum leads the column: it answers "am I keeping this up?",
+              which frames the completion ratios that follow. It sits here
+              rather than in band 1 so it never pushes the task queue further
+              down the page — what's due outranks how consistent you've been. */}
           <div className="space-y-4">
+            <MomentumCard />
             <ProgressOverview />
             <QuickActions />
           </div>
