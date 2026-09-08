@@ -1,6 +1,6 @@
 import type { InputHTMLAttributes, ReactNode, Ref } from "react";
 
-import { cn } from "../../lib/cn";
+import { inputClasses, fieldLabelClasses } from "../../lib/inputStyles";
 
 type FormFieldProps = {
   id: string;
@@ -27,13 +27,7 @@ export default function FormField({
 
   return (
     <div>
-      <label
-        htmlFor={id}
-        className={cn(
-          "label-mono mb-2 block",
-          error ? "text-error" : "text-text-secondary",
-        )}
-      >
+      <label htmlFor={id} className={fieldLabelClasses({ error: !!error })}>
         {label}
       </label>
 
@@ -43,12 +37,7 @@ export default function FormField({
           ref={ref}
           aria-invalid={error ? true : undefined}
           aria-describedby={error ? errorId : undefined}
-          className={cn(
-            "w-full rounded-lg border bg-surface-tertiary px-3.5 py-2.5 text-sm text-text-primary outline-none transition-all duration-[var(--transition-fast)] placeholder:text-text-muted",
-            error
-              ? "border-error focus:border-error focus:shadow-[0_0_0_2px_rgb(239_68_68/0.2)]"
-              : "border-border-primary hover:border-border-hover focus:border-brand-500 focus:shadow-[0_0_0_2px_rgb(59_130_246/0.2)]",
-          )}
+          className={inputClasses({ error: !!error })}
           {...inputProps}
         />
 
